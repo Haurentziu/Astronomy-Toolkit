@@ -13,7 +13,8 @@ var UNIX_TIME_J2000 = 946684800;
 var SECONDS_IN_YEAR = 365.25 * 24 * 60 * 60;
 
 var epoch = unixToEpoch(Date.now() / 1000.0);
-
+//var epoch = 0;
+paused = true;
 
 var planetRadius = 0.07;
 
@@ -21,10 +22,10 @@ var planetRadius = 0.07;
 
 //TODO change mean anomaly values!
 var planets = [
-  new CelestialBody("Mercury",      0.3870, 0.205635, deg2rad(7.0050), deg2rad(48.331300), deg2rad(77.456450), deg2rad(252.25084)),
-  new CelestialBody("Venus",        0.7230, 0.006773, deg2rad(3.3947), deg2rad(76.679900), deg2rad(131.53298), deg2rad(181.97973)),
-  new CelestialBody("Earth",        1.0000, 0.016700, deg2rad(0.0000), deg2rad(-11.26064), deg2rad(102.94719), deg2rad(100.46435)),
-  new CelestialBody("Mars",         1.5240, 0.093405, deg2rad(1.8510), deg2rad(49.557400), deg2rad(336.04084), deg2rad(355.45332)),
+  new CelestialBody("Mercury",      0.3870, 0.205635, deg2rad(7.0050), deg2rad(48.331300), deg2rad(77.456450), deg2rad(174.794787)),
+  new CelestialBody("Venus",        0.7230, 0.006773, deg2rad(3.3947), deg2rad(76.679900), deg2rad(131.53298), deg2rad(50.4160980)),
+  new CelestialBody("Earth",        1.0000, 0.016700, deg2rad(0.0000), deg2rad(-11.26064), deg2rad(102.94719), deg2rad(357.529109)),
+  new CelestialBody("Mars",         1.5240, 0.093405, deg2rad(1.8510), deg2rad(49.557400), deg2rad(336.04084), deg2rad(19.3727660)),
   new CelestialBody("Juno",         2.6700, 0.254981, deg2rad(12.982), deg2rad(169.91138), deg2rad(248.10807), deg2rad(32.096083)),
   new CelestialBody("Ceres",        2.7653, 0.079138, deg2rad(10.586), deg2rad(80.393200), deg2rad(72.589810), deg2rad(113.41044)),
   new CelestialBody("Pallas",       2.7721, 0.230999, deg2rad(34.840), deg2rad(173.12950), deg2rad(310.15094), deg2rad(96.148266)),
@@ -67,10 +68,10 @@ window.onload = function(){
   updatePlanets();
 
 /*  addSphere(0.05, 0xffd234);*/
-  var flareTexture = THREE.ImageUtils.loadTexture("http://mgvez.github.io/jsorrery/img/sunflare.png");
+  var flareTexture = THREE.ImageUtils.loadTexture("./res/flare.png");
   var flareMaterial = new THREE.SpriteMaterial({map: flareTexture, blending:THREE.AdditiveBlending, useScreenCoordinates: false, color: 0xffffff});
   var flareSprite = new THREE.Sprite(flareMaterial);
-  flareSprite.scale.set(0.6, 0.6, 0.6);
+  flareSprite.scale.set(0.8, 0.8, 0.8);
   flareSprite.position.set(0, 0, 0);
   scene.add(flareSprite);
   render();
@@ -112,8 +113,7 @@ function updatePlanets(){
     planet_models[i].position.set(position.x, position.y, position.z);
     planet_models[i].scale.set(scale, scale, scale);
 
-
-    planet_labels[i].scale.set(scale * 10 , scale * 10, scale * 10);
+    planet_labels[i].scale.set(scale * 8 , scale * 8, scale * 8);
     planet_labels[i].position.set(position.x, position.y, position.z);
   }
 }
@@ -212,12 +212,13 @@ function createTextSprite(text){
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   ctx.fillStyle = "#bebebe";
-  ctx.font = "Bold 13px Arial";
+
+  ctx.font = "Bold 19px Arial";
 
   var fontMetrics = ctx.measureText(text);
 
   console.log(fontMetrics.height);
-  ctx.fillText(text, canvas.width / 2 + 20, canvas.height / 2 + 15.0 / 2.0);
+  ctx.fillText(text, canvas.width / 2 + 25, canvas.height / 2 + 15.0 / 2.0);
 
   var texture = new THREE.Texture(canvas);
   texture.minFilter = THREE.LinearFilter;
@@ -239,20 +240,23 @@ function init(){
   renderer = new THREE.WebGLRenderer({antialias:true});
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-  scene.background = new THREE.Color(0x212121);
+  scene.background = new THREE.Color(0x111111);
 
   renderer.domElement.style="position:absolute; top:0px; left:0px; margin:0px; "
   document.body.appendChild(renderer.domElement);
   camera.position.z = 5;
 
-//  controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls = new THREE.TrackballControls(camera, renderer.domElement);
-  controls.rotateSpeed = 8;
-  controls.zoomSpeed = 0.1;
-  controls.dynamicDampingFactor = 0.25;
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+//  controls = new THREE.TrackballControls(camera, renderer.domElement);
+//  controls.rotateSpeed = 8;
+//  controls.zoomSpeed = 0.1;
+//  controls.dynamicDampingFactor = 0.25;
   controls.noPan = true;
-  controls.staticMoving = false;
+//  controls.staticMoving = false;
   //controls.enableZoom = false;
+  controls.enableDamping = true;
+  controls.minAzimuthAngle = -Math.PI / 2.0;
+  controls.maxAzimuthAngle = Math.PI/2.0;
   controls.minDistance = 0.1;
   controls.maxDistance = 60;
 
