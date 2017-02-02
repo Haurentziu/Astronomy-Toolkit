@@ -103,23 +103,22 @@ function computeAccelerations(){
 }
 
 function checkCollisions(){
+  var abort = false;
 	for(var i = 0; i < bodies.length; i++){
-		for(var j = 0; j < bodies.length; j++){
-			if(i != j && bodies[i].distanceToBody(bodies[j]) < bodies[i].size + bodies[j].size){
-				if(bodies[i].mass > bodies[j].mass){
+		for(var j = i + 1; j < bodies.length && !abort; j++){
+			if(bodies[i].distanceToBody(bodies[j]) < bodies[i].size + bodies[j].size){
+				if(bodies[i].size > bodies[j].size){
 					bodies[i].collideWith(bodies[j]);
           bodies[j].removeFrom(scene);
           bodies[j].dispose();
-					bodies.splice(j, 1);
-          j--;
+					bodies.splice(j--, 1);
 				}
 				else{
           bodies[j].collideWith(bodies[i]);
           bodies[i].removeFrom(scene);
           bodies[i].dispose();
-					bodies.splice(i, 1);
-          i--;
-          break;
+					bodies.splice(i--, 1);
+          abort = true;
 				}
         updateBodyNumber();
 			}
@@ -221,7 +220,7 @@ function initGUI(){
   var worldFolder = gui.addFolder("Simulation Settings");
   worldFolder.add(this, 'k', 0, 0.06).step(0.000001).name("G Constant");
   worldFolder.add(this, 'timePerStep', 0, 0.05).step(0.0001).name("Time Per Step");
-  worldFolder.add(this, 'stepsPerFrame', 0, 10).step(1).name("Steps Per Frame").listen();
+  worldFolder.add(this, 'stepsPerFrame', 0, 30).step(1).name("Steps Per Frame").listen();
   worldFolder.add(this, 'trailLength', 0, 1000).step(1).name("Trail Length").listen();
   worldFolder.open();
 
