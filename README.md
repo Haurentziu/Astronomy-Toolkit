@@ -23,9 +23,10 @@
 3. Jean Meeus - Astronomical Algorithms, Second Edition
 4. [Map Projections - A Working Manual](http://eaps.mit.edu/12.114/Map_projections_a_working_manual.pdf)
 5. [Small-Body Orbital Elements from NASA](http://ssd.jpl.nasa.gov/?sb_elem)
-6. [Felix R. Hoots, Ronald L. Roehrich - Models for Propagation of NORAD Element Sets](http://www.celestrak.com/NORAD/documentation/spacetrk.pdf)
+6. [Jill Vincent - The mathematics of sundials](http://files.eric.ed.gov/fulltext/EJ802706.pdf)
 
 ### Used libraries
 1. [THREE.js](https://github.com/mrdoob/three.js/)
 2. [JQuery](https://github.com/jquery/jquery)
 3. [randomColor](https://github.com/davidmerfield/randomColor)
+4. [pySVG](https://github.com/zlsa/pysvg/)

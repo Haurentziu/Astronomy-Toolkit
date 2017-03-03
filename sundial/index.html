@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sundial Generator</title>
+		<link rel = "stylesheet" type = "text/css" href = "stylesheet.css">
+  </head>
+
+  <body>
+    <h1 id = "title">Sundial Generator</h1>
+		<script src = "get_image.js"></script>
+
+		<div id = "type_select">
+			<input type = "radio" name = "type" value = "horizontal">Horizontal Sundial<br>
+			<input type = "radio" name = "type" value = "vertical">Vertical Sundial<br>
+		</div>
+
+		<div id = "location_select"></div>
+			Latitude: <input type = "text" id = "lat" value = "46"><br>
+			Longitude: <input type = "text" id = "long" value = "26">
+		<div id = "style_select">
+			Motto: <input type = "text" id = "motto"><br>
+		</div>	
+		
+		<input type = "button" value = "Get Sundial" onclick = "getImage()">
+		<div id = "image_div"></div>	
+	  <!--  <img src = "../cgi-bin/sundial.py?lat=46&long=26" width = "1200px" height = "800px" /> -->
+
+  </body>
+</html>
