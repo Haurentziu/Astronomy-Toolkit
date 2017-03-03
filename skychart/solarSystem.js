@@ -1,55 +1,7 @@
 //for all the things that have to do with the solar system (planets, asteroids, comets, sun, moons)
 var logPos = false;
-/*function moonInfo(){
-    month = 29.530588853;
-    moonAge = (JD - 2457043.052083);
-    while (moonAge<month) moonAge +=month;
-    while (moonAge>month) moonAge -=month;
-   // moonAge = 28.5;
-    var phaseName;
-    phase = moonAge/month;
-    ctx.lineWidth=1;
-    if(isPrintFr) ctx.strokeStyle='black';
-    else ctx.strokeStyle='white';
-    var shadow;
-    ctx.strokeRect(height-201, 7, 190, 70);
-    if(phase<0.25) shadow = (1-phase -0.75)*160;
-    else if (phase<0.5) shadow = -(phase-0.25)*160
-    else if (phase<0.75) shadow = (1-phase-0.25)*160;
-    else if(phase<1) shadow = -(phase-0.75)*160
-    ctx.lineWidth=0;
-    ctx.fillStyle='black';
-    ctx.beginPath();
-    ctx.arc(height-167, 42, 30, 0, 2*Math.PI);
-    ctx.fill();
-    ctx.fillStyle='gray';
-    ctx.beginPath();
-    if(phase<0.5) ctx.arc(height-167, 42, 30, -Math.PI/2, -3*Math.PI/2);
-    else ctx.arc(height-167, 42, 30, Math.PI/2, 3*Math.PI/2);
-    ctx.fill();
-    if(phase<0.25) ctx.fillStyle='black';
-    else if(phase<0.75) ctx.fillStyle='gray';
-    else if(phase<1) ctx.fillStyle='black';
-    ctx.beginPath();
-    ctx.moveTo(height-167, 42+30);
-    ctx.bezierCurveTo(height-167+shadow, 42+30, height-167+shadow, 42-30, height-167, 42-30);
-    ctx.fill();
-    if(moonAge<1) phaseName = "New Moon";
-    else if (moonAge<6.375) phaseName = "Waxing Crescent";
-    else if (moonAge<8.375) phaseName = "First Quarter";
-    else if (moonAge<13.75) phaseName = "Waxing Gibbous";
-    else if (moonAge<15.75) phaseName = "Full Moon";
-    else if(moonAge<21.125) phaseName = "Waning Gibbous";
-    else if (moonAge<23.125) phaseName = "Second Quarter";
-    else if(moonAge<28.5) phaseName = "Waning Crescent"
-    else if(moonAge<30) phaseName="New Moon";
-    if(isPrintFr) ctx.fillStyle = "black";
-    else ctx.fillStyle='white';
-    ctx.font = "17px Arial";
-    ctx.fillText(phaseName, height-141, 25);
-    ctx.fillText("Age: "+Math.floor(moonAge*100)/100+" days", height-134, 69);
 
-}*/
+var VSOP_TERM_LIMIT = 10E-5;
 
 function normalise(angle){
     angle = angle - 2*Math.PI*Math.floor(angle/(2*Math.PI));
@@ -57,8 +9,6 @@ function normalise(angle){
 }
 
 function moonPos(){
-//   JD = 2448724.5;
-
     var T = (JD-2451545)/36525;
     e = deg2rad(23.4392916666666667-0.0130041666666667*T-0.0000001666666667*T*T+0.0000005027777778*T*T*T);
     var L1 = normalisedeg(218.3164477 + 481267.88123421*T - 0.0015786*T*T + Math.pow(T, 3)/538841 - Math.pow(T, 4)/65194000);
@@ -70,7 +20,7 @@ function moonPos(){
     var A2 = normalisedeg((53.09 + 479264.290*T));
     var A3 = normalisedeg((313.45 + 481266.484*T));
     var E = normalisedeg(1-0.002516*T - 0.0000074*T*T);
-    var sigma = calcMoon(D, M, M1, F, E);
+    var sigma = computeMoonPosition(D, M, M1, F, E);
     sigma.l+=3958*Math.sin(deg2rad(A1))+1962*Math.sin(deg2rad(L1-F))+318*Math.sin(deg2rad(A2));
     sigma.b+=-2235*Math.sin(deg2rad(L1))+382*Math.sin(deg2rad(A3))+175*Math.sin(deg2rad(A1-F))+175*Math.sin(deg2rad(A1+F))+
         127*Math.sin(deg2rad(L1-M1))-115*Math.sin(deg2rad(L1+M1));
@@ -89,6 +39,56 @@ function moonPos(){
     drawMoon();
     if(logPos) console.log("Moon   "+decHours(eq.ra)+"   "+decDeg(eq.de));
     //logPos = false;
+}
+
+function computeMoonPosition(D, M, M1, F, E){
+  var sigma = new Object();
+  sigma.l = computeELPSeriesSine(0, 60, D, M, M1, F, E);
+  sigma.r = computeELPSeriesCosine(60, 120, D, M, M1, F, E);
+  sigma.b = computeELPSeriesCosine(120, 180, D, M, M1, F, E);
+  return sigma;
+}
+
+function computeELPSeriesCosine(start, end, D, M, M1, F, E){
+  var sum = 0;
+  for(i = start; i < end; i++){
+    var dMul = elpData[5 * i];
+    var mMul = elpData[5 * i + 1];
+    var m1Mul = elpData[5 * i + 2];
+    var fMul = elpData[5 * i + 3];
+    var E2 = E * E;
+    var coef = elpData[5 * i + 4];
+    var term = coef * Math.cos(dMul * D + mMul * M + m1Mul * M1 + fMul * F);
+    if(mMul == 1 || mMul == -1){
+        term *= E;
+    }
+    else if(mMul == 2 || mMul == -2){
+        term *= E2;
+    }
+    sum += term;
+  }
+  return sum;
+}
+
+function computeELPSeriesSine(start, end, D, M, M1, F, E){
+  var sum = 0;
+  for(i = start; i < end; i++){
+    var dMul = elpData[5 * i];
+    var mMul = elpData[5 * i + 1];
+    var m1Mul = elpData[5 * i + 2];
+    var fMul = elpData[5 * i + 3];
+    var E2 = E * E;
+    var coef = elpData[5 * i + 4];
+    var term = coef * Math.sin(dMul * D + mMul * M + m1Mul * M1 + fMul * F);
+    if(mMul == 1 || mMul == -1){
+        term *= E;
+    }
+    else if(mMul == 2 || mMul == -2){
+        term *= E2;
+    }
+    sum += term;
+  }
+  return sum;
 }
 
 function ecliptic2equatorial(ecl, eps) {
@@ -148,126 +148,76 @@ function Rect2Spheric(eq){
 }
 
 function drawPlanets(){
-//    JD = 2451545;
-    ctx.beginPath();
-    T = (JD-2451545)/365250;
-    e = deg2rad(23.4392916666666667-0.0130041666666667*T-0.0000001666666667*Math.pow(T, 2)+0.0000005027777778*Math.pow(T, 3));
-    earthPos();
-    mercuryPos();
-    venusPos();
-    marsPos();
-    jupiterPos();
-    saturnPos();
-    uranusPos();
-    neptunePos();
-    ctx.fillStyle='#FFFFFF';
-    ctx.closePath();
-    ctx.fill();
+  var time = (JD-2451545)/365250;
+  var inclination = deg2rad(23.4392916666666667-0.0130041666666667*time-0.0000001666666667*Math.pow(time, 2)+0.0000005027777778*Math.pow(time, 3));
+  var earthCoord = computePlanetCoordinates(vsopData[2], time);
+  var sunCoord = new Object();
+  sunCoord.x = -earthCoord.x;
+  sunCoord.y = -earthCoord.y;
+  sunCoord.z = -earthCoord.z;
+  drawSun(sunCoord, time, inclination);
+
+  ctx.beginPath();
+
+  for(var i = 0; i < vsopData.length; i++){
+    if(i != 2){
+      var helioCoord = computePlanetCoordinates(vsopData[i], time);
+      drawPlanet(helioCoord, sunCoord, inclination, planetNames[i], planetMagnitudes[i]);
+    }
+  }
+
+  ctx.fillStyle='#FFFFFF';
+  ctx.closePath();
+  ctx.fill();
 }
 
-function mercuryPos(){
-    var name = "Mercury";
-    var mag = -1.7;
+function computePlanetCoordinates(vsopData, time){
+  var helioCoord = new Object();
+  helioCoord.x = computeVSOP(vsopData.x, time);
+  helioCoord.y = computeVSOP(vsopData.y, time);
+  helioCoord.z = computeVSOP(vsopData.z, time);
+  return helioCoord;
+
+}
+
+function computeVSOP(seriesArray, time){
+  var result = 0;
+  var i = 0;
+  for(series of seriesArray){
+    result += computeVSOPPolynom(series, time) * Math.pow(time, i);
+    i++;
+  }
+  return result;
+}
+
+function computeVSOPPolynom(terms, time){
+  var result = 0;
+  for(variables of terms){
+    if(Math.abs(variables[0]) < VSOP_TERM_LIMIT)
+      break;
+
+    result += variables[0] * Math.cos(variables[1] + variables[2] * time);
+  }
+
+  return result;
+}
+
+
+
+function drawSun(sunCoord, time, incl){
     time = Date.now();
-    var mercury = calcmercury(T);
-    var helio = new Object();
-    helio.x = calcCoord(mercury.X, T);
-    helio.y = calcCoord(mercury.Y, T);
-    helio.z = calcCoord(mercury.Z, T);
-    eqCoord(helio, e, name, mag);
-//    console.log(Date.now()-time);
-}
-
-function venusPos(){
-    var name = "Venus";
-    var mag = -3.38;
-    var venus = calcvenus(T);
-    var helio = new Object();
-    helio.x = calcCoord(venus.X, T);
-    helio.y = calcCoord(venus.Y, T);
-    helio.z = calcCoord(venus.Z, T);
-    eqCoord(helio, e, name, mag);
-}
-
-function marsPos(){
-    var name = "Mars";
-    var mag = -1.26;
-    var mars = calcmars(T);
-    var helio = new Object();
-    helio.x = calcCoord(mars.X, T);
-    helio.y = calcCoord(mars.Y, T);
-    helio.z = calcCoord(mars.Z, T);
-    eqCoord(helio, e, name, mag);
-}
-
-function jupiterPos(){
-    var name = "Jupiter";
-    var mag = -2.21;
-    var jupiter = calcjupiter(T);
-    var helio = new Object();
-    helio.x = calcCoord(jupiter.X, T);
-    helio.y = calcCoord(jupiter.Y, T);
-    helio.z = calcCoord(jupiter.Z, T);
-    eqCoord(helio, e, name, mag);
-
-}
-
-function uranusPos(){
-    var name = "Uranus";
-    var mag = 6.15;
-    var uranus = calcuranus(T);
-    var helio = new Object();
-    helio.x = calcCoord(uranus.X, T);
-    helio.y = calcCoord(uranus.Y, T);
-    helio.z = calcCoord(uranus.Z, T);
-    eqCoord(helio, e, name, mag);
-
-}
-
-function earthPos(){
-    time = Date.now();
-    var earth = calcearth(T);
-    var helio = new Object();
-    helio.x = calcCoord(earth.X, T);
-    helio.y = calcCoord(earth.Y, T);
-    helio.z = calcCoord(earth.Z, T);
-    sunEclipticRect = new Object();
-    sunEclipticRect.x = -helio.x;
-    sunEclipticRect.y = -helio.y;
-    sunEclipticRect.z = -helio.z;
-    var EqRect = rotateCoordinateSystem(sunEclipticRect, e);
-    var eqCoord = Rect2Spheric(EqRect);
+    var eqRect = rotateCoordinateSystem(sunCoord, incl);
+    var eqCoord = Rect2Spheric(eqRect);
     var sun = projectStereo(eqCoord.de, eqCoord.ra, false);
     ctx.drawImage(document.getElementById("rose"), sun.x-20, sun.y-20, 40 ,40);
     if(logPos) console.log("Sun   "+decHours(eqCoord.ra)+"   "+decDeg(eqCoord.de));
 }
 
-function neptunePos(){
-    var name = "Neptune";
-    var mag = 7.75;
-    var neptune  = calcneptune(T);
-    var helio = new Object();
-    helio.x = calcCoord(neptune.X, T);
-    helio.y = calcCoord(neptune.Y, T);
-    helio.z = calcCoord(neptune.Z, T);
-    eqCoord(helio, e, name, mag);
-}
+function drawPlanet(coord, sunCoord, epsilon, n, mag){
+    coord.x += sunCoord.x;
+    coord.y += sunCoord.y;
+    coord.z += sunCoord.z;
 
-function saturnPos(){
-    var name = "Saturn";
-    var mag = 0.4;
-    var saturn = calcsaturn(T);
-    var helio = new Object();
-    helio.x = calcCoord(saturn.X, T);
-    helio.y = calcCoord(saturn.Y, T);
-    helio.z = calcCoord(saturn.Z, T);
-    eqCoord(helio, e, name, mag);
-}
-
-function eqCoord(coord, epsilon, n, mag){
-    coord.x+=sunEclipticRect.x;
-    coord.y+=sunEclipticRect.y;
-    coord.z+=sunEclipticRect.z;
     var planetEqRect = rotateCoordinateSystem(coord, epsilon);
     var eqCoord = Rect2Spheric(planetEqRect);
     var planet = projectStereo(eqCoord.de, eqCoord.ra, false);
@@ -296,31 +246,7 @@ function Spheric2Rect(spheric, d){
     rect.z = d*Math.sin(spheric.lat);
     return rect;
 }
-/*
-function setSize(){
-    var oldSize = Math.min(canv.width, canv.height);
-	var testWidth = getBrowserWidth() * 0.978;
-    var testHeight = getBrowserHeight() * 0.978;
-    var size = Math.min(testWidth, testHeight);
-    if(size > 895 && size < 1030){
-        canv.width = size;
-        canv.height = size;
-   }
-    else{
-        canv.width=900 ;
-        canv.height=900 ;
-    }
-	
-    height = canv.height;
-    width = canv.width;
-	ctx.scale(width / oldSize, height / oldHeight);	
-	//document.style.width = canv.width;
-	//canv.style.height = canv.height;
-    document.getElementById("starmap").style.marginLeft = -height/2+"px";
-//	ctx = canv.getContext("2d");
-//	drawStuff();	
-}
-*/
+
 function getBrowserWidth(){
   return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 }

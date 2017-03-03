@@ -17,6 +17,7 @@ setSize();
 var i =1;
 
 window.onload = function() {
+	getSolarSystemData();
 	startUp();
 	setSize();
 	time = Date.now();
@@ -112,7 +113,7 @@ function drawStuff(){
 	else ctx.fillStyle="#FCB3EA";
 	if (document.getElementById("names").checked)
 		drawConNames(); //draws constellation names
-	if(document.getElementById("planets").checked){
+	if(document.getElementById("planets").checked && loadedVSOP){
 	 	drawPlanets();
 		moonPos();
 		logPos=false;
@@ -144,13 +145,12 @@ function drawLines(){
 	else ctx.lineWidth=1.5;
 	if(isPrintFr) ctx.strokeStyle='#A0A0A0';
 	else ctx.strokeStyle='#2D4A5E';
-	ctx.beginPath()
-	for (var line=0; line<conRA.length; line++) {
+	ctx.beginPath();
+
+	for (line of constellationLines) {
 		var isAboveHor = new Object()
-		var beginEquatorial = calcPrecession(conDE[line][0], conRA[line][0]);
-		var endEquatorial = calcPrecession(conDE[line][1], conRA[line][1]);
-		var begin = projectStereo(beginEquatorial.dec, beginEquatorial.ra, true);
-		var end = projectStereo(endEquatorial.dec, endEquatorial.ra, true);
+		var begin = projectStereo(line.startDEC, line.startRA, true);
+		var end = projectStereo(line.endDEC, line.endRA, true);
 		isAboveHor.begin = Math.pow(begin.x-height/2, 2)+Math.pow(begin.y-height/2, 2) < Math.pow(height/2-8, 2);
 		isAboveHor.end  = Math.pow(end.x-height/2, 2)+Math.pow(end.y-height/2, 2) < Math.pow(height/2-8, 2);
 		if(isAboveHor.end || isAboveHor.begin){
@@ -171,9 +171,7 @@ function drawMilkyWay(){
 	var isAboveHor;
 	for(var i = 0; i < milkyway.length; i++){
 		if(lat-milkyway[i].de<Math.PI/2){
-			var posEquatorial = calcPrecession(milkyway[i].de, milkyway[i].ra)
-
-			var pos = projectStereo(posEquatorial.dec, posEquatorial.ra, true);
+			var pos = projectStereo(milkyway[i].de, milkyway[i].ra, true);
 			isAboveHor = Math.pow(pos.x-height/2, 2)+Math.pow(pos.y-height/2, 2) < Math.pow(height/2+8, 2);
 		}
 		else isAboveHor = false;
@@ -188,40 +186,9 @@ function drawMilkyWay(){
 	}
 }
 
-function drawBounds(){
-	ctx.lineWidth = 1.2;
-	ctx.strokeStyle = "red";
-	var cname=bounds[0].con;
-	ctx.beginPath();
-	var isAboveHor;
-	for(var i = 0; i<bounds.length; i++){
-	 	if(lat-bounds[i].de<Math.PI/2){
-			var pos = projectStereo(bounds[i].de, bounds[i].ra, true);
-			isAboveHor = Math.pow(pos.x-height/2, 2)+Math.pow(pos.y-height/2, 2) < Math.pow(height/2+8, 2);
-		}
-		else isAboveHor = false;
-
-		if (isAboveHor) {
-			if(bounds[i].con != cname){
-				ctx.beginPath();
-				ctx.moveTo(pos.x, pos.y);
-			}
-			else ctx.lineTo(pos.x, pos.y);
-			if (typeof bounds[i+1] === 'undefined') ctx.stroke();
-			else if(bounds[i].con != bounds[i+1].con) ctx.stroke();
-		}
-		else{
-			ctx.stroke();
-			ctx.beginPath();
-		}
-		cname = bounds[i].con;
-	}
-}
-
 function drawConNames(){
 	for(var con = 0; con < 87; con++){
-		var nameEquatorial = calcPrecession(constellation[con].dec, constellation[con].ra);
-		var name = projectStereo(nameEquatorial.dec, nameEquatorial.ra);
+		var name = projectStereo(constellation[con].dec, constellation[con].ra, false);
 		if (name) {
 			ctx.fillText(constellation[con].name, name.x, name.y);
 		}
@@ -239,8 +206,7 @@ function drawStars(){
 	ctx.beginPath();
 	for (var HR = 0; HR < stars.length; HR++){
 		if (stars[HR].mag < 5.5)  {
-			var starEquatorial = calcPrecession(stars[HR].dec, stars[HR].ra);
-			coord=projectStereo(starEquatorial.dec, starEquatorial.ra, false);
+			coord=projectStereo(stars[HR].dec, stars[HR].ra, false);
 			if (coord) {
 				size = 5*Math.pow(1.45, -stars[HR].mag);
 				ctx.moveTo(coord.x, coord.y);
@@ -262,25 +228,22 @@ function drawStars(){
 function drawDSO(){
 	ctx.strokeStyle='green';
 	ctx.fillStyle='#FCC868';
-	for (var mes = 0; mes < 110; mes++){
-		var coordEquatorial = calcPrecession(mesDE[mes], mesRA[mes]);
-		var coord=projectStereo(coordEquatorial.dec, coordEquatorial.ra, false);
+	for (messier of messierObjects){
+		var coord = projectStereo(messier.dec, messier.ra, false);
 
 		if (coord) {
-			if (mesType[mes] == 'GC') gcSymbol(coord['x'], coord['y'], 4);
-			if (mesType[mes] == 'GX') gxSymbol(coord['x'], coord['y'], 4, 2);
-			if (mesType[mes] == 'DN') dnSymbol(coord['x'], coord['y'], 6, 6);
-			if (mesType[mes] == 'PN') pnSymbol(coord['x'], coord['y'], 3);
-			if (mesType[mes] == 'OC') ocSymbol(coord['x'], coord['y'], 4);
-			if (mesMag[mes] < 7 || zoom>1) {
+			if (messier.type == 'Globular Cluster') gcSymbol(coord['x'], coord['y'], 4);
+			if (messier.type == 'Spiral Galaxy' && messier.type == 'Galaxy') gxSymbol(coord['x'], coord['y'], 4, 2);
+			if (messier.type == 'Nebula') dnSymbol(coord['x'], coord['y'], 6, 6);
+		//	if (messier.type == 'PN') pnSymbol(coord['x'], coord['y'], 3);
+			if (messier.type == 'Open Cluster') ocSymbol(coord['x'], coord['y'], 4);
+			if (messier.mag < 7) {
 				if(isPrintFr) ctx.fillStyle="black" ;
 				else ctx.fillStyle='#FCC868';
-				ctx.fillText("M"+(mes+1), coord.x+7, coord.y+5);
+				ctx.fillText(messier.name, coord.x+7, coord.y+5);
 			}
 		}
 	}
-
-	//ctx.beginPath();
 }
 
 function date(){
@@ -356,23 +319,6 @@ function drawCardPoints(){
 		ctx.fillText("W", height-30, height/2);
 	}
 }
-
-function calcPrecession(dec, ra){
-	var T = (JD - 2451545)/36525;
-	//T = 0.288670500;
-	var eqC = new Object();
-	var xi = deg2rad(2306.2181*T + 0.30188*Math.pow(T, 2) + 0.017998*Math.pow(T, 3))/3600;
-	var zeta = deg2rad(2306.2181*T + 1.09468*Math.pow(T, 2) + 0.018203*Math.pow(T, 3))/3600;
-	var theta = deg2rad(2004.3109*T - 0.42665*Math.pow(T, 2) - 0.041833*Math.pow(T, 3))/3600;
-	var A = Math.cos(dec)*Math.sin(ra+xi);
-	var B = Math.cos(theta)*Math.cos(dec)*Math.cos(ra + xi) - Math.sin(theta)*Math.sin(dec);
-	var C = Math.sin(theta)*Math.cos(dec)*Math.cos(ra + xi) + Math.cos(theta)*Math.sin(dec);
-	eqC.ra = Math.atan2(A, B) + zeta;
-	eqC.dec = Math.asin(C);
-	//console.log(decHours(eqC.ra)+"   "+decDeg(eqC.dec));
-	return eqC;
-}
-
 
 function downloadImage(){
 	var img = document.createElement("img");
