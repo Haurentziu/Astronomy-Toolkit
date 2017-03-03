@@ -7,7 +7,6 @@ offSet.y=0;
 zoom=1;
 unixTime = Date.now();
 var canv = document.getElementById("starmap");
-console.log(canv.height + " " + canv.width);
 //setSize();
 var ctx = canv.getContext("2d");
 //ctx.imageSmoothingEnabled = false;
@@ -38,16 +37,15 @@ function setSize(){
     var testWidth = getBrowserWidth() * 0.978;
     var testHeight = getBrowserHeight() * 0.978;
     var size = Math.min(testWidth, testHeight);
-    if(size > 895){
-			var realSize = size * window.devicePixelRatio;
+    if(size > 900){
+			var realSize = parseInt(size * window.devicePixelRatio);
 	  	canv.width = realSize;
 	    canv.height = realSize;
     }
     else{
-    	canv.width = 900 * window.devicePixelRatio;
-      canv.height = 900 * window.devicePixelRatio;
-
-			size = 900;
+			var realSize = parseInt(900 * window.devicePixelRatio);
+    	canv.width = realSize;
+      canv.height = realSize;
     }
 
     height = canv.height;
@@ -59,6 +57,7 @@ function setSize(){
 		var starmapDOM = document.getElementById("starmap")
     starmapDOM.style.marginLeft = -size/2+"px";
 		starmapDOM.style.width = starmapDOM.style.height = size + "px";
+		console.log(height + " " + width)
 //  ctx = canv.getContext("2d");
 //  drawStuff();
 }

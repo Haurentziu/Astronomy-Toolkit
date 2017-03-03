@@ -6,24 +6,42 @@
   </head>
 
   <body>
-    <h1 id = "title">Sundial Generator</h1>
+    <div id = "title">
+      <div id = "banner">
+
+      </div>
+      <div id = "gradient">
+
+      </div>
+      <h1>Sundial Generator(Work in progress)</h1>
+      <h2>Create your own sundial in five minutes</h2>
+    </div>
 		<script src = "get_image.js"></script>
 
-		<div id = "type_select">
-			<input type = "radio" name = "type" value = "horizontal">Horizontal Sundial<br>
-			<input type = "radio" name = "type" value = "vertical">Vertical Sundial<br>
-		</div>
+    <div id = "content">
 
-		<div id = "location_select"></div>
-			Latitude: <input type = "text" id = "lat" value = "46"><br>
-			Longitude: <input type = "text" id = "long" value = "26">
-		<div id = "style_select">
-			Motto: <input type = "text" id = "motto"><br>
-		</div>	
-		
-		<input type = "button" value = "Get Sundial" onclick = "getImage()">
-		<div id = "image_div"></div>	
-	  <!--  <img src = "../cgi-bin/sundial.py?lat=46&long=26" width = "1200px" height = "800px" /> -->
+  	<!--	<div id = "type_select">
+  			<input type = "radio" name = "type" value = "horizontal">Horizontal Sundial<br>
+  			<input type = "radio" name = "type" value = "vertical">Vertical Sundial<br>
+  		</div>
+-->
+      <h3>Select your location</h3>
+  		<div id = "location_select" >
+        <input type="button" value = "Auto Detect Location" /><br>
+  			Latitude: <input type = "text" id = "lat" value = "46"><br>
+  			Longitude: <input type = "text" id = "long" value = "26">
+      </div>
+
+      <h3>Decorate your sundial</h3>
+  		<div id = "style_select">
+  			Motto: <input type = "text" id = "motto"><br>
+  		</div>
+
+
+  		<input type = "button" value = "Get Sundial" onclick = "getImage()">
+  		<div id = "image_div"></div>
+
+  </div>
 
   </body>
 </html>

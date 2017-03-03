@@ -175,9 +175,15 @@ a{
 
 #now{
     position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    padding: 3px 0px 3px 0px;
     left:320px;
-    top:32px;
+    top:36px;
     width:50px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #FFF;
 }
 
 .textInputs input[type="text"]{
@@ -375,7 +381,7 @@ input:focus + .side-label::before {
   display: none;
   width: 12px;
   height: 12px;
-  margin: 4px;
+  margin: 3.8px;
   background-color: #FFF;
 }
 
