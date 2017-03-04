@@ -232,7 +232,7 @@ function drawDSO(){
 
 		if (coord) {
 			if (messier.type == 'Globular Cluster') gcSymbol(coord['x'], coord['y'], 4);
-			if (messier.type == 'Spiral Galaxy' && messier.type == 'Galaxy') gxSymbol(coord['x'], coord['y'], 4, 2);
+			if (messier.type == 'Spiral Galaxy' || messier.type == 'Galaxy') gxSymbol(coord['x'], coord['y'], 4, 2);
 			if (messier.type == 'Nebula') dnSymbol(coord['x'], coord['y'], 6, 6);
 		//	if (messier.type == 'PN') pnSymbol(coord['x'], coord['y'], 3);
 			if (messier.type == 'Open Cluster') ocSymbol(coord['x'], coord['y'], 4);

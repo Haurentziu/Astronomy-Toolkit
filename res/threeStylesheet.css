@@ -90,7 +90,7 @@ canvas{
   position: absolute;
   width: 90%;
   height: 80%;
-  top: -100%;
+  top: 0px; /*For SEO */
   left: 5%;
   overflow: auto;
   border-width: 1px;
@@ -103,6 +103,7 @@ canvas{
   -o-transition: 0.3s linear;
   font-size: 110%;
 
+  display: none;
 }
 
 .showAbout{
@@ -111,6 +112,7 @@ canvas{
   -ms-transform:translate(180%, 137.5%);
   -o-transform:translate(180%, 137.5%);
   transform:translate(0%, 137.5%);
+
 }
 #about a{
   color: #fff;

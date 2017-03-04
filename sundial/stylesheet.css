@@ -7,7 +7,7 @@ body{
 	background-color: #FFF;
 	min-height: 100%;
 	font-family: Arial, Helvetica, sans-serif;
-
+	min-width: 1050px;
 
 }
 
@@ -60,7 +60,6 @@ body{
 	z-index: 3;
 	text-align: center;
 	vertical-align: middle;
-	line-height: 100%;
 	font-size: 50px;
 	font-weight: 500;
 
@@ -82,16 +81,24 @@ body{
 
 #content{
 	position: relative;
-	top: 25px;
-	margin-left: 5%;
+	top: 0px;
+	left: 14%;
+	width: 72%;
+	border-style: solid;
+	border-color: #9d9d9d;
+	border-width: 0 1px 0 1px;
+	background-color: #fff;
+	padding-bottom: 30px;
 }
 
 #content h3{
-	color: rgb(21, 126, 60);
+	color: rgb(171, 50, 50);
 	font-weight: 500;
 	font-size: 22px;
 	margin-bottom: 10px;
+	margin-left: 20px;
 }
+
 
 input{
 	margin-bottom: 10px;
@@ -109,21 +116,33 @@ input[type="text"]::-moz-selection {
 
 input[type="text"]{
 	border-radius: 4px;
-
 }
 
 input[type="button"]{
 	border-style: solid;
 	border-width: 1px;
-	border-color: black;
-	width: 150px;
-	height: 30px;
+	border-color: #212121;
+	width: 160px;
+	height: 35px;
+	background-color: #e74c3c;
+	color: #FFF;
+	font-size: 16px;
+}
 
+input[type="button"]:active{
+	background-color: #c0392b;
+}
+
+.form{
+	margin-left: 50px;
 }
 
 #location_select{
-	margin-left: 5%;
+	position: relative;
+	padding-top: 15px;
+	padding-bottom: 15px;
 	margin-bottom: 15px;
+	background-color: #F5F5F5;
 }
 
 #location_select input[type="text"]{
@@ -131,12 +150,75 @@ input[type="button"]{
 	height: 20px;
 }
 
+#search_field{
+	width: 500px !important;
+}
+
+#search_button{
+	width: 60px;
+	height: 25px;
+}
+
+#map {
+	position: relative;
+	width: 680px;
+	height: 500px;
+	background-color: #0F0F0F;
+
+}
+
 #style_select{
 	margin-left: 5%;
 	margin-bottom: 15px;
 }
 
+#submit{
+	background-color: #F5F5F5;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+#submit input[type="button"]{
+	height: 50px;
+	width: 600px;
+	font-size: 20px;
+}
+
+#image_div{
+	position: relative;
+	width: 100%;
+	margin-top: 50px;
+/*	width: 80%; */
+}
+
 #sundial{
 	position: relative;
-/*	width: 80%; */
+	left: 50%;
+	margin-left: -400px;
+}
+
+#bottom_bar{
+	display: table;
+	position: relative;
+	background-color: #212121;
+	color: #FFF;
+	width: 100%;
+	text-align: center;
+	height: 1.5em;
+}
+
+#bottom_bar p {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+@media only screen and (max-device-width: 480px) {
+	#banner{
+		height: 50vh;
+	}
+	#content{
+		width: 100%;
+		left: 0px;
+	}
 }

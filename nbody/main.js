@@ -27,6 +27,7 @@ var sunPreset = [new Body(1.000, 0.0, 0.00, 0.00, 0.00, 900, 0xF0C400)]
 var bodies = [];
 
 window.onload = function(){
+  positionAboutOutsidePage();
   initGUI();
   updateBodyNumber();
 
@@ -45,6 +46,12 @@ window.onload = function(){
   addSolarSystem();
   render();
 
+}
+
+function positionAboutOutsidePage(){
+  var aboutDiv = document.getElementById("about");
+  aboutDiv.style.top="-100%"
+  aboutDiv.style.display="block";
 }
 
 function render(){
