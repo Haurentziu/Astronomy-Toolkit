@@ -124,13 +124,7 @@ function rotateCoordinateSystem(oldCoord, angle){
     return newCoord;
 }
 
-function deg2rad(angle){
-    return angle*Math.PI/180;
-}
 
-function rad2deg(angle){
-    return angle*180/Math.PI;
-}
 
 /*function normalise(deg){
     while(deg<0 || deg>2*Math.PI){

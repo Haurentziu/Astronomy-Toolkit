@@ -59,6 +59,7 @@ var asteroidSpriteTexture = THREE.ImageUtils.loadTexture("./res/asteroid.png");
 var canvasWidth, canvasHeight;
 
 window.onload = function(){
+  positionAboutOutsidePage();
   loadGUI();
   try{
     init();
@@ -83,6 +84,12 @@ window.onload = function(){
 
   render();
 
+}
+
+function positionAboutOutsidePage(){
+  var aboutDiv = document.getElementById("about");
+  aboutDiv.style.top="-100%"
+  aboutDiv.style.display="block";
 }
 
 function render(){

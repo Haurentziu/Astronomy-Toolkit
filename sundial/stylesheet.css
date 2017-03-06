@@ -1,9 +1,224 @@
-body{
-	background-color: #FFF4C9;
+*{
+		margin: 0px;
+		padding: 0px;
+}
 
+body{
+	background-color: #FFF;
+	min-height: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+	min-width: 1050px;
+
+}
+
+#title{
+	position: relative;
+	top: 0px;
+	color: #FFF;
+	width: 100%;
+	height: 80vh;
+	text-shadow:
+	-0.5px -0.5px 0 #000,
+	 0.5px -0.5px 0 #000,
+	 -0.5px 0.5px 0 #000,
+		0.5px 0.5px 0 #000;
+
+}
+
+#banner{
+	position: relative;
+	background-image: url("res/sundial.png");
+	background-position: center;
+	width: 100%;
+	height: 80vh;
+	background-attachment: fixed;
+	-webkit-filter: blur(1px);
+	-moz-filter: blur(1px);
+	-o-filter: blur(1px);
+	-ms-filter: blur(1px);
+	filter: blur(1px);
+
+}
+
+#gradient{
+	z-index: 2;
+	position: relative;
+	top: -100%;
+	width: 100%;
+	height: 100%;
+	background: -webkit-linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
+/*	background: -o-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+	background: -moz-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+	background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));*/
+
+}
+
+
+#title h1{
+	position: relative;
+	top: -150%;
+	z-index: 3;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 50px;
+	font-weight: 500;
+
+}
+
+#title h2{
+	z-index: 3;
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.2);
+	width: 100%;
+	top: -150%;
+	font-weight: 500;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	padding: 10px 0 10px 0;
+
+}
+
+#content{
+	position: relative;
+	top: 0px;
+	left: 14%;
+	width: 72%;
+	border-style: solid;
+	border-color: #9d9d9d;
+	border-width: 0 1px 0 1px;
+	background-color: #fff;
+	padding-bottom: 30px;
+}
+
+#content h3{
+	color: rgb(171, 50, 50);
+	font-weight: 500;
+	font-size: 22px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+
+
+input{
+	margin-bottom: 10px;
+}
+
+input[type="text"]::selection {
+    background: #0087E3; /* WebKit/Blink Browsers */
+    color:#fff;
+}
+
+input[type="text"]::-moz-selection {
+    background: #0087E3; /* Gecko Browsers */
+    color:#fff;
+}
+
+input[type="text"]{
+	border-radius: 4px;
+}
+
+input[type="button"]{
+	border-style: solid;
+	border-width: 1px;
+	border-color: #212121;
+	width: 160px;
+	height: 35px;
+	background-color: #e74c3c;
+	color: #FFF;
+	font-size: 16px;
+}
+
+input[type="button"]:active{
+	background-color: #c0392b;
+}
+
+.form{
+	margin-left: 50px;
+}
+
+#location_select{
+	position: relative;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	margin-bottom: 15px;
+	background-color: #F5F5F5;
+}
+
+#location_select input[type="text"]{
+	width: 50px;
+	height: 20px;
+}
+
+#search_field{
+	width: 500px !important;
+}
+
+#search_button{
+	width: 60px;
+	height: 25px;
+}
+
+#map {
+	position: relative;
+	width: 680px;
+	height: 500px;
+	background-color: #0F0F0F;
+
+}
+
+#style_select{
+	margin-left: 5%;
+	margin-bottom: 15px;
+}
+
+#submit{
+	background-color: #F5F5F5;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+#submit input[type="button"]{
+	height: 50px;
+	width: 600px;
+	font-size: 20px;
+}
+
+#image_div{
+	position: relative;
+	width: 100%;
+	margin-top: 50px;
+/*	width: 80%; */
 }
 
 #sundial{
 	position: relative;
-/*	width: 80%; */	
+	left: 50%;
+	margin-left: -400px;
+}
+
+#bottom_bar{
+	display: table;
+	position: relative;
+	background-color: #212121;
+	color: #FFF;
+	width: 100%;
+	text-align: center;
+	height: 1.5em;
+}
+
+#bottom_bar p {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+@media only screen and (max-device-width: 480px) {
+	#banner{
+		height: 50vh;
+	}
+	#content{
+		width: 100%;
+		left: 0px;
+	}
 }

@@ -139,7 +139,7 @@ a{
 }
 
 #upArrows input[type="button"]{
-    opacity: 0.7;
+    opacity: 0.65;
     transition: ease-in-out, width .35s ease-in-out;
     float: left;
     display: inline-block;
@@ -175,9 +175,15 @@ a{
 
 #now{
     position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    padding: 3px 0px 3px 0px;
     left:320px;
-    top:32px;
+    top:36px;
     width:50px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #FFF;
 }
 
 .textInputs input[type="text"]{
@@ -301,6 +307,7 @@ a{
     font-weight: 100;
     margin-bottom: 10px;
     margin-top:5px;
+    margin-bottom: -8px;
     margin-left:15px;
 }
 
@@ -312,34 +319,38 @@ input[type="checkbox"], input[type="radio"] {
 #settings input[type="text"] {
   width: 50px;
   position:relative;
-  top: 3px;
-  margin-left:35px;
+  top: 0px;
+  margin-left:20px;
   background-color: #fff;
   border: 2px solid #fff;
   border-radius: 2px;
+  /*margin-bottom: 5px;*/
 
 }
 
-.side-label,a {
-  display: block;
+.side-label {
+  display: inline-block;
   position: relative;
-  margin: 10px 20px 10px 35px;
+  /*top: 20px;*/
+  margin: 5px 20px 5px 20px;
   padding-left: 26px;
   padding-top: -9px;
   cursor: pointer;
   color:#fff;
   font: normal 18px arial !important;
   cursor:default;
+  box-sizing: border-box;
 
 }
+
 
 
 .location{
   display: block;
   position: relative;
-  margin: 15px 20px -25px 50px;
+  margin: 15px 20px -20px 30px;
   padding-left: 45px;
-  padding-top: -9px;
+  /*padding-top: -9px;*/
 
 
   cursor: pointer;
@@ -349,7 +360,7 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 .side-label::before, .side-label::after {
-  content: '';
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -372,10 +383,14 @@ input:focus + .side-label::before {
 }
 
 .side-label::after {
+  position: absolute;
+  top: 0px;
+  left: 0px;
   display: none;
+/*  margin: 10px 20px 10px 35px;*/
+  margin: 4px;
   width: 12px;
   height: 12px;
-  margin: 4px;
   background-color: #FFF;
 }
 
