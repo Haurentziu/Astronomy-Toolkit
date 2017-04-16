@@ -15,6 +15,15 @@ import cgi
 
 hours = ["VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII"]
 
+#TODO change this fucking shit
+def normalise(angle):
+	while angle < 0:
+		angle += 2 * math.pi
+	while angle > 2 * math.pi:
+		angle -= 2 * math.pi
+	return angle
+
+
 def draw_sundial(latitude, longitude, scale, city_name = ""):
 	width = scale;
 	height = scale;
@@ -42,8 +51,8 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
 	offset = int(longitude / 15) / 2.0 - longitude / 15.0
 
     #draw lines and numbers
-	for time in range(6 * 4, 18 * 4 - 3):
-		hour_angle = math.radians(time / 4.0 * 15) - offset
+	for time in range(6 * 4, 19 * 4):
+		hour_angle = math.radians(time / 4.0 * 15 - 180)
 		length = 0;
 		color = ""
 		start_length = 0;
@@ -77,7 +86,8 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
 			text_x = line_end_x + math.sin(angle) * 5;
 			text_y = line_end_y - math.cos(angle) * 5;
 			text = hours[(int)(time / 4) - 6]
-
+			#text = int(math.degrees(hour_angle))
+			#text = int(math.degrees(angle))
 			deg_angle = str(int(math.degrees(angle)))
 			text = pysvg.text.text(text, x = text_x, y = text_y, fill = "rgb(26, 56, 88)")
 			text.set_text_anchor("middle")
