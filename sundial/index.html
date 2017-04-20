@@ -4,6 +4,8 @@
     <title>Sundial Generator</title>
 		<link rel = "stylesheet" type = "text/css" href = "stylesheet.css">
     <script type="text/javascript" src="../lib/analytics.js"></script>
+    <script type="text/javascript" src="../lib/jquery-2.1.4.js"></script>
+
 
   </head>
 
@@ -29,7 +31,7 @@
   			<input type = "radio" name = "type" value = "vertical">Vertical Sundial<br>
   		</div>
 -->
-  		<div id = "location_select" >
+  		<div id = "location_select"  >
         <h3>Select your location</h3>
         <div class = "form">
           <input type="button" value = "Auto Detect Location" onclick = "geolocate()"/><br>
@@ -37,18 +39,31 @@
     			Longitude: <input type = "text" id = "long" value = "0"><br><br>
           <input type = "text" placeholder = "Search location..." id = "search_field">
           <input type = "button" value = "Search" id = "search_button" onclick="geocode()"/>
-          <div id = "map">
-        </div>
+          <div id = "map"></div>
+
         </div>
       </div>
 
-      <h3>Decorate your sundial</h3>
+      <div id = "time_select"  >
+        <h3>Time Options</h3>
+        <div class = "form">
+          <input type="radio" id = "solar" name="time_type" value="solar"> Solar Time<br>
+          <input type="radio" id = "civil" name="time_type" value="civil" checked> Civil Time<br>
+
+          Time Zone: <input type="number" id = "time_zone_input" name="time_zone" min="-12" max="12" value = "0"><br>
+        </div>
+      </div>
+
   		<div id = "style_select">
-  			Motto: <input type = "text" id = "motto"><br>
+        <h3>Decorate your sundial</h3>
+        <div class = "form">
+  			     Text: <input type = "text" id = "motto"><br>
+        </div>
   		</div>
 
-      <div id = "submit">
+      <div id = "submit" class="select_select_section">
         <input type = "button" value = "Get Sundial" onclick = "getImage()">
+        <input type = "button" value = "Download PDF" onclick = "getPDF()">
       </div>
   		<div id = "image_div"></div>
 

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"  >
+<line y1="405.0" x2="405.0" style="stroke:rgb(201, 54, 54); stroke-width:2; " x1="405.0" y2="245.0"  />
+<defs  >
+<clipPath id="pathRect"  >
+<circle cy="405.0" cx="405.0" r="380.0" style="stroke:black; stroke-width:3; fill:none; "  />
+</clipPath>
+</defs>
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="504.128390046" clip-path="url(#pathRect)" x2="38.1573058013" y1="405.0" x1="405.0"  />
+<text transform="rotate(-105, 33.330428246,505.432710967)" text-anchor="middle" y="505.432710967" x="33.330428246" fill="rgb(26, 56, 88)"  >
+V</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="471.176523812" clip-path="url(#pathRect)" x2="30.8066439711" y1="465.952061406" x1="60.3482247103"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="437.193736517" clip-path="url(#pathRect)" x2="26.3661883441" y1="434.65212574" x1="56.2583313696"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="402.695049254" clip-path="url(#pathRect)" x2="25.0069905879" y1="402.87701905" x1="55.0064386994"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="368.233618635" clip-path="url(#pathRect)" x2="26.7828227046" y1="405.0" x1="405.0"  />
+<text transform="rotate(-84, 21.8062808981,367.749850459)" text-anchor="middle" y="367.749850459" x="21.8062808981" fill="rgb(26, 56, 88)"  >
+VI</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="334.359806335" clip-path="url(#pathRect)" x2="31.6235638944" y1="339.936663729" x1="61.1006509554"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="301.580733736" clip-path="url(#pathRect)" x2="39.343801686" y1="309.745412652" x1="68.2113962898"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="270.327150873" clip-path="url(#pathRect)" x2="49.6646320614" y1="280.95921791" x1="77.717424267"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="240.932315537" clip-path="url(#pathRect)" x2="62.2438258545" y1="405.0" x1="405.0"  />
+<text transform="rotate(-64, 57.7338761947,238.773530215)" text-anchor="middle" y="238.773530215" x="57.7338761947" fill="rgb(26, 56, 88)"  >
+VII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="213.624389246" clip-path="url(#pathRect)" x2="76.7083985106" y1="228.732990095" x1="102.626156523"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="188.530852562" clip-path="url(#pathRect)" x2="92.6842812037" y1="205.620522096" x1="117.340785319"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="165.691528208" clip-path="url(#pathRect)" x2="109.819622385" y1="184.584302297" x1="133.123336407"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="145.076232095" clip-path="url(#pathRect)" x2="127.800369989" y1="405.0" x1="405.0"  />
+<text transform="rotate(-46, 124.153006436,141.656182518)" text-anchor="middle" y="141.656182518" x="124.153006436" fill="rgb(26, 56, 88)"  >
+VIII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="126.603558964" clip-path="url(#pathRect)" x2="146.358507547" y1="148.582225362" x1="166.77757274"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="110.158332518" clip-path="url(#pathRect)" x2="165.274341974" y1="133.435306266" x1="184.200051818"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="95.6063460628" clip-path="url(#pathRect)" x2="184.374600503" y1="120.032160847" x1="201.7923952"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="82.8059116045" clip-path="url(#pathRect)" x2="203.5279935" y1="405.0" x1="405.0"  />
+<text transform="rotate(-32, 200.877046046,78.5665157046)" text-anchor="middle" y="78.5665157046" x="200.877046046" fill="rgb(26, 56, 88)"  >
+IX</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="71.6163285242" clip-path="url(#pathRect)" x2="222.63956681" y1="97.9360920618" x1="237.036443114"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="61.9037009664" clip-path="url(#pathRect)" x2="241.644774833" y1="88.9902508901" x1="254.541239977"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="53.5446491966" clip-path="url(#pathRect)" x2="260.503853368" y1="81.29112426" x1="271.911443891"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="46.4284524342" clip-path="url(#pathRect)" x2="279.19679942" y1="405.0" x1="405.0"  />
+<text transform="rotate(-19, 277.541494149,41.7104057557)" text-anchor="middle" y="41.7104057557" x="277.541494149" fill="rgb(26, 56, 88)"  >
+X</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="40.4580906988" clip-path="url(#pathRect)" x2="297.719077358" y1="69.2377151173" x1="306.188623882"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="35.5505618002" clip-path="url(#pathRect)" x2="316.07805325" y1="64.7176227107" x1="323.098206941"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="31.6367598431" clip-path="url(#pathRect)" x2="334.290093342" y1="61.1128051186" x1="339.872454394"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="28.6611241809" clip-path="url(#pathRect)" x2="352.378231242" y1="405.0" x1="405.0"  />
+<text transform="rotate(-7, 351.685839548,23.7092968675)" text-anchor="middle" y="23.7092968675" x="351.685839548" fill="rgb(26, 56, 88)"  >
+XI</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="26.5812058953" clip-path="url(#pathRect)" x2="370.370297888" y1="56.456373851" x1="373.104221739"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="25.3672518586" clip-path="url(#pathRect)" x2="388.297409225" y1="55.3382582908" x1="389.616034812"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="25.0018717974" clip-path="url(#pathRect)" x2="406.19271225" y1="55.0017240239" x1="406.098550757"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="25.4798285135" clip-path="url(#pathRect)" x2="424.090296877" y1="405.0" x1="405.0"  />
+<text transform="rotate(2, 424.341484994,20.4861420466)" text-anchor="middle" y="20.4861420466" x="424.341484994" fill="rgb(26, 56, 88)"  >
+XII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="26.8079725643" clip-path="url(#pathRect)" x2="442.024186475" y1="56.6652378882" x1="439.101224385"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="29.0053275062" clip-path="url(#pathRect)" x2="460.027322816" y1="58.6891174399" x1="455.683060488"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="32.1033176881" clip-path="url(#pathRect)" x2="478.130460964" y1="61.5425294496" x1="472.357003519"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="36.1461150484" clip-path="url(#pathRect)" x2="496.360886358" y1="405.0" x1="405.0"  />
+<text transform="rotate(13, 497.563003284,31.292774457)" text-anchor="middle" y="31.292774457" x="497.563003284" fill="rgb(26, 56, 88)"  >
+XIII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="41.1910618242" clip-path="url(#pathRect)" x2="514.740860683" y1="69.9128201012" x1="506.077108524"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="47.3090997434" clip-path="url(#pathRect)" x2="533.285696294" y1="75.5478550268" x1="523.157878165"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="54.5851001529" clip-path="url(#pathRect)" x2="552.001353617" y1="82.2494343514" x1="540.395983594"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="63.1179406562" clip-path="url(#pathRect)" x2="570.881456163" y1="405.0" x1="405.0"  />
+<text transform="rotate(25, 573.064106902,58.6194925069)" text-anchor="middle" y="58.6194925069" x="573.064106902" fill="rgb(26, 56, 88)"  >
+XIV</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="73.0201098811" clip-path="url(#pathRect)" x2="589.903630458" y1="99.2290485747" x1="575.305975422"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="84.4165426166" clip-path="url(#pathRect)" x2="609.025113288" y1="109.725762936" x1="592.917867502"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="97.4422967367" clip-path="url(#pathRect)" x2="628.177640375" y1="121.723168047" x1="610.558352977"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="112.238593122" clip-path="url(#pathRect)" x2="647.26175646" y1="405.0" x1="405.0"  />
+<text transform="rotate(39, 650.44941115,108.386469347)" text-anchor="middle" y="108.386469347" x="650.44941115" fill="rgb(26, 56, 88)"  >
+XV</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="128.946675314" clip-path="url(#pathRect)" x2="666.140885213" y1="150.740358842" x1="645.524499538"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="147.698950381" clip-path="url(#pathRect)" x2="684.635780731" y1="168.012191141" x1="662.559271726"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="168.607010823" clip-path="url(#pathRect)" x2="702.520343284" y1="187.269615232" x1="679.03189513"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="191.746488289" clip-path="url(#pathRect)" x2="719.520173825" y1="405.0" x1="405.0"  />
+<text transform="rotate(55, 723.658597165,188.940521029)" text-anchor="middle" y="188.940521029" x="723.658597165" fill="rgb(26, 56, 88)"  >
+XVI</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="217.139323372" clip-path="url(#pathRect)" x2="735.315555457" y1="231.970429422" x1="709.238011605"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="244.734963773" clip-path="url(#pathRect)" x2="749.550603196" y1="257.387466633" x1="722.349239786"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="274.393110069" clip-path="url(#pathRect)" x2="761.849884829" y1="284.704180327" x1="733.6775255"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="305.871609954" clip-path="url(#pathRect)" x2="771.842694199" y1="405.0" x1="405.0"  />
+<text transform="rotate(74, 776.669571754,304.567289033)" text-anchor="middle" y="304.567289033" x="776.669571754" fill="rgb(26, 56, 88)"  >
+XVII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="338.823476188" clip-path="url(#pathRect)" x2="779.193356029" y1="344.047938594" x1="749.65177529"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="372.806263483" clip-path="url(#pathRect)" x2="783.633811656" y1="375.34787426" x1="753.74166863"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="407.304950746" clip-path="url(#pathRect)" x2="784.993009412" y1="407.12298095" x1="754.993561301"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="441.766381365" clip-path="url(#pathRect)" x2="783.217177295" y1="405.0" x1="405.0"  />
+<text transform="rotate(95, 788.193719102,442.250149541)" text-anchor="middle" y="442.250149541" x="788.193719102" fill="rgb(26, 56, 88)"  >
+XVIII</text>
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="475.640193665" clip-path="url(#pathRect)" x2="778.376436106" y1="470.063336271" x1="748.899349045"  />
+<line style="stroke:rgb(89, 135, 237); stroke-width:2; " y2="508.419266264" clip-path="url(#pathRect)" x2="770.656198314" y1="500.254587348" x1="741.78860371"  />
+<line style="stroke:rgb(144, 174, 238); stroke-width:2; " y2="539.672849127" clip-path="url(#pathRect)" x2="760.335367939" y1="529.04078209" x1="732.282575733"  />
+<line style="stroke:rgb(57, 112, 233); stroke-width:2; " y2="569.067684463" clip-path="url(#pathRect)" x2="747.756174146" y1="405.0" x1="405.0"  />
+<text transform="rotate(115, 752.266123805,571.226469785)" text-anchor="middle" y="571.226469785" x="752.266123805" fill="rgb(26, 56, 88)"  >
+XIX</text>
+<circle cy="405.0" cx="405.0" r="400.0" style="stroke:black; stroke-width:3; fill:none; "  />
+<circle cy="405.0" cx="405.0" r="380.0" style="stroke:black; stroke-width:3; fill:none; "  />
+<circle cy="405.0" cx="405.0" r="350.0" style="stroke:gray; stroke-width:3; fill:none; "  />
+<text text-anchor="middle" y="680.0" x="400.0"  />
+</svg>
+

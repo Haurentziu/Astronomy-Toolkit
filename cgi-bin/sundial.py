@@ -13,7 +13,10 @@ import math
 import cgitb
 import cgi
 
-hours = ["VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII"]
+hours = ["V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX"]
+
+months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "Octomber", "November", "December"]
+equation_of_time = []
 
 #TODO change this fucking shit
 def normalise(angle):
@@ -23,26 +26,53 @@ def normalise(angle):
 		angle -= 2 * math.pi
 	return angle
 
+def get_gnomon_base_width(latitude, scale):
+	max_gnomon_size = 0.2 * scale
+	if math.fabs(latitude) < math.pi / 4.0:
+		return max_gnomon_size
+	else:
+		return max_gnomon_size / math.tan(latitude)
 
-def draw_sundial(latitude, longitude, scale, city_name = ""):
-	width = scale;
-	height = scale;
-	circle_distance = 20
+def draw_gnomon(latitude, scale):
+	svg_document = svg()
+	shape_builder = ShapeBuilder()
+
+	margin = 5
+	gnomon_width = get_gnomon_base_width(latitude, scale)
+	gnomon_height = gnomon_width * math.tan(latitude)
+	gnomon_base_x = margin
+	gnomon_base_y = gnomon_height + margin
+	cos_lat = math.cos(latitude)
+	sin_lat = math.sin(latitude)
+
+	svg_document.addElement(shape_builder.createLine(margin, gnomon_base_y, margin, margin, strokewidth=4, stroke="rgb(0, 0, 0)"))
+	svg_document.addElement(shape_builder.createLine(margin + gnomon_width, gnomon_base_y, margin, margin, strokewidth=4, stroke="rgb(0, 0, 0)"))
+	svg_document.addElement(shape_builder.createLine(margin - 2, gnomon_base_y, margin + gnomon_width, gnomon_base_y, strokewidth=4, stroke="rgb(231,76,60)"))
+
+	return svg_document.getXML()
+
+
+def draw_sundial(latitude, longitude, scale, time_zone = 0, time_type = "solar", city_name = ""):
+	margin = 5
+	width = scale - 2 * margin;
+	height = scale - 2 * margin;
+	outter_circle_distance = 20
+	inner_circle_distance = 30
+	total_circle_distance = outter_circle_distance + inner_circle_distance
 
 	svg_document = svg()
 	shape_builder = ShapeBuilder()
 	svg_defs = defs()
 
-	main_circle = shape_builder.createCircle(width / 2.0, height / 2.0, width / 2.0 - circle_distance, strokewidth = 3, stroke = "black")
-	secondary_circle = shape_builder.createCircle(width / 2.0, height / 2.0, width / 2.0 - 2 * circle_distance, strokewidth = 3, stroke = "gray")
-	outside_circle = shape_builder.createCircle(width / 2.0, height / 2.0, width / 2.0, strokewidth = 3, stroke = "black")
 
-	gnomon_base_x = width / 2.0
-	gnomon_base_y = height/ 2.0
-	gnomon_base_width = 0.2 * scale
-	line_length = width / 2.0 - circle_distance
-	svg_document.addElement(shape_builder.createLine(gnomon_base_x, gnomon_base_y, gnomon_base_x, gnomon_base_y - gnomon_base_width, strokewidth=2, stroke="rgb(201, 54, 54)"))
+	main_circle = shape_builder.createCircle(width / 2.0 + margin, height / 2.0 + margin, width / 2.0 - outter_circle_distance, strokewidth = 3, stroke = "black")
+	secondary_circle = shape_builder.createCircle(width / 2.0  + margin, height / 2.0 + margin, width / 2.0 - total_circle_distance, strokewidth = 3, stroke = "gray")
+	outside_circle = shape_builder.createCircle(width / 2.0 + margin, height / 2.0 + margin, width / 2.0, strokewidth = 3, stroke = "black")
 
+	gnomon_base_x = width / 2.0 + margin
+	gnomon_base_y = height/ 2.0 + margin
+	gnomon_base_width = get_gnomon_base_width(latitude, scale)
+	line_length = width / 2.0 - outter_circle_distance
 	clip_path = clipPath(id="pathRect")
 	clip_path.addElement(main_circle)
 	svg_defs.addElement(clip_path)
@@ -50,9 +80,13 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
 
 	offset = int(longitude / 15) / 2.0 - longitude / 15.0
 
-    #draw lines and numbers
-	for time in range(6 * 4, 19 * 4):
-		hour_angle = math.radians(time / 4.0 * 15 - 180)
+	for time in range(5 * 4, 19 * 4 + 1):
+		civil_time_correction = 0
+
+		if time_type == "civil":
+			civil_time_correction = longitude - math.radians(15 * time_zone)
+
+		hour_angle = math.radians(time / 4.0 * 15 - 180) - civil_time_correction
 		length = 0;
 		color = ""
 		start_length = 0;
@@ -62,15 +96,21 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
 			color = "rgb(57, 112, 233)"
 			start_length = 0
 		elif time % 4 == 2:
-			length = circle_distance
+			length = inner_circle_distance
 			color = "rgb(89, 135, 237)"
-			start_length = width / 2.0 - 2 * circle_distance
+			start_length = width / 2.0 - total_circle_distance
 		else:
-			length = circle_distance
+			length = inner_circle_distance
 			color = "rgb(144, 174, 238)"
-			start_length = width / 2.0 - 2 * circle_distance
+			start_length = width / 2.0 - total_circle_distance
 
 		angle = math.atan(math.tan(hour_angle) * math.sin(latitude))
+
+		if hour_angle < -math.pi / 2.0:
+			angle -= math.pi
+		elif hour_angle > math.pi / 2.0:
+			angle += math.pi
+
 		line_start_x = gnomon_base_x + math.sin(angle) * start_length
 		line_start_y = gnomon_base_y - math.cos(angle) * start_length
 		line_end_x = line_start_x + math.sin(angle) * length
@@ -85,7 +125,7 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
 			sin_angle = math.sin(angle)
 			text_x = line_end_x + math.sin(angle) * 5;
 			text_y = line_end_y - math.cos(angle) * 5;
-			text = hours[(int)(time / 4) - 6]
+			text = hours[(int)(time / 4) - 5]
 			#text = int(math.degrees(hour_angle))
 			#text = int(math.degrees(angle))
 			deg_angle = str(int(math.degrees(angle)))
@@ -106,17 +146,16 @@ def draw_sundial(latitude, longitude, scale, city_name = ""):
     #city_name_text.set_text_size("1em")
 	svg_document.addElement(city_name_text)
 
-	print svg_document.getXML()
+	svg_document.addElement(shape_builder.createLine(gnomon_base_x, gnomon_base_y, gnomon_base_x, gnomon_base_y - gnomon_base_width, strokewidth=4, stroke="rgb(231,76,60)"))
+	return svg_document.getXML()
 
 if __name__ == '__main__':
-	cgitb.enable()
+	#cgitb.enable()
 	print "Content-type: image/svg+xml\n"
-	#print "Content-type: text/html\n"
-#	print "auie"
 	form = cgi.FieldStorage()
 	latitude = float(form.getvalue("lat"))
 	longitude = float(form.getvalue("long"))
+	zone = int(form.getvalue('zone'));
 	name = form.getvalue("name")
-	#	uaie = 99
-	draw_sundial(math.radians(latitude), math.radians(longitude), 800, city_name = name)
-#	draw_sundial(math.radians(latitude), math.radians(longitude), 800, city_name = name)
+	time = form.getvalue("time")
+	print draw_sundial(math.radians(latitude), math.radians(longitude), 800, time_zone = zone, city_name = name, time_type = time)

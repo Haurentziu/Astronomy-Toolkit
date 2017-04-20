@@ -119,18 +119,25 @@ input[type="text"]{
 }
 
 input[type="button"]{
-	border-style: solid;
+	border-style: none;
 	border-width: 1px;
 	border-color: #212121;
-	width: 160px;
-	height: 35px;
+	padding: 10px;
+	/*width: 160px;
+	height: 35px;*/
 	background-color: #e74c3c;
 	color: #FFF;
-	font-size: 16px;
+	font-size: 18px;
+	-webkit-transition: background-color 100ms ease-out 5ms;
+	/*-moz-transition: background-color 80ms ease-out 5ms;
+	-o-transition: background-color 80ms ease-out 5ms;
+	transition: background-color 80ms ease-out 5ms;*/
+
+
 }
 
-input[type="button"]:active{
-	background-color: #c0392b;
+input[type="button"]:hover, input[type="button"]:focus, input[type="button"]:active{
+	background-color: #CF3A24 !important;
 }
 
 .form{
@@ -155,6 +162,8 @@ input[type="button"]:active{
 }
 
 #search_button{
+	padding: 3px;
+	font-size: 16px;
 	width: 60px;
 	height: 25px;
 }
@@ -167,13 +176,27 @@ input[type="button"]:active{
 
 }
 
-#style_select{
-	margin-left: 5%;
+#time_select{
+	padding-top: 15px;
+	padding-bottom: 15px;
 	margin-bottom: 15px;
+	background-color: #FFF;
+}
+
+#time_zone_input{
+	width: 40px;
+
+}
+
+#style_select{
+	background-color: #F5F5F5;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	margin-bottom: 15px
 }
 
 #submit{
-	background-color: #F5F5F5;
+	background-color: #FFF;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	text-align: center;
