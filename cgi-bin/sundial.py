@@ -31,7 +31,7 @@ def get_gnomon_base_width(latitude, scale):
 	if math.fabs(latitude) < math.pi / 4.0:
 		return max_gnomon_size
 	else:
-		return max_gnomon_size / math.tan(latitude)
+		return max_gnomon_size / math.fabs(math.tan(latitude))
 
 def draw_gnomon(latitude, scale):
 	svg_document = svg()
@@ -39,7 +39,7 @@ def draw_gnomon(latitude, scale):
 
 	margin = 5
 	gnomon_width = get_gnomon_base_width(latitude, scale)
-	gnomon_height = gnomon_width * math.tan(latitude)
+	gnomon_height = gnomon_width * math.fabs(math.tan(latitude))
 	gnomon_base_x = margin
 	gnomon_base_y = gnomon_height + margin
 	cos_lat = math.cos(latitude)

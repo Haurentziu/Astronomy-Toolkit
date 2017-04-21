@@ -45,16 +45,21 @@ function getImage(){
 }
 
 function getPDF(){
+	removeImage();
 	var linkEnd = getLinkEnding();
-	window.open("../cgi-bin/sundialPDF.py"+linkEnd);
+	var imgElement = document.createElement("iframe");
+	imgElement.setAttribute("src", "../cgi-bin/sundialPDF.py"+linkEnd);
+	imgElement.setAttribute("width", "820px");
+	imgElement.setAttribute("height", "820px");
+	imgElement.setAttribute("id", "sundial");
+	document.getElementById("image_div").appendChild(imgElement);
 }
 
 function addImage(ending){
-	var imgElement = document.createElement("embed");
+	var imgElement = document.createElement("img");
 	imgElement.setAttribute("src", "../cgi-bin/sundial.py" + ending);
-	imgElement.setAttribute("type", "image/svg+xml");
-	imgElement.setAttribute("width", "810px");
-	imgElement.setAttribute("height", "810px");
+	imgElement.setAttribute("width", "820px");
+	imgElement.setAttribute("height", "820px");
 	imgElement.setAttribute("id", "sundial");
 	document.getElementById("image_div").appendChild(imgElement)
 
@@ -119,6 +124,7 @@ function initMap(){
     var longitude = event.latLng.lng();
     marker.setPosition(event.latLng);
 		updateFields(latitude, longitude);
+		updateTimeZone(latitude, longitude);
 	});
 }
 
