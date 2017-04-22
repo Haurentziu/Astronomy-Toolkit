@@ -1,13 +1,8 @@
-#content h5{
-	margin-left: 40px !important;
-}
-
 #location_select{
 	position: relative;
 	padding-top: 15px;
 	padding-bottom: 15px;
 	margin-bottom: 10px;
-	background-color: #F5F5F5;
 }
 
 #location_select input[type="text"]{
@@ -46,15 +41,8 @@
 
 }
 
-#style_select{
-	background-color: #F5F5F5;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	margin-bottom: 15px
-}
-
 #submit{
-	background-color: #FFF;
+	/*background-color: #F5F5F5;*/
 	padding-top: 10px;
 	padding-bottom: 10px;
 	text-align: center;

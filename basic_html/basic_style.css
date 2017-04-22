@@ -17,7 +17,15 @@ body{
 	min-width: 1140px;
 }
 
+#main_container{
+ 	min-height: 100%;
+  position: relative;
+}
 
+
+#menu{
+  min-width: 1140px !important;
+}
 
 #title{
 	position: relative;
@@ -90,7 +98,7 @@ body{
 	background-color: #fff;
 	padding-bottom: 30px;*/
 /*  padding-top: 35px;*/
-  padding-bottom: 35px;
+/*  padding-bottom: 35px;*/
 }
 
 #content h5{
@@ -138,13 +146,23 @@ body{
 }
 
 
-#content p{
+#content p, li, label{
   /*text-indent: 50px;*/
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-size: 20px;
+  font-weight: normal;
 }
 
+#content ol{
+  padding-left: 0 !important;
+  list-style: inside decimal;
+}
+
+#content ul{
+  padding-left: 0 !important;
+  list-style: inside disc;
+}
 
 
 input{
@@ -153,15 +171,6 @@ input{
 	font-size: 16px;
 }
 
-input[type="text"]::selection {
-  /*  background: #0087E3;*/ /* WebKit/Blink Browsers */
-  color:#000;
-}
-
-input[type="text"]::-moz-selection {
-    /*background: #0087E3;*/ /* Gecko Browsers */
-	  color:#000;
-}
 
 input[type="text"], input[type="number"]{
 	border-radius: 1px;
@@ -190,11 +199,30 @@ input[type="button"]:hover, input[type="button"]:active{
 	background-color: #CF3A24 !important;
 }
 
+label{
+  margin-right: 10px;
+}
+
 .form{
-	margin-left: 50px;
+	margin-left: 0px;
 	font-size: 18px;
 	font-weight: 300;
 
+}
+
+#bottom_bar{
+	display: table;
+	position: relative;
+	background-color: #212121;
+	color: #FFF;
+	width: 100%;
+	text-align: center;
+	height: 1.5em;
+}
+
+#bottom_bar p {
+	display: table-cell;
+	vertical-align: middle;
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -215,4 +243,5 @@ input[type="button"]:hover, input[type="button"]:active{
 	#title h2{
 		top: -130vh;
 	}
+
 }

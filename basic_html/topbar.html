@@ -1,11 +1,11 @@
 <style>
   #menu{
-    min-width: 1140px;
+    min-width: 100%;
   	z-index: 4;
-  	position: absolute;
+  	position: fixed;
   	display: table;
-  	width: 100%;
-  	height: 50px;
+  	width: 100% !important;
+  	/*height: 50px;*/
   	background-color: rgba(0, 0, 0, 0.7);
   	top: 0px;
   }
@@ -18,7 +18,9 @@
   	left: 20px;
   	font-size: 35px;
   	font-weight: normal;
+
   }
+
 
   #links{
   	position: relative;
@@ -29,6 +31,7 @@
 
   #menu h5{
     display: inline-block;
+    padding: 10px;
     position: relative;
     margin-right: 22px;
     float: right;
@@ -36,16 +39,26 @@
     color: #fff;
     font-size: 20px;
     vertical-align: middle;
+    -webkit-transition: background-color 200ms ease-out 1ms;
+    -moz-transition: background-color 200ms ease-out 1ms;
+    -o-transition: background-color 200ms ease-out 1ms;
+    transition: background-color 200ms ease-out 1ms;
+
+
+  }
+
+  #menu h5:hover{
+    background-color: rgba(205, 205, 205, 0.2);
   }
 
 
 </style>
 
 <div id = "menu">
-  <h1>Astronomy Toolkit</h1>
+  <h1>Astronomy Tools</h1>
   <div id = "links">
-    <h5>About</h5>
     <a href = "../contact"><h5>Contact</h5></a>
+    <a href = "../about"><h5>About</h5></a>
     <a href = "../"><h5>Home</h5></a>
   </div>
 </div>

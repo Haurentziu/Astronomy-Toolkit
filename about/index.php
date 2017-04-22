@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact</title>
+    <title>About</title>
     <link rel = "stylesheet" type = "text/css" href = "../basic_html/basic_style.css">
     <script type="text/javascript" src="../lib/analytics.js"></script>
     <script type="text/javascript" src="../lib/jquery-2.1.4.js"></script>
@@ -14,14 +14,14 @@
       <?php include("../basic_html/topbar.html") ?>
 
       <div id = "title">
-        <div id = "banner" style = "background-image: url('doggo.jpg');">
+        <div id = "banner" style = "background-image: url('sheep.jpg');">
 
         </div>
         <div id = "gradient">
 
         </div>
-        <h1>Contact</h1>
-        <h2>Contact Information</h2>
+        <h1>About</h1>
+        <h2>Information about the site</h2>
       </div>
 
       <div id = "content">

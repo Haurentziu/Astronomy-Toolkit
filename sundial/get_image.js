@@ -16,10 +16,10 @@ window.onload = function(){
 	longitudeInput = document.getElementById("long");
 	zoneInput = document.getElementById("time_zone_input")
 	civilInput = document.getElementById("civil");
-	solarInput = document.getElementById("civil")
+	solarInput = document.getElementById("solar")
 	document.getElementById("search_field").addEventListener("keypress", enterSearch);
 
-	addImage("?lat=" + defaultLat + "&long=" + defaultLong + "&zone=" + defaultZone + "&time=civil&name=Greenwich");
+	addImage("?lat=" + defaultLat + "&long=" + defaultLong + "&zone=" + defaultZone + "&time=civil");
 	updateFields(defaultLat, defaultLong)
 }
 
@@ -28,14 +28,13 @@ function getLinkEnding(){
 	var longitude = parseFloat(longitudeInput.value);
 	var zone = parseFloat(zoneInput.value);
 	var time = "";
-	if(civilInput.value){
+	if(civilInput.checked){
 		time = "civil";
 	}
-	else if(solarInput.value){
+	else if(solarInput.checked){
 		time = "solar";
 	}
-	var motto = document.getElementById('motto').value;
-	return "?lat=" + latitude + "&long=" + longitude + "&zone=" + zone + "&time=" + time + '&name=' + motto;
+	return "?lat=" + latitude + "&long=" + longitude + "&zone=" + zone + "&time=" + time;
 }
 
 function getImage(){
@@ -94,11 +93,17 @@ function geolocate(){
 function updatePosition(position){
 	updateFields(position.coords.latitude, position.coords.longitude);
 	updateMarker(position.coords.latitude, position.coords.longitude);
+	updateTimeZone(position.coords.latitude, position.coords.longitude);
 }
 
 function updateFields(lat, lng){
 	latitudeInput.value = lat;
 	longitudeInput.value = lng;
+}
+
+function positionInputListener(){
+	updateMarker(latitudeInput.value, longitudeInput.value);
+	updateTimeZone(latitudeInput.value, longitudeInput.value);
 }
 
 function updateMarker(lat, lng){
@@ -142,7 +147,8 @@ function updateTimeZone(latitude, longitude){
    url: url,
 	}).done(function(response){
   	if(response.timeZoneId != null){
-			zoneInput.value = parseInt(response.rawOffset / 3600);
+			zoneInput.value = parseInt((response.rawOffset) / 3600);
+			console.log(response);
    	}
 	});
 }

@@ -7,11 +7,6 @@
 
 body{
   background-color: #ecf0f1;
-  /*background-image: url("./res/starry_night.jpg");
-  background-size:cover;
-  background-attachment: fixed;
-  background-position: center;*/
-
   color: #FFF;
   margin: 0px;
   font-family: 'Source Sans Pro', sans-serif;
@@ -23,7 +18,13 @@ body{
 	to { background-position: 6121px 0; }
 }
 
+#container{
+ 	min-height: 100%;
+  position: relative;
+}
+
 #menu{
+	position: absolute !important;
 	height: 150px !important;
 	background-color: rgba(0, 0, 0, 0) !important;
 }
@@ -31,6 +32,7 @@ body{
 #menu h1{
 	text-align: center !important;
 	left: 0px !important;
+	top: -15px;
 	font-size: 60px !important;
 	text-shadow:
 	-1px -1px 0 #000,
@@ -42,22 +44,24 @@ body{
 
 #links{
 	position: absolute !important;
-	display: inline-block !important;
+	display: table !important;
 	left: 0px !important;
-	top: 120px !important;
+	top: 106px !important;
 	width: 100% !important;
 	margin-left: 0px !important;
-	height: 30px !important;
-	background-color: rgba(0, 0, 0, 0.3) !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+	background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
-#bottom_bar{
-	top: 30px !important;
-}
+/*#bottom_bar{
+	top: 300px !important;
+}*/
 
 
 #title{
   position: relative;
+	display: block;
   top: 0px;
   width: 100%;
   margin: 0px;
@@ -173,6 +177,7 @@ body{
 }
 
 #pages_container{
+	display: table;
   position: relative;
   left: 15% ;
   top: 30px;
@@ -180,7 +185,9 @@ body{
 	padding-bottom: 50px;
 }
 
+
 .page{
+	display: table-row;
   float: left;
   position: relative;
   top: 0px;
@@ -206,7 +213,6 @@ body{
   -moz-transition: 200ms;
   -o-transition: 200ms;
   transition: 200ms;
-
   background-size: cover !important;
 }
 
