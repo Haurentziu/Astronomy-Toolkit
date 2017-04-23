@@ -7,7 +7,7 @@
 
 ![N-Body Simulator Photo](http://i.imgur.com/d6lsyGQ.png)
 
-![Sundial Photo](http://i.imgur.com/rIUpGQT.png)
+![Sundial Photo](http://i.imgur.com/eY7ItjJ.png)
 
 
 ### Features
