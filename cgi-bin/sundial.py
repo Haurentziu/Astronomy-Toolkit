@@ -61,19 +61,20 @@ def draw_gnomon(latitude, scale):
 	cos_lat = math.cos(latitude)
 	sin_lat = math.sin(latitude)
 
-	arrow_width = 34 * relative_scale
-	arrow_height = 10 * relative_scale
-	arrow_x = margin + 10 * relative_scale
-	arrow_y = gnomon_base_y - 2 * arrow_height - margin
+	arrow_scale = min(gnomon_width, gnomon_height) / 95.0
+	arrow_width = 30 * relative_scale * arrow_scale # width and height get reversed at rotation
+	arrow_height = 40 * relative_scale * arrow_scale
+	arrow_x = margin +  arrow_height + 10 * relative_scale
+	arrow_y = gnomon_base_y - arrow_width - margin
+
+	rotation = math.copysign(90, -latitude)
 
 	if(latitude > 0):
-		arrow_x = arrow_x + arrow_width * 1.5
-		arrow_y = arrow_y + arrow_height
+		arrow_x = arrow_x - arrow_height
+		arrow_y = arrow_y + arrow_width
 
-
-	rotation = -180 if(latitude > 0) else 0
 	arrow_drawing = arrow(arrow_x, arrow_y, arrow_width, arrow_height, stroke = "#000", fill="rgb(231,76,60)")
-	arrow_drawing.set_transform("rotate(" + str(-rotation) + ","  + str(arrow_x) + ", " + str(arrow_y) + ")")
+	arrow_drawing.set_transform("rotate(" + str(rotation) + ","  + str(arrow_x) + ", " + str(arrow_y) + ")")
 	svg_document.addElement(arrow_drawing)
 
 	svg_document.addElement(shape_builder.createLine(margin, gnomon_base_y, margin, margin, strokewidth=4, stroke="rgb(0, 0, 0)"))
@@ -84,7 +85,7 @@ def draw_gnomon(latitude, scale):
 
 def arrow(x, y, width, height, forward=True, stroke="blue", fill="blue", strokewidth=1):
 	sb = ShapeBuilder()
-	arrowshape = [(0, 0), (width, 0), (width, -height*0.5), (width*1.5, height*0.5), (width, height*1.5), (width, height), (0, height)]
+	arrowshape = [(width / 2.0, 0), (0, height), (width / 2.0, 3 * height / 4.0), (width, height), (width / 2.0, 0)]#, (width, height), (0, height)]
 
 	if not forward: # Change the direction
 	    arrowshape = [(width*1.2 - a, b) for (a, b) in arrowshape]
@@ -199,7 +200,7 @@ def draw_sundial(latitude, longitude, scale, time_zone = 0, time_type = "solar",
 	style.setFontSize(str(15 * relative_scale) + "px")
 	start_y = 100 * relative_scale;
 	dist_y = 16 * relative_scale;
-	dist_x = 100 * relative_scale
+	dist_x = 50 * relative_scale
 
 	for i in range(0, 12):
 		for j in range(0, 2):
@@ -207,7 +208,10 @@ def draw_sundial(latitude, longitude, scale, time_zone = 0, time_type = "solar",
 			x = width / 2.0 - dist_x / 2.0 + j * dist_x
 			y = height / 2.0 + start_y + dist_y * (i + 1.5)
 			correction_text = pysvg.text.text(text, x = x, y = y)
-			correction_text.set_text_anchor("middle")
+			if j == 0:
+				correction_text.set_text_anchor("end")
+			else:
+				correction_text.set_text_anchor("start")
 			correction_text.set_style(style.getStyle())
 			svg_document.addElement(correction_text)
 
@@ -217,19 +221,19 @@ def draw_sundial(latitude, longitude, scale, time_zone = 0, time_type = "solar",
 	correction_text.set_style(style.getStyle())
 	svg_document.addElement(correction_text)
 
-	rotation =  math.copysign(90, latitude)
-	arrow_width = 100 * relative_scale
-	arrow_height = 30 * relative_scale
+	arrow_width = 60 * relative_scale
+	arrow_height = 80 * relative_scale
 
-	arrow_x = width - total_circle_distance - margin - 180 * relative_scale
-	arrow_y = width / 2.0 + 250 * relative_scale
-
-	if latitude < 0:
-		arrow_x = arrow_x +  arrow_height
-		arrow_y = arrow_y - 1.5 * arrow_width
+	arrow_x = width - total_circle_distance - margin - 210 * relative_scale
+	arrow_y = width / 2.0 + 140 * relative_scale
 
 	arrow_drawing = arrow(arrow_x, arrow_y, arrow_width, arrow_height, stroke = "#000", fill="rgb(231,76,60)")
-	arrow_drawing.set_transform("rotate(" + str(-rotation) + ","  + str(arrow_x) + ", " + str(arrow_y) + ")")
+
+	if latitude < 0:
+		arrow_x = arrow_x + arrow_width / 2.0
+		arrow_y = arrow_y + arrow_height / 2.0
+		arrow_drawing.set_transform("rotate(180,"  + str(arrow_x) + ", " + str(arrow_y) + ")")
+
 	svg_document.addElement(arrow_drawing)
 
 	svg_document.addElement(shape_builder.createLine(gnomon_base_x, gnomon_base_y, gnomon_base_x, gnomon_base_y - gnomon_base_width, strokewidth=4, stroke="rgb(231,76,60)"))

@@ -6,16 +6,20 @@
 ![Solar System Photo](http://i.imgur.com/fqtLaAk.png)
 
 ![N-Body Simulator Photo](http://i.imgur.com/d6lsyGQ.png)
+
+![Sundial Photo](http://i.imgur.com/rIUpGQT.png)
+
+
 ### Features
 * JavaScript skychart
 * THREE.js Solar System
 * N-Body Simulator
+* Sundial Generator
 
 ### Upcoming Features
 * Eclipses Animations
 * Astronomical Clock
 * Daily Ephemerides
-* Sundial Generator
 
 ### References and acknowledgements
 1. Star positions from the [Yale Bright Star Catalog](http://cdsarc.u-strasbg.fr/viz-bin/Cat?V/50)
@@ -30,3 +34,4 @@
 2. [JQuery](https://github.com/jquery/jquery)
 3. [randomColor](https://github.com/davidmerfield/randomColor)
 4. [pySVG](https://github.com/zlsa/pysvg/)
+5. [ReportLab](http://www.reportlab.com/)

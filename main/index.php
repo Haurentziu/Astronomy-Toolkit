@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-1754254364823400",
+          enable_page_level_ads: true
+        });
+      </script>
       <title>Astronomy Toolkit</title>
       <link rel="stylesheet" type="text/css" href="stylesheet.css" />
       <meta name='og:image' content="https://astronomytoolkit.ddns.net/res/solar_system.jpg">
