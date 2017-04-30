@@ -42,6 +42,11 @@ body{
 		font-weight: 900 !important;
 }
 
+.dropdown_content{
+	position: absolute !important;
+	/*top: 152px !important;*/
+}
+
 #links{
 	position: absolute !important;
 	display: table !important;

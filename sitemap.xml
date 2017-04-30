@@ -28,35 +28,30 @@
 
 <url>
 	<loc>https://astronomytoolkit.ddns.net/solar_system/</loc>
-	<lastmod>2017-01-20T15:40:56+00:00</lastmod>
 	<changefreq>always</changefreq>
 	<priority>0.85</priority>
 </url>
 
 <url>
 	<loc>https://astronomytoolkit.ddns.net/nbody/</loc>
-	<lastmod>2017-01-23T15:29:42+00:00</lastmod>
 	<changefreq>always</changefreq>
 	<priority>0.85</priority>
 </url>
 
 <url>
 	<loc>https://astronomytoolkit.ddns.net/sundial/</loc>
-	<lastmod>2017-01-23T15:29:42+00:00</lastmod>
 	<changefreq>always</changefreq>
 	<priority>0.85</priority>
 </url>
 
 <url>
 	<loc>https://astronomytoolkit.ddns.net/contact/</loc>
-	<lastmod>2017-01-23T15:29:42+00:00</lastmod>
 	<changefreq>always</changefreq>
 	<priority>0.85</priority>
 </url>
 
 <url>
 	<loc>https://astronomytoolkit.ddns.net/about/</loc>
-	<lastmod>2017-01-23T15:29:42+00:00</lastmod>
 	<changefreq>always</changefreq>
 	<priority>0.85</priority>
 </url>
