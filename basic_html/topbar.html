@@ -26,7 +26,6 @@
   	position: relative;
   	display: table-cell;
   	vertical-align: middle;
-  	margin-left: 200px;
   }
 
   #menu h5, .dropdown_link{
@@ -80,27 +79,33 @@
 </style>
 
 <div id = "menu">
-  <h1>Astronomy Tools</h1>
+  <h1>Valuare &amp; Talent</h1>
   <div id = "links">
     <a href = "../contact"><h5>Contact</h5></a>
-    <a href = "../about"><h5>About</h5></a>
+
+    <div class = "dropdown">
+      <a class = "drop_link" href = "#"><h5>Downloads</h5></a>
+      <div class = "dropdown_content">
+        <a href = "../downloads/JavaFractal1.1.jar" target="_blank"><h5>Java Fractal</h5></a>
+        <a href = "../downloads/FunctionPlotter.jar" target="_blank"><h5>Function Plotter</h5></a>
+      </div>
+    </div>
 
     <div class = "dropdown">
       <a class = "drop_link" href = "#"><h5>Articles</h5></a>
       <div class = "dropdown_content">
-        <a href = "../rosetta"><h5>Rosetta Spacecraft</h5></a>
-        <a href = "../history"><h5>History Of Astronomy</h5></a>
-        <a href = "../subfields"><h5>Subfields Of Astronomy</h5></a>
-        <a href = "../halley"><h5>Halley's Comet</h5></a>
+				<a href = "../skychart_info" ><h5>Coding the Sky Map</h5></a>
+        <h5>Coding the Solar System</h5>
+        <h5>Coding the Sundial</h5>
       </div>
     </div>
 
     <div class = "dropdown">
       <a class = "drop_link" href = "#"><h5>Tools</h5></a>
       <div class = "dropdown_content">
-        <a href = "../skychart"><h5>Sky Chart</h5></a>
-        <a href = "../nbody"><h5>N-Body Simulator</h5></a>
-        <a href = "../solar_system"><h5>Solar System</h5></a>
+        <a href = "../skychart" target="_blank"><h5>Sky Chart</h5></a>
+        <a href = "../nbody" target="_blank"><h5>N-Body Simulator</h5></a>
+        <a href = "../solar_system" target="_blank"><h5>Solar System</h5></a>
         <a href = "../sundial"><h5>Sundial</h5></a>
       </div>
     </div>

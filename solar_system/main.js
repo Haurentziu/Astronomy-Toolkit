@@ -350,7 +350,7 @@ function init(){
   canvasWidth = getBrowserWidth();
   canvasHeight = getBrowserHeight();
   aspect_ratio = canvasWidth / canvasHeight;
-  camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 200);
+  camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 500);
   camera.lookAt(new THREE.Vector3(0,0,0));
   renderer = new THREE.WebGLRenderer({antialias:true, });
 
