@@ -15,7 +15,7 @@ body{
 
 @keyframes animatedBackground {
 	from { background-position: 0 0; }
-	to { background-position: 6121px 0; }
+	to { background-position: 3295px 0;}
 }
 
 #container{
@@ -79,12 +79,12 @@ body{
 
 #banner{
 	background-color: #000;
-	background-image: url("../res/starry_night.jpg");
+	background-image: url("../res/moving_banner.jpg");
 
 /*  background-size: contain;*/
 	background-position: 0px 0px;
 	background-attachment: fixed;
-	animation: animatedBackground 90s linear infinite;
+	animation: animatedBackground 40s linear infinite;
 
 	/*background-position: left;*/
 	background-repeat: repeat-x;

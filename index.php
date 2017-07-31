@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title>Astronomy Toolkit</title>
+      <title>Valuare &amp; Talent</title>
       <link rel="stylesheet" type="text/css" href="stylesheet.css" />
       <meta name='og:image' content="https://astronomytoolkit.ddns.net/res/solar_system.jpg">
       <meta name='og:description' content="Astronomy Website by Haurentziu">

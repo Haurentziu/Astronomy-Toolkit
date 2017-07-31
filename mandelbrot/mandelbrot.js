@@ -4,6 +4,10 @@ var fractalMesh;
 
 var lastScale = 1;
 
+var stats = new Stats();
+stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom);
+
 
 window.onload = function(){
   init();
@@ -16,8 +20,10 @@ window.onload = function(){
 
 
 function render(){
-  requestAnimationFrame(render);
+  stats.begin();
   renderer.render(scene, camera)
+  stats.end();
+  requestAnimationFrame(render);
 }
 
 function createFractal(){
@@ -25,10 +31,12 @@ function createFractal(){
   var material = new THREE.ShaderMaterial({
       uniforms: {
           zoom: { type: 'f', value: 1},
-          coloring: { type: 'i', value: 1},
+          coloring: { type: 'i', value: 3},
           aspect_ratio: {type: 'f', value: 1.0},
           //origin: {type: '2f', value: new THREE.Vector2(0.001643721971153, -0.822467633298876)}
-          origin: {type: '2f', value: new THREE.Vector2(0.0, 0.0)}
+          origin: {type: '2f', value: new THREE.Vector2(0.0, 0.0)},
+          color_offset: {type: 'f', value: 0.0},
+          color_density: {type: 'f', value: 1.0}
       },
       vertexShader: document.getElementById('fractal-vertex').innerHTML,
       fragmentShader: document.getElementById('fractal-fragment').innerHTML
