@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>Mandelbrot Set</title>
     <link rel="stylesheet" type="text/css" href="../res/threeStylesheet.css" />
     <script type="text/javascript" src="../lib/analytics.js"></script>
@@ -32,21 +33,29 @@
         return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
       }
 
-      float catmullRom(float S1, float S2, float S3, float S4, float d){
-      		float cr = 0.5*(d*d*d - d*d)*S1;
-      		cr += 0.5*(4.0*d*d + d - 3.0*d*d*d)*S2;
-      		cr += 0.5*(2.0 - 5.0*d*d + 3.0*d*d*d)*S3;
-      		cr += 0.5*(2.0*d*d - d - d*d*d)*S4 + 1.0;
-      		return cr;
-      	}
+      float catmullRom(float sum, float sum1, float sum2, float sum3, float d){
+        float d_2 = d * d;
+        float d_3 = d_2 * d;
+    		float cr = 0.5*(d_3 - d_2) * sum;
+    		cr += 0.5 * (4.0* d_2 + d - 3.0 * d_3) * sum1;
+    	  cr += 0.5 * (2.0 - 5.0 * d_2 + 3.0 * d_3) * sum2;
+    		cr += 0.5 * (2.0 * d_2 - d - d_3) * sum3 + 1.0;
+    		return cr;
+      //  return 0.0;
+      }
 
-
+        vec2 squareVector(vec2 z){
+          vec2 z_square = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
+          return z_square;
+        }
 
       void main () {
         vec2 z = pos;
+        float max_abs_sq = 1e7;
         bool hasEscaped = false;
         float max_iter = 400.0;
-        float max_abs_sq = 8e6;
+
+        bool isAverageColoring = (coloring == 4) || (coloring == 5);
 
         float sum = 0.0, sum1 = 0.0, sum2 = 0.0, sum3 = 0.0;
 
@@ -54,10 +63,10 @@
         float completed_iterations = max_iter;
 
         for(float iter = 0.0; iter < 400.0; iter++){
-          vec2 z_power = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y); //z^p
+          vec2 z_power =  squareVector(z);//z^p
           z = pos + z_power;
 
-          if(coloring == 4){
+        if(coloring == 4){
             sum3 = sum2;
             sum2 = sum1;
             sum1 = sum;
@@ -90,15 +99,13 @@
             else if(coloring == 2){
               color = (iter + 1.0 - log(log(length(z))) / log(2.0)) / max_iter;
             }
-            else if(coloring == 1){
-              color = (iter + 1.0 + 1.0 / log(2.0) * log(2.0) / log(length(z))) / max_iter;
-            }
+
             hasEscaped = true;
             break;
           }
         }
 
-        if(coloring == 4 || coloring == 5){
+        if(isAverageColoring){
           sum /= completed_iterations;
           if(completed_iterations > 1.0)
             sum1 /= completed_iterations - 1.0;
@@ -107,14 +114,11 @@
           if(completed_iterations > 3.0)
             sum3 /= completed_iterations - 3.0;
 
-          float il = 1.0/log(2.0);
           float lp = log(log(max_abs_sq) / 2.0);
+          float il = 1.0 / log(2.0);
 
-          float u = il*(lp - log(log(length(z)))) + 1.0;
-          color = catmullRom(sum, sum1, sum2, sum3, u);
-
-          gl_FragColor = vec4(hsv2rgb(vec3(color, 0.85, 0.85)), 1.0);
-
+          float d = il*(lp - log(log(length(z)))) + 1.0;
+          color = catmullRom(sum, sum1, sum2, sum3, d);
         }
 
         color *= color_density;

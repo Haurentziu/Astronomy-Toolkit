@@ -8,6 +8,10 @@ var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
 
+var shouldUpdate = true;
+
+var lastEventUnix = Date.now();
+var normalPixelRatio = true;
 
 window.onload = function(){
   init();
@@ -21,7 +25,16 @@ window.onload = function(){
 
 function render(){
   stats.begin();
-  renderer.render(scene, camera)
+  if(!normalPixelRatio && Date.now() - lastEventUnix > 150){
+    renderer.setPixelRatio(1.0);
+    normalPixelRatio = true;
+    shouldUpdate = true;
+  }
+
+  if(shouldUpdate){
+    renderer.render(scene, camera);
+    shouldUpdate = false;
+ }
   stats.end();
   requestAnimationFrame(render);
 }
@@ -31,7 +44,7 @@ function createFractal(){
   var material = new THREE.ShaderMaterial({
       uniforms: {
           zoom: { type: 'f', value: 1},
-          coloring: { type: 'i', value: 3},
+          coloring: { type: 'i', value: 2},
           aspect_ratio: {type: 'f', value: 1.0},
           //origin: {type: '2f', value: new THREE.Vector2(0.001643721971153, -0.822467633298876)}
           origin: {type: '2f', value: new THREE.Vector2(0.0, 0.0)},
@@ -59,6 +72,27 @@ function resize(){
 
 }
 
+function decreasePixelRatio(){
+  lastEventUnix = Date.now();
+  renderer.setPixelRatio(0.1);
+  normalPixelRatio = false;
+  shouldUpdate = true;
+}
+
+function setColoring(coloring){
+  fractalMesh.material.uniforms.coloring.value = coloring;
+  shouldUpdate = true;
+}
+
+function setColorDensity(density){
+  fractalMesh.material.uniforms.color_density.value = density;
+  shouldUpdate = true;
+}
+
+function setColorOffset(offset){
+  fractalMesh.material.uniforms.color_offset.value = offset;
+  shouldUpdate = true;
+}
 
 
 function init(){

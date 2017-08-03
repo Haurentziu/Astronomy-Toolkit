@@ -6,17 +6,18 @@ function addListeners(renderer){
   renderer.domElement.addEventListener("mousedown", mouseDownListener);
   renderer.domElement.addEventListener("mousemove", mouseMoveListener);
   renderer.domElement.addEventListener("mouseup", mouseUpListener);
+
 }
 
 function wheelListener(e){
-  var oldZoom = fractalMesh.material.uniforms.zoom.value;
-
-  if(e.wheelDelta > 0){
+  if(e.deltaY < 0){
     fractalMesh.material.uniforms.zoom.value *= 1.05;
   }
   else{
     fractalMesh.material.uniforms.zoom.value /= 1.05;
   }
+  decreasePixelRatio();
+
 }
 
 function mouseDownListener(e){
@@ -36,5 +37,6 @@ function mouseMoveListener(e){
     fractalMesh.material.uniforms.origin.value.y += 2.0 * (e.clientY - initY) / (fractalMesh.material.uniforms.zoom.value * canvasHeight);
     initX = e.clientX;
     initY = e.clientY;
+    decreasePixelRatio();
   }
 }
