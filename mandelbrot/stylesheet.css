@@ -1,0 +1,395 @@
+*{
+  /*  margin: 0;
+    padding: 0;*/
+}
+
+body{
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif	;
+}
+
+#menu{
+  position: absolute;
+  top: 0px;
+  left: -350px;
+/*  left: 0px;*/
+  width: 350px;
+  height: 100%;
+  z-index: 2;
+  /*-webkit-transition: all 2.5s ease-in-out;
+  -moz-transition: all 2.5s ease-in-out;
+  -ms-transition: all 2.5s ease-in-out;
+  -o-transition: all 2.5s ease-in-out;*/
+  /*filter: alpha(opacity=50);*/
+
+  transition: all 500ms linear;
+  background: #111111;
+  /*overflow-y: scroll;*/
+}
+
+
+.horizTranslateMenu {
+  left: 0px !important;
+}
+
+#toogle_menu_button{
+  position: absolute;
+  left: 100%;
+  width: 25px;
+  height: 25px;
+  padding: 10px;
+  background-color: #252525;
+}
+
+#menu h4{
+  margin-left: 8px;
+  margin-bottom: 4px;
+  margin-top: 5px;
+}
+
+#menu h4, .radio_input label{
+  font-weight: normal;
+  font-size: 16px;
+}
+
+#menu canvas{
+  position: relative;
+}
+
+
+#menu input, canvas{
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 18px;
+}
+
+input[type = "button"]{
+  background-color: goldenrod; /* Green */
+  color: #252525;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  outline: none;
+  transition: all 100ms ease-in-out;
+}
+
+input[type = "button"]:hover{
+  background-color: gold;
+}
+
+
+/*Range Input */
+
+/*CHROME*/
+input[type=range]{
+    -webkit-appearance: none;
+    width: 80%;
+
+}
+
+input[type=range]::-webkit-slider-runnable-track{
+    height: 4px;
+    background: rgb(231, 231, 231);
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -6px;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track{
+    background: #ccc;
+}
+
+/*FIREFOX*/
+input[type=range]{
+    /* fix for FF unable to apply focus style bug  */
+    border: 0px solid white;
+
+    /*required for proper track sizing in FF*/
+    width: 300px;
+}
+
+input[type=range]::-moz-range-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring{
+    outline: 0px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]:focus::-moz-range-track {
+    background: #ccc;
+}
+
+
+
+/*Radio Button Input */
+ .radio_input{
+   margin-left: -18px;
+ }
+/* CUSTOM RADIO & CHECKBOXES
+   http://stackoverflow.com/a/17541916/383904 */
+.radio_input,
+.checkbox_input{
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  margin-bottom: 5px !important;
+
+}
+.radio_input > input,
+.checkbox_input > input{ /* HIDE ORG RADIO & CHECKBOX */
+  visibility: hidden;
+  position: relative;
+
+}
+
+/* RADIO & CHECKBOX STYLES */
+.radio_input > i,
+.checkbox_input > i{     /* DEFAULT <i> STYLE */
+  display: inline-block;
+  vertical-align: middle;
+  width:  18px;
+  height: 18px;
+  border-radius: 50%;
+  transition: 0.2s;
+  box-shadow: inset 0 0 0 8px #252525;
+  border: 1px solid gray;
+  background: #252525;
+}
+
+/* CHECKBOX OVERWRITE STYLES */
+.checkbox_input > i {
+  width: 25px;
+  border-radius: 3px;
+}
+
+.radio_input > input +i{
+  box-shadow: inset 0 0 0 18px #252525;
+  transition: 250ms ease-in-out;
+}
+
+.radio_input:hover > i{ /* HOVER <i> STYLE */
+  box-shadow: inset 0 0 0 3px #252525;
+  /*background: #292929;*/
+}
+
+.radio_input > input:checked + i{ /* (RADIO CHECKED) <i> STYLE */
+  box-shadow: inset 0 0 0 3px #252525;
+  background-color: goldenrod;
+}
+/* CHECKBOX */
+.checkbox_input > input + i:after{
+  content: "";
+  display: block;
+  height: 14px;
+  width:  14px;
+  margin: 2px;
+  border-radius: inherit;
+  transition: inherit;
+  background: gray;
+
+}
+.checkbox_input > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
+  margin-left: 11px;
+  background:  goldenrod;
+}
+
+
+#error{
+  display: none;
+  z-index: 0;
+  background-color: black;
+  position: absolute;
+  text-align: center;
+  top : 50%;
+  left: 50%;
+  width: 100%;
+  -ms-transform: translate(-50%, -50%);
+  transform    : translate(-50%, -50%);
+}
+
+#error a{
+  color: #fff;
+}
+
+#error img{
+  display: inline-block;
+  width: 64px;
+  margin-right: 50px;
+}
+
+canvas{
+  z-index: 1;
+/*  width: 100%;
+  height: 100%;*/
+
+  image-rendering: optimizeSpeed;             /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  image-rendering: -webkit-optimize-contrast; /* Safari                        */
+  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated;                 /* Awesome future-browsers       */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+}
+
+#info{
+  z-index: 2;
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 0px;
+  left: 10px;
+}
+
+#info p{
+  font-family: "Courier New", Courier, monospace;
+  font-size: 15px;
+  color: #fff;
+  margin-top: -10px;
+}
+
+#guiContainer{
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  z-index: 2;
+  user-select: none;
+}
+
+#aboutLink{
+  color: #fff;
+  z-index: 3;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: 20px;
+}
+
+#bellowAbout{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+}
+
+.blurBellow{
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
+
+#about{
+  z-index: 4;
+  background-color: rgba(17, 17, 17, 0.85);
+  position: absolute;
+  width: 90%;
+  height: 80%;
+  top: 0px; /*For SEO */
+  left: 5%;
+  overflow: auto;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #fff;
+  border-radius: 1px;
+
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+  font-size: 110%;
+
+  display: none;
+}
+
+.showAbout{
+  -webkit-transform:translate(180%, 137.5%);
+  -moz-transform:translate(180%, 137.5%);
+  -ms-transform:translate(180%, 137.5%);
+  -o-transform:translate(180%, 137.5%);
+  transform:translate(0%, 137.5%);
+
+}
+#about a{
+  color: #fff;
+  outline: 0;
+}
+
+#about h1{
+  margin-left: 10px;
+}
+
+#about h2{
+  margin-left: 20px;
+}
+
+#about h3{
+  margin-left: 40px;
+}
+
+#about ul{
+  margin-left: 40px;
+}
+
+#aboutClose{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #fff;
+}
+
+
+::-webkit-scrollbar {
+  width:  5px;;
+  height: 5px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background:#aaaaaa;
+}
+
+::-webkit-scrollbar-track {
+  background: #212121;
+}
+
+body {
+  scrollbar-face-color: #aaaaaa;
+  scrollbar-track-color: #212121;
+}

@@ -3,7 +3,7 @@
   <head>
 
     <title>Mandelbrot Set</title>
-    <link rel="stylesheet" type="text/css" href="../res/threeStylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     <script type="text/javascript" src="../lib/analytics.js"></script>
   </head>
   <body>
@@ -24,8 +24,45 @@
       precision highp float;
       varying vec2 pos;
       uniform int coloring;
+      uniform int fractal_type;
       uniform float color_density;
       uniform float color_offset;
+
+      uniform float slopes_red[6];
+      uniform float slopes_green[6];
+      uniform float slopes_blue[6];
+
+      uniform vec2 palette_red[6];
+      uniform vec2 palette_green[6];
+      uniform vec2 palette_blue[6];
+
+      vec2 getValueFromArray(int id, vec2 array[6]){
+        for(int i = 0; i < 6; i++){
+          if(i == id) return array[i];
+        }
+      }
+
+      float getValueFromArray(int id, float array[6]){
+        for(int i = 0; i < 6; i++){
+          if(i == id) return array[i];
+        }
+      }
+
+
+      float interpolateLinear(float x, float slopes[6], vec2 palette[6]){
+        int intervalNo = 0;
+        for(int i = 0; i < 6 - 1; i++){
+          if(palette[i].x < x && x < palette[i + 1].x){
+            intervalNo = i;
+            break;
+          }
+        }
+        vec2 v = getValueFromArray(intervalNo, palette);
+        float slope = getValueFromArray(intervalNo, slopes);
+        float y = slope * (x - v.x) + v.y;
+        return y;
+      }
+
 
       vec3 hsv2rgb(vec3 c){
         vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -41,7 +78,6 @@
     	  cr += 0.5 * (2.0 - 5.0 * d_2 + 3.0 * d_3) * sum2;
     		cr += 0.5 * (2.0 * d_2 - d - d_3) * sum3 + 1.0;
     		return cr;
-      //  return 0.0;
       }
 
         vec2 squareVector(vec2 z){
@@ -51,20 +87,27 @@
 
       void main () {
         vec2 z = pos;
-        float max_abs_sq = 1e7;
+        vec2 c = vec2(0.285, 0.01);
+        float max_abs_sq = 1e15;
         bool hasEscaped = false;
         float max_iter = 400.0;
 
-        bool isAverageColoring = (coloring == 4) || (coloring == 5);
+        bool isAverageColoring = (coloring == 4) || (coloring == 5) || (coloring == 6);
 
         float sum = 0.0, sum1 = 0.0, sum2 = 0.0, sum3 = 0.0;
+        vec2 z1 = vec2(0, 0), z2 = vec2(0, 0);
 
         float color = 0.0;
         float completed_iterations = max_iter;
 
         for(float iter = 0.0; iter < 400.0; iter++){
           vec2 z_power =  squareVector(z);//z^p
-          z = pos + z_power;
+          z2 = z1;
+          z1 = z;
+          if(fractal_type == 0)
+            z = pos + z_power;
+          else if(fractal_type == 1)
+            z = c + z_power;
 
         if(coloring == 4){
             sum3 = sum2;
@@ -89,6 +132,19 @@
               float arg = atan(z.y / z.x);
               sum += 0.5 * sin(2.0 * arg) + 0.5;
             }
+          }
+
+          else if(coloring == 6){
+            sum3 = sum2;
+            sum2 = sum1;
+            sum1 = sum;
+
+            vec2 diff1 = z - z1;
+            vec2 diff2 = z1 - z2;
+            float abs_sq = diff2.x * diff2.x + diff2.y * diff2.y;
+            vec2 r = vec2((diff1.x * diff2.x + diff1.y * diff2.y) / abs_sq, (diff1.y * diff2.x - diff1.x * diff2.y) / abs_sq);
+            float arg = abs(atan(r.y, r.x));
+            sum += arg ;
           }
 
           if(z.x * z.x + z.y * z.y > max_abs_sq){
@@ -125,6 +181,12 @@
         color += color_offset;
         color -=  floor(color);
 
+      /*  float red = interpolateLinear(color, slopes_red, palette_red);
+        float green = interpolateLinear(color, slopes_green, palette_green);
+        float blue = interpolateLinear(color, slopes_blue, palette_blue);
+
+        gl_FragColor = vec4(red, green, blue, 1.0);*/
+
         gl_FragColor = vec4(hsv2rgb(vec3(color, 0.85, 0.85)), 1.0);
 
         if(!hasEscaped){
@@ -138,11 +200,69 @@
     <script src = "../lib/three.js/three.min.js"></script>
     <script src = "../lib/three.js/stats.min.js"></script>
     <script src = "../lib/dat.gui.min.js"></script>
+    <script src = "../lib/FileSaver.min.js"></script>
+    <!-- <script src = "Interpolator.js"></script>
+    <script src = "colorPalette.js"></script> -->
     <script src = "mandelbrot.js"></script>
+    <script src = "gui.js"></script>
     <script src = "controls.js"></script>
     <script src = "../lib/Utils.js"></script>
 
     <div id = "bellowAbout">
     </div>
+
+    <div id = "menu">
+      <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+      <br>
+      <h4>Color density:</h4>
+      <input type="range" name = "color_density" oninput="setColorDensity(this.value);"  step="0.01" min="0" max="2" value = "1"/>
+
+      <h4>Color offset:</h4>
+      <input type="range" name = "color_offset" oninput="setColorOffset(this.value);" step="0.01" min="-1" max="1" value = "0"/>
+
+      <h4>Fractal Type: </h4>
+      <label class = "radio_input">
+        <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
+        <i></i>   Mandelbrot
+      </label>
+      <br>
+
+      <label class = "radio_input">
+        <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
+        <i></i>   Julia
+      </label>
+      <br>
+
+
+      <h4>Coloring method: </h4>
+
+      <label class = "radio_input">
+        <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
+        <i></i>   Smooth Iteration Count
+      </label>
+      <br>
+
+      <label class = "radio_input">
+        <input type="radio" id="triangle" onchange="setColoring(4)" name="coloring">
+        <i></i>   Triangle Inequality
+      </label><br>
+
+      <label class = "radio_input">
+        <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
+      <i></i>   Stripe Average
+      </label><br>
+
+      <label class = "radio_input">
+        <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
+      <i></i>   Curvature Average
+      </label><br>
+
+    <!--  <canvas id = "red" height="100" width="310" ></canvas>
+      <canvas id = "green" height="100" width= "310" ></canvas>
+      <canvas id = "blue" height="100" width="310" ></canvas> -->
+
+      <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
+    </div>
+
   </body>
 </html>
