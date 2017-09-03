@@ -131,7 +131,6 @@
         vec2 z = pos;
         vec2 c = vec2(julia_real, julia_imag);
         bool hasEscaped = false;
-
         bool isAverageColoring = (coloring == 4) || (coloring == 5) || (coloring == 6);
 
         float sum = 0.0, sum1 = 0.0, sum2 = 0.0, sum3 = 0.0;
@@ -139,6 +138,8 @@
 
         float color = 0.0;
         float completed_iterations = MAX_ITER;
+
+        float trap_distance = 1e15;
 
         for(float iter = 0.0; iter < MAX_ITER; iter++){
           vec2 z_power =  squareVector(z);//z^p
@@ -187,6 +188,19 @@
             sum += arg / 3.1416;
           }
 
+          else if(coloring == 7){
+            float modulus = length(z);
+            if(modulus < trap_distance)
+              trap_distance = modulus;
+          }
+
+          else if(coloring == 8){
+            float a = -1.0, b = 0.0, c = 1.2;
+            float d = abs(a * z.x + b * z.y + c) / sqrt(a * a + b * b);
+            if(d < trap_distance)
+              trap_distance = d;
+          }
+
           if(z.x * z.x + z.y * z.y > escape_radius_sq){
             completed_iterations = iter;
             if(coloring == 3){
@@ -194,6 +208,9 @@
             }
             else if(coloring == 2){
               color = (iter + 1.0 - log(log(length(z))) / log(2.0)) / MAX_ITER;
+            }
+            else if(coloring == 7 || coloring == 8){
+              color = trap_distance ;
             }
 
             hasEscaped = true;
@@ -287,11 +304,14 @@
         </label>
         <br><br>
 
-        <label for = "text">Real Part: </label><input type="text" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
-        <label for = "text">Imaginary Part: </label><input type="text" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+        <label for = "text">Julia Real Part: </label><input type="text" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
+        <label for = "text">Jula Imag Part: </label><input type="text" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
         <hr>
 
         <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
+        <label for = "text">Center Real Part: </label><input type="text" id = "center_re_input" oninput="setCenterReal(parseFloat(this.value))" value = "0.0"><br >
+        <label for = "text">Center Imag Part: </label><input type="text" id = "center_img_input" oninput="setCenterImag(parseFloat(this.value))" value = "0.0"><br >
+        <label for = "text">Zoom</label><input type="text" id = "zoom_input" oninput="setZoom(parseFloat(this.value))" value = "1.0"><br >
 
       </div>
 
@@ -324,6 +344,17 @@
           <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
         <i></i>   Curvature Average
         </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="trap_point" onchange="setColoring(7)" name="coloring">
+        <i></i>   Orbit Trap (Point)
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="trap_line" onchange="setColoring(8)" name="coloring">
+        <i></i>   Orbit Trap (Line)
+        </label><br>
+
 
         <canvas id = "red" height="100" width="310" ></canvas>
         <canvas id = "green" height="100" width= "310" ></canvas>

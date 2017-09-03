@@ -28,6 +28,9 @@ function wheelListener(e){
   var newZoom = fractalMesh.material.uniforms.zoom.value;
   fractalMesh.material.uniforms.origin.value.x -= threeX / newZoom - threeX / oldZoom;
   fractalMesh.material.uniforms.origin.value.y -= threeY / newZoom - threeY / oldZoom;
+  updateFieldInput("zoom_input", fractalMesh.material.uniforms.zoom.value);
+  updateFieldInput("center_re_input", fractalMesh.material.uniforms.origin.value.x);
+  updateFieldInput("center_img_input", fractalMesh.material.uniforms.origin.value.y);
   decreasePixelRatio();
 
 }
@@ -51,6 +54,8 @@ function mouseMoveListener(e){
     fractalMesh.material.uniforms.origin.value.y += 2.0 * dpr * (e.clientY - initY) / (fractalMesh.material.uniforms.zoom.value * canvasHeight);
     initX = e.clientX;
     initY = e.clientY;
+    updateFieldInput("center_re_input", fractalMesh.material.uniforms.origin.value.x);
+    updateFieldInput("center_img_input", fractalMesh.material.uniforms.origin.value.y);
     decreasePixelRatio();
   }
 }

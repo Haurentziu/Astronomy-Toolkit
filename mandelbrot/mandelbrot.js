@@ -236,6 +236,24 @@ function setEscapeRadius(value){
   shouldUpdate = true;
 }
 
+function setCenterReal(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.origin.value.x = value;
+  shouldUpdate = true;
+}
+
+function setCenterImag(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.origin.value.y = value;
+  shouldUpdate = true;
+}
+
+function setZoom(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.zoom.value = value;
+  shouldUpdate = true;
+}
+
 function updateFieldInput(id, value){
   document.getElementById(id).value = value;
 }
