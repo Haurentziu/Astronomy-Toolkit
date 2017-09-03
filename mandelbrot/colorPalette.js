@@ -1,5 +1,5 @@
 var rgbCanvases = [], contexts = [];
-var FUNCTION_COLOR = "#a8a8a8";
+var FUNCTION_COLOR = "#6a6969";
 var POINT_RADIUS = 4;
 
 function ColorPalette(canvasInterpolator, redInterpolator, greenInterpolator, blueInterpolator, id){
@@ -27,7 +27,7 @@ ColorPalette.prototype.mouseDownListener = function(e){
 
   for(var i = 0; i < dataX.length; i++){
     var deltaX = dataX[i] * this.canvas.width - point.x;
-    var deltaY = dataY[i] * this.canvas.height - point.y;
+    var deltaY = (1.0 - dataY[i]) * this.canvas.height - point.y;
     if(deltaX * deltaX + deltaY * deltaY < 100){
       this.selectedPoint = i;
       break;
@@ -46,8 +46,14 @@ ColorPalette.prototype.mouseMoveListener = function(e){
     var dataX = this.canvasInterpolator.getDataX();
     var dataY = this.canvasInterpolator.getDataY();
     var point = getCursorPosition(this.canvas, e);
-
-    this.canvasInterpolator.updatePoint(this.selectedPoint, point.x / this.canvas.width, point.y / this.canvas.height);
+    var lastPointIndex = dataX.length - 1;
+    if(this.selectedPoint == 0 || this.selectedPoint == lastPointIndex){
+      this.canvasInterpolator.updatePoint(lastPointIndex, dataX[lastPointIndex], 1.0 - point.y / this.canvas.height);
+      this.canvasInterpolator.updatePoint(0, dataX[0], 1.0 - point.y/ this.canvas.height);
+    }
+    else{
+      this.canvasInterpolator.updatePoint(this.selectedPoint, point.x / this.canvas.width, 1.0 - point.y / this.canvas.height);
+    }
     updatePaletts(); //from mandelbrot.js
   }
 }
@@ -76,10 +82,12 @@ ColorPalette.prototype.drawPoints = function(){
   var dataX = this.canvasInterpolator.getDataX();
   var dataY = this.canvasInterpolator.getDataY();
   this.ctx.fillStyle = FUNCTION_COLOR;
+  this.ctx.strokeStyle = "#000000";
   for(var i = 0; i < dataX.length ; i++){
     this.ctx.beginPath();
-    this.ctx.arc(dataX[i] * this.canvas.width, dataY[i] * this.canvas.height, POINT_RADIUS, 0, 2*Math.PI);
+    this.ctx.arc(dataX[i] * this.canvas.width, (1.0 - dataY[i]) * this.canvas.height, POINT_RADIUS, 0, 2*Math.PI);
     this.ctx.fill();
+    this.ctx.stroke();
   }
 }
 
@@ -88,7 +96,7 @@ ColorPalette.prototype.drawFunction = function(){
   this.ctx.strokeStyle = FUNCTION_COLOR;
   for(var i = 0; i < this.canvas.width; i += this.canvas.width / 100.0){
     var x = i / this.canvas.width;
-    var y = this.canvasInterpolator.linearInterpolation(x) * this.canvas.height;
+    var y = this.canvas.height - this.canvasInterpolator.akimaInterpolation(x) * this.canvas.height;
 
     if(i == 0){
       this.ctx.moveTo(i, y);
@@ -104,9 +112,9 @@ ColorPalette.prototype.drawGradient = function(){
   for(var i = 0; i < this.canvas.width - 1; i++){
     var x = i / this.canvas.width;
 
-    var red = this.redInterpolator.linearInterpolation(x);
-    var green = this.greenInterpolator.linearInterpolation(x);
-    var blue = this.blueInterpolator.linearInterpolation(x);
+    var red = this.redInterpolator.akimaInterpolation(x);
+    var green = this.greenInterpolator.akimaInterpolation(x);
+    var blue = this.blueInterpolator.akimaInterpolation(x);
 
     this.ctx.fillStyle = "rgb( " + float2rgb(red) + ", " + float2rgb(green) + "," + float2rgb(blue) + ")";
     this.ctx.fillRect(i, 0, i + 1, this.canvas.height);

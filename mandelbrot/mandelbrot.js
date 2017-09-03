@@ -3,20 +3,51 @@ var scene, aspect_ratio, camera, renderer, controls;
 var fractalMesh;
 
 var lastScale = 1;
+var redX, redY, greenX, greenY, blueX, blueY;
 
-var redX = [0.0, 0.20416666666666666, 0.45625, 0.6666666666666666, 0.7895833333333333, 1.0];
-var redY = [0.03, 0.96, 0.99, 0.99, 0.21, 0.03];
-/*var redY = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5];*/
-
-var greenX = [0.0, 0.20416666666666666, 0.45625, 0.6666666666666666, 0.7895833333333333, 1.0];
-var greenY = [0.02, 0.13, 0.65, 0.99, 0.44, 0.02];
-
-var blueX = [0.0, 0.19583333333333333, 0.43333333333333335, 0.6625, 0.7979166666666667, 1.0];
-var blueY = [0.15, 0.02, 0.03, 0.01, 0.97, 0.15];
+//FIRE
 /*
+redX = [0,0.20416666666666666,0.45625,0.6666666666666666,0.7895833333333333,1];
+redY = [0.03,0.96,0.99,0.99,0.21,0.03];
+greenX = [0,0.20416666666666666,0.45625,0.6666666666666666,0.7895833333333333,1];
+greenY = [0.02,0.13,0.65,0.99,0.44,0.02];
+blueX = [0,0.19583333333333333,0.43333333333333335,0.6193700851932649,0.7979166666666667,1];
+blueY = [0.15,0.02,0.03,0.46976440429687505,0.97,0.15];
+
+*/
+
+redX = [0,0.1613055690642326,0.45625,0.6666666666666666,0.8322733109997165,1];
+redY = [0.025802001953124987,0.22580200195312505,0.99,0.99,0.955802001953125,0.025802001953124987];
+greenX = [0,0.15807976261261972,0.38388621422552294,0.6774346013222972,0.8258216980964906,1];
+greenY = [0.12278320312500002,0.452783203125,0.962783203125,0.6827832031250001,0.252783203125,0.12278320312500002];
+blueX = [0,0.19033782712874875,0.3967894400319745,0.616144278741652,0.848402343257781,1];
+blueY = [0.269764404296875,0.949764404296875,0.939764404296875,0.019764404296874982,0.08976440429687504,0.269764404296875];
+
+
+
+//FROST
+/*
+redX = [0,0.19678944003197454,0.45625,0.6666666666666666,0.7742087948706842,1];
+redY = [0.025802001953124987,0.3591983032226562,0.99,0.99,0.905802001953125,0.025802001953124987];
+greenX = [0,0.18388621422552293,0.41937008519326485,0.6387249239029423,0.7935636335803616,1];
+greenY = [0.232783203125,0.54617919921875,0.9999530029296875,0.732783203125,0.5327832031249999,0.232783203125];
+blueX = [0,0.19678944003197454,0.41614427874165194,0.616144278741652,0.7774346013222971,1];
+blueY = [0.409764404296875,0.659764404296875,1.0069342041015625,0.08976440429687504,0.06976440429687503,0.409764404296875];
+*/
+
+//B&W
+/*
+redX = [0,0.20324105293520034,0.40646685938681326,0.645176536806168,0.7613055690642326,1];
+redY = [0.05580200195312501,0.795802001953125,0.25580200195312497,0.985802001953125,0.435802001953125,0.05580200195312501];
+greenX = [0,0.20324105293520034,0.40646685938681326,0.645176536806168,0.7613055690642326,1];
+greenY = [0.05580200195312501,0.795802001953125,0.25580200195312497,0.985802001953125,0.435802001953125,0.05580200195312501];
+blueX = [0,0.20324105293520034,0.40646685938681326,0.645176536806168,0.7613055690642326,1];
+blueY = [0.05580200195312501,0.795802001953125,0.25580200195312497,0.985802001953125,0.435802001953125,0.05580200195312501];
+*/
+
 var redInterpolator = new Interpolator(redX, redY);
 var greenInterpolator = new Interpolator(greenX, greenY);
-var blueInterpolator = new Interpolator(blueX, blueY);*/
+var blueInterpolator = new Interpolator(blueX, blueY);
 
 var redPalette, greenPalette, bluePalette;
 
@@ -38,17 +69,27 @@ window.onload = function(){
 
   render();
 
-/*  redPalette = new ColorPalette(redInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "red");
+  redPalette = new ColorPalette(redInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "red");
   greenPalette = new ColorPalette(greenInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "green");
   bluePalette = new ColorPalette(blueInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "blue");
 
 
   redPalette.draw();
   greenPalette.draw();
-  bluePalette.draw();*/
+  bluePalette.draw();
 }
 
+function printPalettes(){
+  console.log("redX = [" + redInterpolator.getDataX().toString() + "]; \n" +
+    "redY = [" + redInterpolator.getDataY().toString() + "]; \n" +
 
+    "greenX = [" + greenInterpolator.getDataX().toString() + "]; \n" +
+    "greenY = [" + greenInterpolator.getDataY().toString() + "]; \n" +
+
+    "blueX = [" + blueInterpolator.getDataX().toString() + "]; \n" +
+    "blueY = [" + blueInterpolator.getDataY().toString() + "]; \n"
+  );
+}
 
 function render(){
   stats.begin();
@@ -59,8 +100,10 @@ function render(){
   }
 
   if(shouldUpdate){
+  //  var uaie = Date.now();
     renderer.render(scene, camera);
     shouldUpdate = false;
+  //  console.log(Date.now() - uaie);
  }
   stats.end();
   requestAnimationFrame(render);
@@ -83,8 +126,8 @@ function updatePaletts(){
 }
 
 function floatArrayToVec2Array(x, y){
-  var array = []
-  for(var i = 0 ; i < x.length; i++){
+  var array = [];
+  for(var i = 0; i < x.length; i++){
     array[i] = new THREE.Vector2(x[i], y[i])
   }
   return array;
@@ -103,14 +146,19 @@ function createFractal(){
           color_density: {type: 'f', value: 1.0},
           fractal_type: {type: 'i', value: 0},
 
-        /*  slopes_red: {type : 'uFloatArray', value: redInterpolator.getSlopes()},
+          julia_real: {type: 'f', value: 0.285},
+          julia_imag: {type: 'f', value: 0.01},
+
+          escape_radius_sq: {type: 'f', value: 1e14},
+
+          slopes_red: {type : 'uFloatArray', value: redInterpolator.getSlopes()},
           slopes_green: {type : 'uFloatArray', value: greenInterpolator.getSlopes()},
           slopes_blue: {type : 'uFloatArray', value: blueInterpolator.getSlopes()},
 
           palette_red: {type: 'v2v', value: floatArrayToVec2Array(redInterpolator.getDataX(), redInterpolator.getDataY())},
           palette_green: {type: 'v2v', value: floatArrayToVec2Array(greenInterpolator.getDataX(), greenInterpolator.getDataY())},
           palette_blue: {type: 'v2v', value: floatArrayToVec2Array(blueInterpolator.getDataX(), blueInterpolator.getDataY())},
-*/
+
       },
       vertexShader: document.getElementById('fractal-vertex').innerHTML,
       fragmentShader: document.getElementById('fractal-fragment').innerHTML
@@ -136,7 +184,7 @@ function resize(){
 
 function decreasePixelRatio(){
   lastEventUnix = Date.now();
-  renderer.setPixelRatio(0.30);
+  renderer.setPixelRatio(0.25);
   normalPixelRatio = false;
   shouldUpdate = true;
 }
@@ -144,10 +192,19 @@ function decreasePixelRatio(){
 function setColoring(coloring){
   fractalMesh.material.uniforms.coloring.value = coloring;
   shouldUpdate = true;
+  var new_esc_radius = 1e7;
+
+  if(coloring == 4){
+    new_esc_radius = 1e3;
+  }
+  setEscapeRadius(new_esc_radius); //TIA has problems with 32 bit precission!
+  updateFieldInput("radius_input", new_esc_radius.toExponential());
+
+  shouldUpdate = true;
 }
 
-function setFractalType(coloring){
-  fractalMesh.material.uniforms.fractal_type.value = coloring;
+function setFractalType(type){
+  fractalMesh.material.uniforms.fractal_type.value = type;
   shouldUpdate = true;
 }
 
@@ -161,6 +218,27 @@ function setColorOffset(offset){
   shouldUpdate = true;
 }
 
+function setJuliaReal(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.julia_real.value = value;
+  shouldUpdate = true;
+}
+
+function setJuliaImag(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.julia_imag.value = value;
+  shouldUpdate = true;
+}
+
+function setEscapeRadius(value){
+  if(!isNaN(value))
+    fractalMesh.material.uniforms.escape_radius_sq.value = value * value;
+  shouldUpdate = true;
+}
+
+function updateFieldInput(id, value){
+  document.getElementById(id).value = value;
+}
 
 function downloadFractalImage(){
   var data = renderer.domElement.toDataURL();

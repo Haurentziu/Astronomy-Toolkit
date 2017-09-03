@@ -21,12 +21,17 @@
      </script>
 
     <script id="fractal-fragment" type="x-shader/x-fragment">
+      const float MAX_ITER = 400.0;
+
       precision highp float;
       varying vec2 pos;
       uniform int coloring;
       uniform int fractal_type;
       uniform float color_density;
       uniform float color_offset;
+      uniform float julia_real;
+      uniform float julia_imag;
+      uniform float escape_radius_sq;
 
       uniform float slopes_red[6];
       uniform float slopes_green[6];
@@ -48,19 +53,56 @@
         }
       }
 
-
-      float interpolateLinear(float x, float slopes[6], vec2 palette[6]){
+      float interpolateAkima(float x, float slopes[6], vec2 palette[6]){
         int intervalNo = 0;
+
+        for(int j = 0; j < 6; j++){
+          if(palette[j].x < x && x < palette[j + 1].x){
+            intervalNo = j;
+            //break works weirdly on NVidia https://www.opengl.org/discussion_boards/showthread.php/170219-Odd-GLSL-loop-breakout-behavior
+            //FML!!!
+            //break;
+          }
+        }
+
+        vec2 paletteI = getValueFromArray(intervalNo, palette);
+        vec2 paletteIPlusOne = getValueFromArray(intervalNo + 1, palette);
+
+        float slopeI = getValueFromArray(intervalNo, slopes);
+        float slopeIPlusOne = getValueFromArray(intervalNo + 1, slopes);
+
+        float h = (paletteIPlusOne.x - paletteI.x);
+        float k = (x - paletteI.x)/h;
+        float k3 = k*k*k, k2 = k*k;
+
+        float value = (2.0 * k3 - 3.0 * k2 + 1.0) * paletteI.y;
+        value += (k3 - 2.0 * k2 + k) * slopeI * h;
+        value += (-2.0 * k3 + 3.0 *  k2) * paletteIPlusOne.y;
+        value += (k3 - k2) * slopeIPlusOne * h * slopeIPlusOne;
+        return value;
+      }
+
+
+      float  interpolateLinear(float x, float slopes[6], vec2 palette[6]){
+        int intervalNo = 99;
+        bool uaie = false;
         for(int i = 0; i < 6 - 1; i++){
-          if(palette[i].x < x && x < palette[i + 1].x){
+          if(palette[i].x <= x && x <= palette[i + 1].x){
+            uaie = (palette[i + 1].x - palette[i].x <= 0.0);
             intervalNo = i;
-            break;
+            //break;
           }
         }
         vec2 v = getValueFromArray(intervalNo, palette);
         float slope = getValueFromArray(intervalNo, slopes);
         float y = slope * (x - v.x) + v.y;
-        return y;
+        //return y;
+        if(intervalNo == 99 && x <= 1.0){
+          return 100.0;
+        }
+        else{
+          return y;
+        }
       }
 
 
@@ -87,10 +129,8 @@
 
       void main () {
         vec2 z = pos;
-        vec2 c = vec2(0.285, 0.01);
-        float max_abs_sq = 1e15;
+        vec2 c = vec2(julia_real, julia_imag);
         bool hasEscaped = false;
-        float max_iter = 400.0;
 
         bool isAverageColoring = (coloring == 4) || (coloring == 5) || (coloring == 6);
 
@@ -98,9 +138,9 @@
         vec2 z1 = vec2(0, 0), z2 = vec2(0, 0);
 
         float color = 0.0;
-        float completed_iterations = max_iter;
+        float completed_iterations = MAX_ITER;
 
-        for(float iter = 0.0; iter < 400.0; iter++){
+        for(float iter = 0.0; iter < MAX_ITER; iter++){
           vec2 z_power =  squareVector(z);//z^p
           z2 = z1;
           z1 = z;
@@ -144,16 +184,16 @@
             float abs_sq = diff2.x * diff2.x + diff2.y * diff2.y;
             vec2 r = vec2((diff1.x * diff2.x + diff1.y * diff2.y) / abs_sq, (diff1.y * diff2.x - diff1.x * diff2.y) / abs_sq);
             float arg = abs(atan(r.y, r.x));
-            sum += arg ;
+            sum += arg / 3.1416;
           }
 
-          if(z.x * z.x + z.y * z.y > max_abs_sq){
+          if(z.x * z.x + z.y * z.y > escape_radius_sq){
             completed_iterations = iter;
             if(coloring == 3){
-              color = iter / max_iter;
+              color = iter / MAX_ITER;
             }
             else if(coloring == 2){
-              color = (iter + 1.0 - log(log(length(z))) / log(2.0)) / max_iter;
+              color = (iter + 1.0 - log(log(length(z))) / log(2.0)) / MAX_ITER;
             }
 
             hasEscaped = true;
@@ -170,30 +210,40 @@
           if(completed_iterations > 3.0)
             sum3 /= completed_iterations - 3.0;
 
-          float lp = log(log(max_abs_sq) / 2.0);
+          float lp = log(log(escape_radius_sq) / 2.0);
           float il = 1.0 / log(2.0);
 
           float d = il*(lp - log(log(length(z)))) + 1.0;
+
           color = catmullRom(sum, sum1, sum2, sum3, d);
+        //  color = sum;
         }
 
-        color *= color_density;
+        //
         color += color_offset;
+        color *= color_density;
+        color = exp(color * log(1.8));
         color -=  floor(color);
 
-      /*  float red = interpolateLinear(color, slopes_red, palette_red);
-        float green = interpolateLinear(color, slopes_green, palette_green);
-        float blue = interpolateLinear(color, slopes_blue, palette_blue);
 
-        gl_FragColor = vec4(red, green, blue, 1.0);*/
+        float red = interpolateAkima(color, slopes_red, palette_red);
+        float green = interpolateAkima(color, slopes_green, palette_green);
+        float blue = interpolateAkima(color, slopes_blue, palette_blue);
+        gl_FragColor = vec4(red, green, blue, 1.0);
 
-        gl_FragColor = vec4(hsv2rgb(vec3(color, 0.85, 0.85)), 1.0);
+        //gl_FragColor = vec4(hsv2rgb(vec3(color, 0.85, 0.85)), 1.0);
 
         if(!hasEscaped){
-          gl_FragColor = vec4(0, 0, 0, 1);
+          gl_FragColor = vec4(0.0, 0.0, 0.0, 1);
         }
 
-      //  gl_FragColor = vec4(1.0, 0, 0, 1);
+      /*  if(escape_radius_sq < 100.0){
+          gl_FragColor = vec4(0.98, 0.25, 0.84, 1.0);
+        }
+        else{
+          gl_FragColor = vec4(0.1, 0.25, 0.84, 1.0);
+        }*/
+
       }
     </script>
 
@@ -201,8 +251,8 @@
     <script src = "../lib/three.js/stats.min.js"></script>
     <script src = "../lib/dat.gui.min.js"></script>
     <script src = "../lib/FileSaver.min.js"></script>
-    <!-- <script src = "Interpolator.js"></script>
-    <script src = "colorPalette.js"></script> -->
+    <script src = "interpolator.js"></script>
+    <script src = "colorPalette.js"></script>
     <script src = "mandelbrot.js"></script>
     <script src = "gui.js"></script>
     <script src = "controls.js"></script>
@@ -210,58 +260,79 @@
 
     <div id = "bellowAbout">
     </div>
+    <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+
+
 
     <div id = "menu">
-      <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+      <div id = "tab_button_container">
+        <button class = "tab_button" onclick="select_tab(event, 'fractal_menu')">Fractal</button>
+        <button class = "tab_button active" onclick="select_tab(event, 'color_menu')">Coloring</button>
+        <button class = "tab_button" onclick="select_tab(event, 'misc_menu')">Misc</button>
+      </div>
+
       <br>
-      <h4>Color density:</h4>
-      <input type="range" name = "color_density" oninput="setColorDensity(this.value);"  step="0.01" min="0" max="2" value = "1"/>
+      <div id = "fractal_menu" class = "tab_content">
 
-      <h4>Color offset:</h4>
-      <input type="range" name = "color_offset" oninput="setColorOffset(this.value);" step="0.01" min="-1" max="1" value = "0"/>
+        <h4>Fractal Type: </h4>
+        <label class = "radio_input">
+          <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
+          <i></i>   Mandelbrot
+        </label>
+        <br>
 
-      <h4>Fractal Type: </h4>
-      <label class = "radio_input">
-        <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
-        <i></i>   Mandelbrot
-      </label>
-      <br>
+        <label class = "radio_input">
+          <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
+          <i></i>   Julia
+        </label>
+        <br><br>
 
-      <label class = "radio_input">
-        <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
-        <i></i>   Julia
-      </label>
-      <br>
+        <label for = "text">Real Part: </label><input type="text" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
+        <label for = "text">Imaginary Part: </label><input type="text" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+        <hr>
 
+        <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
 
-      <h4>Coloring method: </h4>
+      </div>
 
-      <label class = "radio_input">
-        <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
-        <i></i>   Smooth Iteration Count
-      </label>
-      <br>
+      <div id = "color_menu" class = "tab_content">
+        <label>Color density:</label>
+        <input type="range" name = "color_density" oninput="setColorDensity(this.value);"  step="0.01" min="0" max="2" value = "1"/>
 
-      <label class = "radio_input">
-        <input type="radio" id="triangle" onchange="setColoring(4)" name="coloring">
-        <i></i>   Triangle Inequality
-      </label><br>
+        <label>Color offset:</label>
+        <input type="range" name = "color_offset" oninput="setColorOffset(this.value);" step="0.01" min="-1" max="1" value = "0"/>
 
-      <label class = "radio_input">
-        <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
-      <i></i>   Stripe Average
-      </label><br>
+        <h4>Coloring method: </h4>
 
-      <label class = "radio_input">
-        <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
-      <i></i>   Curvature Average
-      </label><br>
+        <label class = "radio_input">
+          <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
+          <i></i>   Smooth Iteration Count
+        </label>
+        <br>
 
-    <!--  <canvas id = "red" height="100" width="310" ></canvas>
-      <canvas id = "green" height="100" width= "310" ></canvas>
-      <canvas id = "blue" height="100" width="310" ></canvas> -->
+        <label class = "radio_input">
+          <input type="radio" id="triangle" onchange="setColoring(4);" name="coloring">
+          <i></i>   Triangle Inequality
+        </label><br>
 
-      <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
+        <label class = "radio_input">
+          <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
+        <i></i>   Stripe Average
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
+        <i></i>   Curvature Average
+        </label><br>
+
+        <canvas id = "red" height="100" width="310" ></canvas>
+        <canvas id = "green" height="100" width= "310" ></canvas>
+        <canvas id = "blue" height="100" width="310" ></canvas>
+      </div>
+
+      <div id = "misc_menu" class = "tab_content">
+        <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
+      </div>
     </div>
 
   </body>
