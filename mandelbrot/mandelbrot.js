@@ -63,6 +63,7 @@ var normalPixelRatio = true;
 window.onload = function(){
   init();
   addListeners(renderer);
+
   createFractal();
   resize();
   window.onresize = resize;
@@ -178,6 +179,10 @@ function resize(){
   renderer.domElement.style.height = getBrowserHeight() + "px";
   camera.aspect = canvasWidth / canvasHeight;
   camera.updateProjectionMatrix();
+
+  var selectorCanvas = document.getElementById("selector_canvas");
+  selectorCanvas.width = canvasWidth;
+  selectorCanvas.height = canvasHeight;
   shouldUpdate = true;
 
 }
