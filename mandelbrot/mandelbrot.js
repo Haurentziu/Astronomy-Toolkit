@@ -63,6 +63,7 @@ var normalPixelRatio = true;
 window.onload = function(){
   init();
   addListeners(renderer);
+  addJuliaPresets();
 
   createFractal();
   resize();
@@ -95,7 +96,7 @@ function printPalettes(){
 function render(){
   stats.begin();
   if(!normalPixelRatio && Date.now() - lastEventUnix > 50){
-    renderer.setPixelRatio(1.0);
+    renderer.setPixelRatio(window.devicePixelRatio);
     normalPixelRatio = true;
     shouldUpdate = true;
   }
@@ -152,6 +153,12 @@ function createFractal(){
 
           escape_radius_sq: {type: 'f', value: 1e14},
 
+          orbit_trap_point: {type: '2f', value: new THREE.Vector2(0, 0)},
+
+          orbit_trap_line_a: {type: 'f', value: -1},
+          orbit_trap_line_b: {type: 'f', value: 0},
+          orbit_trap_line_c: {type: 'f', value: 0.12},
+
           slopes_red: {type : 'uFloatArray', value: redInterpolator.getSlopes()},
           slopes_green: {type : 'uFloatArray', value: greenInterpolator.getSlopes()},
           slopes_blue: {type : 'uFloatArray', value: blueInterpolator.getSlopes()},
@@ -174,7 +181,8 @@ function resize(){
   aspectRatio = canvasWidth / canvasHeight;
   fractalMesh.scale.copy( new THREE.Vector3(aspectRatio, 1.0, 1 ) );
   fractalMesh.material.uniforms.aspect_ratio.value = aspectRatio;
-  renderer.setSize(canvasWidth, canvasHeight);
+  renderer.setSize(getBrowserWidth(), getBrowserHeight());
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.domElement.style.width = getBrowserWidth() + "px";
   renderer.domElement.style.height = getBrowserHeight() + "px";
   camera.aspect = canvasWidth / canvasHeight;
@@ -183,6 +191,9 @@ function resize(){
   var selectorCanvas = document.getElementById("selector_canvas");
   selectorCanvas.width = canvasWidth;
   selectorCanvas.height = canvasHeight;
+
+  selectorCanvas.style.width = getBrowserWidth();
+  selectorCanvas.style.height = getBrowserHeight();
   shouldUpdate = true;
 
 }
@@ -222,6 +233,32 @@ function setColorOffset(offset){
   fractalMesh.material.uniforms.color_offset.value = offset;
   shouldUpdate = true;
 }
+
+function setOrbitTrapX(x){
+  fractalMesh.material.uniforms.orbit_trap_point.value.x = x;
+  shouldUpdate = true;
+}
+
+function setOrbitTrapY(y){
+  fractalMesh.material.uniforms.orbit_trap_point.value.y = y;
+  shouldUpdate = true;
+}
+
+function setOrbitTrapA(a){
+  fractalMesh.material.uniforms.orbit_trap_line_a.value = a;
+  shouldUpdate = true;
+}
+
+function setOrbitTrapB(b){
+  fractalMesh.material.uniforms.orbit_trap_line_b.value = b;
+  shouldUpdate = true;
+}
+
+function setOrbitTrapC(c){
+  fractalMesh.material.uniforms.orbit_trap_line_c.value = c;
+  shouldUpdate = true;
+}
+
 
 function setJuliaReal(value){
   if(!isNaN(value))

@@ -11,6 +11,7 @@ function ColorPalette(canvasInterpolator, redInterpolator, greenInterpolator, bl
   this.canvas.addEventListener("mousedown", this.mouseDownListener.bind(this));
   this.canvas.addEventListener("mousemove", this.mouseMoveListener.bind(this));
   this.canvas.addEventListener("mouseup", this.mouseUpListener.bind(this));
+  this.canvas.addEventListener ("mouseout", this.mouseOutListener.bind(this), false);
 
   this.ctx = this.canvas.getContext("2d");
   this.id = id;
@@ -39,6 +40,9 @@ ColorPalette.prototype.mouseUpListener = function(e){
   this.isMouseDown = false;
 }
 
+ColorPalette.prototype.mouseOutListener = function(e){
+  this.isMouseDown = false;
+}
 
 ColorPalette.prototype.mouseMoveListener = function(e){
   //console.log(this.isMouseDown);
@@ -47,6 +51,17 @@ ColorPalette.prototype.mouseMoveListener = function(e){
     var dataY = this.canvasInterpolator.getDataY();
     var point = getCursorPosition(this.canvas, e);
     var lastPointIndex = dataX.length - 1;
+
+    if(point.x / this.canvas.width > dataX[this.selectedPoint + 1] && this.selectedPoint < lastPointIndex - 1 ){
+      dataX[this.selectedPoint] = dataX[this.selectedPoint + 1];
+      this.selectedPoint++;
+    }
+    else if(point.x / this.canvas.width < dataX[this.selectedPoint - 1] && this.selectedPoint > 1){
+      dataX[this.selectedPoint] = dataX[this.selectedPoint - 1];
+      this.selectedPoint--;
+
+    }
+
     if(this.selectedPoint == 0 || this.selectedPoint == lastPointIndex){
       this.canvasInterpolator.updatePoint(lastPointIndex, dataX[lastPointIndex], 1.0 - point.y / this.canvas.height);
       this.canvasInterpolator.updatePoint(0, dataX[0], 1.0 - point.y/ this.canvas.height);
@@ -54,6 +69,7 @@ ColorPalette.prototype.mouseMoveListener = function(e){
     else{
       this.canvasInterpolator.updatePoint(this.selectedPoint, point.x / this.canvas.width, 1.0 - point.y / this.canvas.height);
     }
+
     updatePaletts(); //from mandelbrot.js
   }
 }

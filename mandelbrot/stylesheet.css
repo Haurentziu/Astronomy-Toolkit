@@ -27,6 +27,15 @@ body{
 
   transition: all 500ms linear;
   background: #111111;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
+
 /*  overflow-y: scroll;*/
 }
 
@@ -68,16 +77,15 @@ body{
   position: relative;
   z-index: 2;
   height: 100%;
-  width: 31.3333%;
-  margin-left: 1%;
+  width: 25%;
+  margin-left: 0%;
   float: left;
   border: none;
   outline: none;
 
   background-color: #2e2e2e;
   color: #fff;
-  font-size: 17px;
-  font-family: Arial, Helvetica, sans-serif
+  font-size: 16px;
 }
 
 .tab_button:hover{
@@ -103,7 +111,7 @@ body{
   border-color: #373737;
   border-width: 0px 0px 1px 0px;
 
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 20px;
 /*  border-top: 1px solid #8c8b8b;*/
 }
@@ -125,25 +133,51 @@ body{
 }
 
 
-#menu input, canvas, label{
+#menu input, canvas, label, select{
   margin-left: 10px;
   margin-top: 0px;
   margin-bottom: 15px;
 }
 
 
-#menu label[for="text"]{
+#menu label[for="text"], #menu label[for = "julia_defaults"]{
+  position: relative;
   text-align: left;
-/*  float: left;*/
   display: inline-block;
   width: 140px;
+}
+
+#menu select{
+  width: 120px;
+  font-size: 14px;
+  padding: 3px 3px 3px 3px;
+  margin-left: 6px;
+  background-color: #252525;
+  color: white;
+  border: none;
+  appearance: none;
+
+}
+
+#menu option:hover{
+  background-color: #ff0000;
 }
 
 
 input[type = "text"]{
   width: 120px;
-  margin-left: 0px !important;
-}
+  font-size: 14px;
+
+  padding: 3px 5px 3px 5px;
+
+  background-color: #252525;
+  color: white;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 1px;
+
+  }
+
 
 input[type = "button"]{
   background-color: goldenrod;
@@ -164,24 +198,48 @@ input[type = "button"]:hover{
   background-color: gold;
 }
 
+.range_form{
+  position: relative;
+  width: 98%;
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+
+
+.range_form input[type=text]{
+  position: relative;
+  width: 13% ;
+  display: inline-block;
+  margin-bottom: 0px !important;
+  margin-left: 2% !important;
+  top: 2px;
+}
+
+@-moz-document url-prefix() {
+    .range_form input[type=text] {
+        top: -5px;
+    }
+}
+
 
 /*Range Input */
 
 /*CHROME*/
-input[type=range]{
+.range_form input[type=range]{
     -webkit-appearance: none;
-    width: 80%;
-
+    display: inline-block;
+    width: 85%;
+    margin: 0px !important;
 }
 
-input[type=range]::-webkit-slider-runnable-track{
+.range_form input[type=range]::-webkit-slider-runnable-track{
     height: 4px;
     background: rgb(231, 231, 231);
     border: none;
     border-radius: 3px;
 }
 
-input[type=range]::-webkit-slider-thumb{
+.range_form input[type=range]::-webkit-slider-thumb{
     -webkit-appearance: none;
     border: none;
     height: 16px;
@@ -191,32 +249,32 @@ input[type=range]::-webkit-slider-thumb{
     margin-top: -6px;
 }
 
-input[type=range]:focus {
+.range_form input[type=range]:focus {
     outline: none;
 }
 
-input[type=range]:focus::-webkit-slider-runnable-track{
+.range_form input[type=range]:focus::-webkit-slider-runnable-track{
     background: #ccc;
 }
 
 /*FIREFOX*/
-input[type=range]{
+.range_form input[type=range]{
     /* fix for FF unable to apply focus style bug  */
     border: 0px solid white;
 
     /*required for proper track sizing in FF*/
-    width: 300px;
+    width: 80%;
 }
 
-input[type=range]::-moz-range-track {
-    width: 300px;
+.range_form input[type=range]::-moz-range-track {
+    width: 100%;
     height: 5px;
     background: #ddd;
     border: none;
     border-radius: 3px;
 }
 
-input[type=range]::-moz-range-thumb {
+.range_form input[type=range]::-moz-range-thumb {
     border: none;
     height: 16px;
     width: 16px;
@@ -225,12 +283,12 @@ input[type=range]::-moz-range-thumb {
 }
 
 /*hide the outline behind the border*/
-input[type=range]:-moz-focusring{
+.range_form input[type=range]:-moz-focusring{
     outline: 0px solid white;
     outline-offset: -1px;
 }
 
-input[type=range]:focus::-moz-range-track {
+.range_form input[type=range]:focus::-moz-range-track {
     background: #ccc;
 }
 

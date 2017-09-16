@@ -41,6 +41,12 @@
       uniform vec2 palette_green[6];
       uniform vec2 palette_blue[6];
 
+      uniform vec2 orbit_trap_point;
+
+      uniform float orbit_trap_line_a;
+      uniform float orbit_trap_line_b;
+      uniform float orbit_trap_line_c;
+
       vec2 getValueFromArray(int id, vec2 array[6]){
         for(int i = 0; i < 6; i++){
           if(i == id) return array[i];
@@ -189,14 +195,14 @@
           }
 
           else if(coloring == 7){
-            float modulus = length(z);
+            float modulus = distance(z, orbit_trap_point);
             if(modulus < trap_distance)
               trap_distance = modulus;
           }
 
           else if(coloring == 8){
-            float a = -1.0, b = 0.0, c = 1.2;
-            float d = abs(a * z.x + b * z.y + c) / sqrt(a * a + b * b);
+            float d = abs(orbit_trap_line_a * z.x + orbit_trap_line_b * z.y + orbit_trap_line_c)
+              / sqrt(orbit_trap_line_a * orbit_trap_line_a + orbit_trap_line_b * orbit_trap_line_b);
             if(d < trap_distance)
               trap_distance = d;
           }
@@ -284,6 +290,7 @@
       <div id = "tab_button_container">
         <button class = "tab_button" onclick="select_tab(event, 'fractal_menu')">Fractal</button>
         <button class = "tab_button active" onclick="select_tab(event, 'color_menu')">Coloring</button>
+        <button class = "tab_button" onclick="select_tab(event, 'gradient_menu')">Gradient</button>
         <button class = "tab_button" onclick="select_tab(event, 'misc_menu')">Misc</button>
       </div>
 
@@ -303,8 +310,13 @@
         </label>
         <br><br>
 
-        <label for = "text">Julia Real Part: </label><input type="text" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
-        <label for = "text">Jula Imag Part: </label><input type="text" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+        <label for = "text">Julia Real Part: </label><input type="text" id="julia_real_input" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
+        <label for = "text">Jula Imag Part: </label><input type="text" id="julia_imag_input" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+
+        <label for = "julia_defaults">Julia Presets: </label>
+        <select id="julia_defaults" oninput="setJuliaPreset(this.value)">
+        </select>
+
         <hr>
 
         <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
@@ -315,11 +327,6 @@
       </div>
 
       <div id = "color_menu" class = "tab_content">
-        <label>Color density:</label>
-        <input type="range" name = "color_density" oninput="setColorDensity(this.value);"  step="0.01" min="0" max="2" value = "1"/>
-
-        <label>Color offset:</label>
-        <input type="range" name = "color_offset" oninput="setColorOffset(this.value);" step="0.01" min="-1" max="1" value = "0"/>
 
         <h4>Coloring method: </h4>
 
@@ -353,14 +360,88 @@
           <input type="radio" id="trap_line" onchange="setColoring(8)" name="coloring">
         <i></i>   Orbit Trap (Line)
         </label><br>
+        <hr >
+
+        <label>Real Part (Orbit Trap Point)</label>
+        <form class = "range_form" oninput="setOrbitTrapX(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <label>Imag Part (Orbit Trap Point)</label>
+        <form class = "range_form" oninput="setOrbitTrapY(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
 
 
+        <hr>
+        <label>A (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapA(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "-1"/>
+          <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <label>B (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapB(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+        </form>
+
+        <label>C (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapC(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0.12"/>
+          <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+        </form>
+
+
+      </div>
+
+      <div id = "gradient_menu" class = "tab_content">
+        <label>Color density:</label>
+        <form class = "range_form" oninput="setColorDensity(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1"/>
+          <input type="text" name="amountInput" value="1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+
+        <label>Color offset:</label>
+        <form class = "range_form" oninput="setColorOffset(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;" step="0.01" min="-1" max="1" value = "0"/>
+          <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <br>
+        <hr>
+
+        <label>Red:</label>
         <canvas id = "red" height="100" width="310" ></canvas>
+        <br>
+
+        <label>Green:</label>
         <canvas id = "green" height="100" width= "310" ></canvas>
+        <br>
+
+        <label>Blue:</label>
         <canvas id = "blue" height="100" width="310" ></canvas>
+        <br>
       </div>
 
       <div id = "misc_menu" class = "tab_content">
+        <h4>Control method: </h4>
+
+        <form>
+        <label class = "radio_input">
+          <input type="radio" onchange="setRectangleSelect(true);" name="control">
+        <i></i>   Rectangle Select
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio"  onchange="setRectangleSelect(false);" name="control" checked>
+        <i></i>   Click And Drag
+        </label><br>
+
+        <br>
         <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
       </div>
     </div>

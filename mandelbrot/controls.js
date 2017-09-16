@@ -1,7 +1,7 @@
 var initX, initY;
 var isMouseDown = false;
 var selectorCanvas, selectorCanvasCtx;
-var rectangleSelect = true;
+var rectangleSelect = false;
 
 function addListeners(renderer){
   selectorCanvas = document.getElementById("selector_canvas");
