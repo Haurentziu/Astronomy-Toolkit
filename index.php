@@ -22,9 +22,16 @@
 
       <div id="pages_container">
 
-        <a href = "../mandelbrot" target="_blank">
-          <div class = "page" style = "background: url(../res/mandelbrot.jpg)">
-            <h3>mandelbrot Set (beta)</h3>
+        <a href = "../fractal_gallery">
+          <div class = "page" style = "background: url(../res/fractal_gallery.jpg)">
+            <h3>Fractal Gallery</h3>
+          </div>
+        </a>
+
+
+        <a href = "../fractal" target="_blank">
+          <div class = "page" style = "background: url(../res/fractal_gen.jpg)">
+            <h3>Fractal Generator</h3>
           </div>
         </a>
 

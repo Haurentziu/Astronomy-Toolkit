@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Mandelbrot Set</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <script type="text/javascript" src="../lib/analytics.js"></script>
+  </head>
+  <body>
+
+  <script id="fractal-vertex" type="x-shader/x-vertex">
+         precision highp float;
+         uniform float zoom;
+         uniform float aspect_ratio;
+         uniform vec2 origin;
+         varying vec2 pos;
+         void main () {
+             pos = origin + vec2(position.x * aspect_ratio, position.y) / zoom;
+             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+         }
+     </script>
+
+    <script id="fractal-fragment" type="x-shader/x-fragment">
+      const float MAX_ITER = 400.0;
+
+      precision highp float;
+      varying vec2 pos;
+      uniform int coloring;
+      uniform int fractal_type;
+      uniform float color_density;
+      uniform float color_offset;
+      uniform float julia_real;
+      uniform float julia_imag;
+      uniform float escape_radius_sq;
+
+      uniform float slopes_red[6];
+      uniform float slopes_green[6];
+      uniform float slopes_blue[6];
+
+      uniform vec2 palette_red[6];
+      uniform vec2 palette_green[6];
+      uniform vec2 palette_blue[6];
+
+      uniform vec2 orbit_trap_point;
+
+      uniform float orbit_trap_line_a;
+      uniform float orbit_trap_line_b;
+      uniform float orbit_trap_line_c;
+
+      vec2 getValueFromArray(int id, vec2 array[6]){
+        for(int i = 0; i < 6; i++){
+          if(i == id) return array[i];
+        }
+      }
+
+      float getValueFromArray(int id, float array[6]){
+        for(int i = 0; i < 6; i++){
+          if(i == id) return array[i];
+        }
+      }
+
+      float interpolateAkima(float x, float slopes[6], vec2 palette[6]){
+        int intervalNo = 0;
+
+        for(int j = 0; j < 6; j++){
+          if(palette[j].x < x && x < palette[j + 1].x){
+            intervalNo = j;
+            //break works weirdly on NVidia https://www.opengl.org/discussion_boards/showthread.php/170219-Odd-GLSL-loop-breakout-behavior
+            //FML!!!
+            //break;
+          }
+        }
+
+        vec2 paletteI = getValueFromArray(intervalNo, palette);
+        vec2 paletteIPlusOne = getValueFromArray(intervalNo + 1, palette);
+
+        float slopeI = getValueFromArray(intervalNo, slopes);
+        float slopeIPlusOne = getValueFromArray(intervalNo + 1, slopes);
+
+        float h = (paletteIPlusOne.x - paletteI.x);
+        float k = (x - paletteI.x)/h;
+        float k3 = k*k*k, k2 = k*k;
+
+        float value = (2.0 * k3 - 3.0 * k2 + 1.0) * paletteI.y;
+        value += (k3 - 2.0 * k2 + k) * slopeI * h;
+        value += (-2.0 * k3 + 3.0 *  k2) * paletteIPlusOne.y;
+        value += (k3 - k2) * slopeIPlusOne * h * slopeIPlusOne;
+        return value;
+      }
+
+
+      float  interpolateLinear(float x, float slopes[6], vec2 palette[6]){
+        int intervalNo = 99;
+        bool uaie = false;
+        for(int i = 0; i < 6 - 1; i++){
+          if(palette[i].x <= x && x <= palette[i + 1].x){
+            uaie = (palette[i + 1].x - palette[i].x <= 0.0);
+            intervalNo = i;
+            //break;
+          }
+        }
+        vec2 v = getValueFromArray(intervalNo, palette);
+        float slope = getValueFromArray(intervalNo, slopes);
+        float y = slope * (x - v.x) + v.y;
+        //return y;
+        if(intervalNo == 99 && x <= 1.0){
+          return 100.0;
+        }
+        else{
+          return y;
+        }
+      }
+
+
+      vec3 hsv2rgb(vec3 c){
+        vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+        vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+        return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+      }
+
+      float catmullRom(float sum, float sum1, float sum2, float sum3, float d){
+        float d_2 = d * d;
+        float d_3 = d_2 * d;
+    		float cr = 0.5*(d_3 - d_2) * sum;
+    		cr += 0.5 * (4.0* d_2 + d - 3.0 * d_3) * sum1;
+    	  cr += 0.5 * (2.0 - 5.0 * d_2 + 3.0 * d_3) * sum2;
+    		cr += 0.5 * (2.0 * d_2 - d - d_3) * sum3 + 1.0;
+    		return cr;
+      }
+
+        vec2 squareVector(vec2 z){
+          vec2 z_square = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
+          return z_square;
+        }
+
+      void main () {
+        vec2 z = pos;
+        vec2 c = vec2(julia_real, julia_imag);
+        bool hasEscaped = false;
+        bool isAverageColoring = (coloring == 4) || (coloring == 5) || (coloring == 6);
+
+        float sum = 0.0, sum1 = 0.0, sum2 = 0.0, sum3 = 0.0;
+        vec2 z1 = vec2(0, 0), z2 = vec2(0, 0);
+
+        float color = 0.0;
+        float completed_iterations = MAX_ITER;
+
+        float trap_distance = 1e15;
+
+        for(float iter = 0.0; iter < MAX_ITER; iter++){
+          vec2 z_power =  squareVector(z);//z^p
+          z2 = z1;
+          z1 = z;
+          if(fractal_type == 0)
+            z = pos + z_power;
+          else if(fractal_type == 1)
+            z = c + z_power;
+
+        if(coloring == 4){
+            sum3 = sum2;
+            sum2 = sum1;
+            sum1 = sum;
+
+            if(iter > 1.0){
+              float abs_last_z = length(z_power);
+              float abs_c = length(pos);
+              float m_n = abs(abs_last_z - abs_c);
+              float M_n = abs_last_z + abs_c;
+              sum += (length(z) - m_n) / (M_n - m_n);
+            }
+          }
+
+          else if(coloring == 5){
+            sum3 = sum2;
+            sum2 = sum1;
+            sum1 = sum;
+
+            if(iter > 1.0){
+              float arg = atan(z.y / z.x);
+              sum += 0.5 * sin(2.0 * arg) + 0.5;
+            }
+          }
+
+          else if(coloring == 6){
+            sum3 = sum2;
+            sum2 = sum1;
+            sum1 = sum;
+
+            vec2 diff1 = z - z1;
+            vec2 diff2 = z1 - z2;
+            float abs_sq = diff2.x * diff2.x + diff2.y * diff2.y;
+            vec2 r = vec2((diff1.x * diff2.x + diff1.y * diff2.y) / abs_sq, (diff1.y * diff2.x - diff1.x * diff2.y) / abs_sq);
+            float arg = abs(atan(r.y, r.x));
+            sum += arg / 3.1416;
+          }
+
+          else if(coloring == 7){
+            float modulus = distance(z, orbit_trap_point);
+            if(modulus < trap_distance)
+              trap_distance = modulus;
+          }
+
+          else if(coloring == 8){
+            float d = abs(orbit_trap_line_a * z.x + orbit_trap_line_b * z.y + orbit_trap_line_c)
+              / sqrt(orbit_trap_line_a * orbit_trap_line_a + orbit_trap_line_b * orbit_trap_line_b);
+            if(d < trap_distance)
+              trap_distance = d;
+          }
+
+          if(z.x * z.x + z.y * z.y > escape_radius_sq){
+            completed_iterations = iter;
+            if(coloring == 3){
+              color = iter / MAX_ITER;
+            }
+            else if(coloring == 2){
+              color = (iter + 1.0 - log(log(length(z))) / log(2.0)) / MAX_ITER;
+            }
+            else if(coloring == 7 || coloring == 8){
+              color = trap_distance ;
+            }
+
+            hasEscaped = true;
+            break;
+          }
+        }
+
+        if(isAverageColoring){
+          sum /= completed_iterations;
+          if(completed_iterations > 1.0)
+            sum1 /= completed_iterations - 1.0;
+          if(completed_iterations > 2.0)
+            sum2 /= completed_iterations - 2.0;
+          if(completed_iterations > 3.0)
+            sum3 /= completed_iterations - 3.0;
+
+          float lp = log(log(escape_radius_sq) / 2.0);
+          float il = 1.0 / log(2.0);
+
+          float d = il*(lp - log(log(length(z)))) + 1.0;
+
+          color = catmullRom(sum, sum1, sum2, sum3, d);
+        //  color = sum;
+        }
+
+        //
+        color += color_offset;
+        color *= color_density;
+        color = exp(color * log(1.8));
+        color -=  floor(color);
+
+
+        float red = interpolateAkima(color, slopes_red, palette_red);
+        float green = interpolateAkima(color, slopes_green, palette_green);
+        float blue = interpolateAkima(color, slopes_blue, palette_blue);
+        gl_FragColor = vec4(red, green, blue, 1.0);
+
+        //gl_FragColor = vec4(hsv2rgb(vec3(color, 0.85, 0.85)), 1.0);
+
+        if(!hasEscaped){
+          gl_FragColor = vec4(0.0, 0.0, 0.0, 1);
+        }
+
+      /*  if(escape_radius_sq < 100.0){
+          gl_FragColor = vec4(0.98, 0.25, 0.84, 1.0);
+        }
+        else{
+          gl_FragColor = vec4(0.1, 0.25, 0.84, 1.0);
+        }*/
+
+      }
+    </script>
+
+    <script src = "../lib/three.js/three.min.js"></script>
+    <script src = "../lib/three.js/stats.min.js"></script>
+    <script src = "../lib/dat.gui.min.js"></script>
+    <script src = "../lib/FileSaver.min.js"></script>
+    <script src = "interpolator.js"></script>
+    <script src = "colorPalette.js"></script>
+    <script src = "mandelbrot.js"></script>
+    <script src = "gui.js"></script>
+    <script src = "controls.js"></script>
+    <script src = "../lib/Utils.js"></script>
+
+    <div id = "bellow_help">
+      <canvas id = "selector_canvas"></canvas>
+      <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+
+      <div id = "menu">
+        <div id = "tab_button_container">
+          <button class = "tab_button" onclick="select_tab(event, 'fractal_menu')">Fractal</button>
+          <button class = "tab_button" onclick="select_tab(event, 'color_menu')">Coloring</button>
+          <button class = "tab_button" onclick="select_tab(event, 'gradient_menu')">Gradient</button>
+          <button class = "tab_button active" onclick="select_tab(event, 'misc_menu')">Misc</button>
+        </div>
+
+        <br>
+        <div id = "fractal_menu" class = "tab_content">
+
+          <h4>Fractal Type: </h4>
+          <label class = "radio_input">
+            <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
+            <i></i>   Mandelbrot
+          </label>
+          <br>
+
+          <label class = "radio_input">
+            <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
+            <i></i>   Julia
+          </label>
+          <br><br>
+
+          <label for = "text">Julia Real Part: </label><input type="text" id="julia_real_input" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
+          <label for = "text">Jula Imag Part: </label><input type="text" id="julia_imag_input" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+
+          <label for = "julia_defaults">Julia Presets: </label>
+          <select id="julia_defaults" oninput="setJuliaPreset(this.value)">
+          </select>
+
+          <hr>
+
+          <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
+          <label for = "text">Center Real Part: </label><input type="text" id = "center_re_input" oninput="setCenterReal(parseFloat(this.value))" value = "0.0"><br >
+          <label for = "text">Center Imag Part: </label><input type="text" id = "center_img_input" oninput="setCenterImag(parseFloat(this.value))" value = "0.0"><br >
+          <label for = "text">Zoom</label><input type="text" id = "zoom_input" oninput="setZoom(parseFloat(this.value))" value = "1.0"><br >
+
+        </div>
+
+        <div id = "color_menu" class = "tab_content">
+
+          <h4>Coloring method: </h4>
+
+          <label class = "radio_input">
+            <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
+            <i></i>   Smooth Iteration Count
+          </label>
+          <br>
+
+          <label class = "radio_input">
+            <input type="radio" id="triangle" onchange="setColoring(4);" name="coloring">
+            <i></i>   Triangle Inequality
+          </label><br>
+
+          <label class = "radio_input">
+            <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
+          <i></i>   Stripe Average
+          </label><br>
+
+          <label class = "radio_input">
+            <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
+          <i></i>   Curvature Average
+          </label><br>
+
+          <label class = "radio_input">
+            <input type="radio" id="trap_point" onchange="setColoring(7)" name="coloring">
+          <i></i>   Orbit Trap (Point)
+          </label><br>
+
+          <label class = "radio_input">
+            <input type="radio" id="trap_line" onchange="setColoring(8)" name="coloring">
+          <i></i>   Orbit Trap (Line)
+          </label><br>
+          <hr >
+
+          <label>Real Part (Orbit Trap Point)</label>
+          <form class = "range_form" oninput="setOrbitTrapX(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+            <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          </form>
+
+          <label>Imag Part (Orbit Trap Point)</label>
+          <form class = "range_form" oninput="setOrbitTrapY(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+            <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          </form>
+
+
+          <hr>
+          <label>A (Orbit Trap Line)</label>
+          <form class = "range_form" oninput="setOrbitTrapA(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "-1"/>
+            <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          </form>
+
+          <label>B (Orbit Trap Line)</label>
+          <form class = "range_form" oninput="setOrbitTrapB(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+            <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+          </form>
+
+          <label>C (Orbit Trap Line)</label>
+          <form class = "range_form" oninput="setOrbitTrapC(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0.12"/>
+            <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+          </form>
+
+
+        </div>
+
+        <div id = "gradient_menu" class = "tab_content">
+          <label>Color density:</label>
+          <form class = "range_form" oninput="setColorDensity(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1"/>
+            <input type="text" name="amountInput" value="1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          </form>
+
+
+          <label>Color offset:</label>
+          <form class = "range_form" oninput="setColorOffset(this.amountInput.value);" action="javascript:void(0);">
+            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;" step="0.01" min="-1" max="1" value = "0"/>
+            <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          </form>
+
+          <br>
+          <hr>
+
+          <label>Red:</label>
+          <canvas id = "red" height="100" width="310" ></canvas>
+          <br>
+
+          <label>Green:</label>
+          <canvas id = "green" height="100" width= "310" ></canvas>
+          <br>
+
+          <label>Blue:</label>
+          <canvas id = "blue" height="100" width="310" ></canvas>
+          <br>
+
+          <input type = "button" onclick="resetPalettes();" value = "Reset Gradient"/>
+        </div>
+
+        <div id = "misc_menu" class = "tab_content">
+          <h4>Control method: </h4>
+
+          <form>
+          <label class = "radio_input">
+            <input type="radio" onchange="setRectangleSelect(true);" name="control">
+          <i></i>   Rectangle Select
+          </label><br>
+
+          <label class = "radio_input">
+            <input type="radio"  onchange="setRectangleSelect(false);" name="control" checked>
+          <i></i>   Click And Drag
+          </label><br>
+
+          <br>
+          <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
+        </div>
+      </div>
+      <a id = "help_button" href = "javascript:void(0);" onclick="toogle_help();">Help</a>
+    </div>
+
+    <div id = "help_container">
+      <a id = "close_button" href = "javascript:void(0);" onclick="toogle_help();">Close</a>
+      <h1>Fractal Generator</h1>
+      <hr />
+      <h2>Controls</h2>
+      <p>
+        For medium and high performance computers, you can use the "Click and Drag" option. For
+          computers which cannot render the fractal in real time, use the "Rectangle Select" option.
+      </p>
+      <p>
+        Set the prefered option from the "Misc" tab in the menu:
+      </p>
+      <img src = "res/control.jpg" />
+
+      <h3>Click and Drag</h3>
+      <ul>
+        <li>
+          Mouse Wheel - Zoom in and out
+        </li>
+        <li>
+          Left Mouse Button - Drag the fractal
+        </li>
+        <li>
+          ESC - Zoom out and center the fractal
+        </li>
+      </ul>
+
+      <h3>Rectangle Select</h3>
+      <ul>
+        <li>
+          Left Mouse Button - Select area to zoom in
+        </li>
+        <li>
+          ESC - Zoom out and center the fractal
+        </li>
+
+      </ul>
+
+      <h2>Gallery</h2>
+      <p>Check out the gallery of wallpapers generated using this tool <a href = "../fractal_gallery/" target="_blank">here</a>.</p>
+
+    </div>
+
+
+  </body>
+</html>

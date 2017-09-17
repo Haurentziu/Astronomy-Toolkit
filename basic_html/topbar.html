@@ -1,4 +1,9 @@
 <style>
+  *{
+      margin: 0px;
+      padding: 0px;
+  }
+
   #menu{
     min-width: 100%;
   	z-index: 4;
@@ -70,6 +75,7 @@
     width: 100%;
     display: block;
     float: left !important;
+    margin-bottom: 0px;
   }
   .dropdown:hover .dropdown_content {
       display: block;
@@ -94,15 +100,17 @@
     <div class = "dropdown">
       <a class = "drop_link" href = "#"><h5>Articles</h5></a>
       <div class = "dropdown_content">
+        <a href = "../fractal_gallery" ><h5>Fractal Gallery</h5></a>
 				<a href = "../skychart_info" ><h5>Coding the Sky Map</h5></a>
-        <h5>Coding the Solar System</h5>
-        <h5>Coding the Sundial</h5>
+        <!--<h5>Coding the Solar System</h5>
+        <h5>Coding the Sundial</h5> -->
       </div>
     </div>
 
     <div class = "dropdown">
-      <a class = "drop_link" href = "#"><h5>Tools</h5></a>
+      <a class = "drop_link" href = "#"><h5>Interactive</h5></a>
       <div class = "dropdown_content">
+        <a href = "../fractal" target="_blank"><h5>Fractal Generator</h5></a>
         <a href = "../skychart" target="_blank"><h5>Sky Chart</h5></a>
         <a href = "../nbody" target="_blank"><h5>N-Body Simulator</h5></a>
         <a href = "../solar_system" target="_blank"><h5>Solar System</h5></a>
