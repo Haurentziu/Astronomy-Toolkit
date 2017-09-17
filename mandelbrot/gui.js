@@ -1,4 +1,6 @@
 var show_menu = false;
+var show_help = false;
+
 var juliaDefaults = [
   [0.285, 0.01],
   [-0.4, 0.6],
@@ -15,16 +17,32 @@ var juliaDefaults = [
 
 
 function toogle_menu(){
-  var menu = document.getElementById("menu");
-  var button = document.getElementById("toogle_menu_button");
-  show_menu = !show_menu;
-  if(show_menu){
-    menu.classList.add("horizTranslateMenu");
-    button.classList.add("horizTranslateMenu");
+  if(!show_help){
+    var menu = document.getElementById("menu");
+    var button = document.getElementById("toogle_menu_button");
+    show_menu = !show_menu;
+    if(show_menu){
+      menu.classList.add("horizTranslateMenu");
+      button.classList.add("horizTranslateMenu");
+    }
+    else{
+      menu.classList.remove("horizTranslateMenu");
+      button.classList.remove("horizTranslateMenu");
+    }
+  }
+}
+
+function toogle_help(){
+  var help = document.getElementById("help_container");
+  var bellow = document.getElementById("bellow_help");
+  show_help = !show_help;
+  if(show_help){
+    help.classList.add("vertTranslateHelp");
+    bellow.classList.add("blur_bellow");
   }
   else{
-    menu.classList.remove("horizTranslateMenu");
-    button.classList.remove("horizTranslateMenu");
+    help.classList.remove("vertTranslateHelp");
+    bellow.classList.remove("blur_bellow");
   }
 }
 

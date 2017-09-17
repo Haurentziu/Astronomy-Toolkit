@@ -45,9 +45,9 @@ blueX = [0,0.20324105293520034,0.40646685938681326,0.645176536806168,0.761305569
 blueY = [0.05580200195312501,0.795802001953125,0.25580200195312497,0.985802001953125,0.435802001953125,0.05580200195312501];
 */
 
-var redInterpolator = new Interpolator(redX, redY);
-var greenInterpolator = new Interpolator(greenX, greenY);
-var blueInterpolator = new Interpolator(blueX, blueY);
+var redInterpolator = new Interpolator(redX.slice(), redY.slice());
+var greenInterpolator = new Interpolator(greenX.slice(), greenY.slice());
+var blueInterpolator = new Interpolator(blueX.slice(), blueY.slice());
 
 var redPalette, greenPalette, bluePalette;
 
@@ -79,6 +79,19 @@ window.onload = function(){
   redPalette.draw();
   greenPalette.draw();
   bluePalette.draw();
+}
+
+function resetPalettes(){
+  redInterpolator = new Interpolator(redX.slice(), redY.slice());
+  greenInterpolator = new Interpolator(greenX.slice(), greenY.slice());
+  blueInterpolator = new Interpolator(blueX.slice(), blueY.slice());
+
+  redPalette = new ColorPalette(redInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "red");
+  greenPalette = new ColorPalette(greenInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "green");
+  bluePalette = new ColorPalette(blueInterpolator, redInterpolator, greenInterpolator, blueInterpolator, "blue");
+
+  updatePaletts();
+  shouldUpdate = true;
 }
 
 function printPalettes(){
@@ -331,5 +344,5 @@ function init(){
   scene.background = new THREE.Color(0x0f0f0f);
 
   renderer.domElement.style="position:absolute; top:0px; left:0px; margin:0px; width: 100%; height: 100%;"
-  document.getElementById('bellowAbout').appendChild(renderer.domElement);
+  document.getElementById('bellow_help').appendChild(renderer.domElement);
 }

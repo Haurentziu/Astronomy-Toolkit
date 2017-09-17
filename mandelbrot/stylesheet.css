@@ -1,6 +1,6 @@
 *{
-  /*  margin: 0;
-    padding: 0;*/
+    margin: 0;
+    padding: 0;
 }
 
 body{
@@ -10,9 +10,106 @@ body{
 
 }
 
+#help_button{
+  z-index: 3;
+  position: fixed;
+  right: 10px;
+  bottom: 5px;
+  color: #fff;
+}
+
+#help_container{
+  position: fixed;
+  z-index: 4;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  top: 5%;
+  left: 5%;
+  top: -90%;
+  margin-top: -20px;
+  width: 90%;
+  height: 90%;
+  transition: all 500ms linear;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: auto;
+}
+
+.vertTranslateHelp{
+  margin-top: -30px !important;
+  transform: translate(0, 105.556%); /* 100% + (top / height) * 100*/
+}
+
+.blur_bellow{
+  /*-webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px);*/
+
+}
+
+#help_container h1{
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+#help_container h2{
+  margin-top: 20px;
+  font-size: 23px;
+}
+
+#help_container h3{
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+#help_container p{
+  margin-top: 10px;
+  font-size: 17px;
+}
+
+#help_container ul{
+  margin-top: 10px;
+}
+
+#help_container ul li{
+  list-style-position:inside;
+  font-size: 17px;
+}
+
+#help_container a{
+  color: white;
+}
+
+#help_container img{
+    margin-top: 15px;
+}
+
+#help_container hr{
+    margin-top: 8px;
+}
+
+#end{
+  position: relative;
+  height: 50px;
+  width: 100%;
+  background-color: #ff0;
+}
+
+#close_button{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: white;
+}
 
 #menu{
-  position: absolute;
+  position: fixed;
+  z-index: 3;
   top: 0px;
   left: -350px;
   /*left: 0px;*/
@@ -45,7 +142,8 @@ body{
 }
 
 #toogle_menu_button{
-  position: absolute;
+  position: fixed;
+  z-index: 3;
   left: -1px;
   /*left: 350px;*/
   z-index: 2;
@@ -102,7 +200,7 @@ body{
   display: none;
 }
 
-#color_menu{
+#misc_menu{
   display: block;
 }
 
@@ -407,6 +505,7 @@ canvas{
 
 #selector_canvas{
   position: fixed;
+  z-index: 2;
   top: 0px;
   left: 0px;
   width: 100%;

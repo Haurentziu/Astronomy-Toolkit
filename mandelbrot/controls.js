@@ -37,29 +37,30 @@ function keyListener(e){
 
 
 function wheelListener(e){
-  var x = e.clientX;
-  var y = e.clientY;
-  var dpr = window.devicePixelRatio;
-  var oldZoom = fractalMesh.material.uniforms.zoom.value;
+  if(!rectangleSelect){
+    var x = e.clientX;
+    var y = e.clientY;
+    var dpr = window.devicePixelRatio;
+    var oldZoom = fractalMesh.material.uniforms.zoom.value;
 
-  var threeX = aspectRatio * (2.0 * dpr * x / canvasWidth - 1.0);
-  var threeY = (1.0 - 2.0 * dpr *  y / canvasHeight);
+    var threeX = aspectRatio * (2.0 * dpr * x / canvasWidth - 1.0);
+    var threeY = (1.0 - 2.0 * dpr *  y / canvasHeight);
 
-  if(e.deltaY < 0){
-    fractalMesh.material.uniforms.zoom.value *= 1.05;
+    if(e.deltaY < 0){
+      fractalMesh.material.uniforms.zoom.value *= 1.05;
+    }
+    else{
+      fractalMesh.material.uniforms.zoom.value /= 1.05;
+    }
+
+    var newZoom = fractalMesh.material.uniforms.zoom.value;
+    fractalMesh.material.uniforms.origin.value.x -= threeX / newZoom - threeX / oldZoom;
+    fractalMesh.material.uniforms.origin.value.y -= threeY / newZoom - threeY / oldZoom;
+    updateFieldInput("zoom_input", fractalMesh.material.uniforms.zoom.value);
+    updateFieldInput("center_re_input", fractalMesh.material.uniforms.origin.value.x);
+    updateFieldInput("center_img_input", fractalMesh.material.uniforms.origin.value.y);
+    decreasePixelRatio();
   }
-  else{
-    fractalMesh.material.uniforms.zoom.value /= 1.05;
-  }
-
-  var newZoom = fractalMesh.material.uniforms.zoom.value;
-  fractalMesh.material.uniforms.origin.value.x -= threeX / newZoom - threeX / oldZoom;
-  fractalMesh.material.uniforms.origin.value.y -= threeY / newZoom - threeY / oldZoom;
-  updateFieldInput("zoom_input", fractalMesh.material.uniforms.zoom.value);
-  updateFieldInput("center_re_input", fractalMesh.material.uniforms.origin.value.x);
-  updateFieldInput("center_img_input", fractalMesh.material.uniforms.origin.value.y);
-  decreasePixelRatio();
-
 }
 
 function mouseDownListener(e){
