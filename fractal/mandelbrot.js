@@ -5,7 +5,10 @@ var fractalMesh;
 var lastScale = 1;
 var redX, redY, greenX, greenY, blueX, blueY;
 
+var pixelate = true;
+var quality = 0.18;
 //FIRE
+
 /*
 redX = [0,0.20416666666666666,0.45625,0.6666666666666666,0.7895833333333333,1];
 redY = [0.03,0.96,0.99,0.99,0.21,0.03];
@@ -13,8 +16,9 @@ greenX = [0,0.20416666666666666,0.45625,0.6666666666666666,0.7895833333333333,1]
 greenY = [0.02,0.13,0.65,0.99,0.44,0.02];
 blueX = [0,0.19583333333333333,0.43333333333333335,0.6193700851932649,0.7979166666666667,1];
 blueY = [0.15,0.02,0.03,0.46976440429687505,0.97,0.15];
-
 */
+
+
 
 redX = [0,0.1613055690642326,0.45625,0.6666666666666666,0.8322733109997165,1];
 redY = [0.025802001953124987,0.22580200195312505,0.99,0.99,0.955802001953125,0.025802001953124987];
@@ -61,7 +65,15 @@ var lastEventUnix = Date.now();
 var normalPixelRatio = true;
 
 window.onload = function(){
-  init();
+  try{
+    init();
+  }
+  catch(err){
+    var errorDiv = document.getElementById("error");
+    errorDiv.style.display = "block ";
+    errorDiv.style.zIndex = 3;
+  }
+
   addListeners(renderer);
   addJuliaPresets();
 
@@ -108,7 +120,7 @@ function printPalettes(){
 
 function render(){
   stats.begin();
-  if(!normalPixelRatio && Date.now() - lastEventUnix > 50){
+  if(pixelate && !normalPixelRatio && Date.now() - lastEventUnix > 50){
     renderer.setPixelRatio(window.devicePixelRatio);
     normalPixelRatio = true;
     shouldUpdate = true;
@@ -213,8 +225,10 @@ function resize(){
 
 function decreasePixelRatio(){
   lastEventUnix = Date.now();
-  renderer.setPixelRatio(0.25);
-  normalPixelRatio = false;
+  if(pixelate){
+    renderer.setPixelRatio(quality * window.devicePixelRatio);
+    normalPixelRatio = false;
+  }
   shouldUpdate = true;
 }
 
@@ -238,37 +252,44 @@ function setFractalType(type){
 }
 
 function setColorDensity(density){
-  fractalMesh.material.uniforms.color_density.value = density;
+  if(!isNaN(density))
+    fractalMesh.material.uniforms.color_density.value = density;
   shouldUpdate = true;
 }
 
 function setColorOffset(offset){
-  fractalMesh.material.uniforms.color_offset.value = offset;
+  if(!isNaN(offset))
+    fractalMesh.material.uniforms.color_offset.value = offset;
   shouldUpdate = true;
 }
 
 function setOrbitTrapX(x){
-  fractalMesh.material.uniforms.orbit_trap_point.value.x = x;
+  if(!isNaN(x))
+    fractalMesh.material.uniforms.orbit_trap_point.value.x = x;
   shouldUpdate = true;
 }
 
 function setOrbitTrapY(y){
-  fractalMesh.material.uniforms.orbit_trap_point.value.y = y;
+  if(!isNaN(y))
+    fractalMesh.material.uniforms.orbit_trap_point.value.y = y;
   shouldUpdate = true;
 }
 
 function setOrbitTrapA(a){
-  fractalMesh.material.uniforms.orbit_trap_line_a.value = a;
+  if(!isNaN(a))
+    fractalMesh.material.uniforms.orbit_trap_line_a.value = a;
   shouldUpdate = true;
 }
 
 function setOrbitTrapB(b){
-  fractalMesh.material.uniforms.orbit_trap_line_b.value = b;
+  if(!isNaN(b))
+    fractalMesh.material.uniforms.orbit_trap_line_b.value = b;
   shouldUpdate = true;
 }
 
 function setOrbitTrapC(c){
-  fractalMesh.material.uniforms.orbit_trap_line_c.value = c;
+  if(!isNaN(c))
+    fractalMesh.material.uniforms.orbit_trap_line_c.value = c;
   shouldUpdate = true;
 }
 
@@ -313,6 +334,17 @@ function updateFieldInput(id, value){
   document.getElementById(id).value = value;
 }
 
+function setPixelate(value){
+  pixelate = value;
+}
+
+function setQuality(value){
+  if(!isNaN(value))
+    quality = value;
+
+}
+
+
 function downloadFractalImage(){
   var data = renderer.domElement.toDataURL();
   renderer.domElement.toBlob(function(blob) {
@@ -344,5 +376,5 @@ function init(){
   scene.background = new THREE.Color(0x0f0f0f);
 
   renderer.domElement.style="position:absolute; top:0px; left:0px; margin:0px; width: 100%; height: 100%;"
-  document.getElementById('bellow_help').appendChild(renderer.domElement);
+  document.body.appendChild(renderer.domElement);
 }

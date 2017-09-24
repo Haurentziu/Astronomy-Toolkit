@@ -2,8 +2,12 @@
 <html>
   <head>
 
-    <title>Mandelbrot Set</title>
+    <title>Fractal Generator</title>
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <meta property="og:title" content="Fractal Generator" />
+    <meta property="og:image" content="https://haurentziu.ddns.net/fractal/res/fractal.jpg" />
+    <meta property="og:description"content="Mandelbrot and Julia set generator programmed in JavasScript, using the THREE.js library" />
+
     <script type="text/javascript" src="../lib/analytics.js"></script>
   </head>
   <body>
@@ -281,217 +285,244 @@
     <script src = "controls.js"></script>
     <script src = "../lib/Utils.js"></script>
 
-    <div id = "bellow_help">
-      <canvas id = "selector_canvas"></canvas>
-      <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+    <div id = "error">
+      <h1>Error! There seems to be a problem :/</h1>
+      <h2>Please <a href = "http://www.wikihow.com/Update-Your-Video-Card-Drivers-on-Windows-7">upgrade your video card drivers </a>
+         or download the recommended browsers:</h2>
+      <a href = "https://www.google.com/chrome/browser/desktop/"><img src = "../res/logos/chrome.png"></a>
+      <a href = "https://www.mozilla.org/en-US/firefox/new/"><img src = "../res/logos/firefox.png"></a>
+    </div>
 
-      <div id = "menu">
-        <div id = "tab_button_container">
-          <button class = "tab_button" onclick="select_tab(event, 'fractal_menu')">Fractal</button>
-          <button class = "tab_button" onclick="select_tab(event, 'color_menu')">Coloring</button>
-          <button class = "tab_button" onclick="select_tab(event, 'gradient_menu')">Gradient</button>
-          <button class = "tab_button active" onclick="select_tab(event, 'misc_menu')">Misc</button>
-        </div>
+    <div id = "three_div">
+
+    </div>
+
+
+    <canvas id = "selector_canvas"></canvas>
+    <img src="../res/menu_ico.png" width="30px" height="30px" id = "toogle_menu_button" onclick="toogle_menu();"/>
+
+    <div id = "menu">
+      <div id = "tab_button_container">
+        <button class = "tab_button" onclick="select_tab(event, 'fractal_menu')">Fractal</button>
+        <button class = "tab_button" onclick="select_tab(event, 'color_menu')">Coloring</button>
+        <button class = "tab_button" onclick="select_tab(event, 'gradient_menu')">Gradient</button>
+        <button class = "tab_button active" onclick="select_tab(event, 'misc_menu')">Misc</button>
+      </div>
+
+      <br>
+      <div id = "fractal_menu" class = "tab_content">
+
+        <h4>Fractal Type: </h4>
+        <label class = "radio_input">
+          <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
+          <i></i>   Mandelbrot
+        </label>
+        <br>
+
+        <label class = "radio_input">
+          <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
+          <i></i>   Julia
+        </label>
+        <br><br>
+
+        <label for = "text">Julia Real Part: </label><input type="text" id="julia_real_input" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
+        <label for = "text">Jula Imag Part: </label><input type="text" id="julia_imag_input" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+
+        <label for = "julia_defaults">Julia Presets: </label>
+        <select id="julia_defaults" oninput="setJuliaPreset(this.value)">
+        </select>
+
+        <hr>
+
+        <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
+        <label for = "text">Center Real Part: </label><input type="text" id = "center_re_input" oninput="setCenterReal(parseFloat(this.value))" value = "0.0"><br >
+        <label for = "text">Center Imag Part: </label><input type="text" id = "center_img_input" oninput="setCenterImag(parseFloat(this.value))" value = "0.0"><br >
+        <label for = "text">Zoom</label><input type="text" id = "zoom_input" oninput="setZoom(parseFloat(this.value))" value = "1.0"><br >
+
+      </div>
+
+      <div id = "color_menu" class = "tab_content">
+
+        <h4>Coloring method: </h4>
+
+        <label class = "radio_input">
+          <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
+          <i></i>   Smooth Iteration Count
+        </label>
+        <br>
+
+        <label class = "radio_input">
+          <input type="radio" id="triangle" onchange="setColoring(4);" name="coloring">
+          <i></i>   Triangle Inequality
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
+        <i></i>   Stripe Average
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
+        <i></i>   Curvature Average
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="trap_point" onchange="setColoring(7)" name="coloring">
+        <i></i>   Orbit Trap (Point)
+        </label><br>
+
+        <label class = "radio_input">
+          <input type="radio" id="trap_line" onchange="setColoring(8)" name="coloring">
+        <i></i>   Orbit Trap (Line)
+        </label><br>
+        <hr >
+
+        <label>Real Part (Orbit Trap Point)</label>
+        <form class = "range_form" oninput="setOrbitTrapX(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <label>Imag Part (Orbit Trap Point)</label>
+        <form class = "range_form" oninput="setOrbitTrapY(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+
+        <hr>
+        <label>A (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapA(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "-1"/>
+          <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <label>B (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapB(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
+          <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+        </form>
+
+        <label>C (Orbit Trap Line)</label>
+        <form class = "range_form" oninput="setOrbitTrapC(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0.12"/>
+          <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+        </form>
+
+
+      </div>
+
+      <div id = "gradient_menu" class = "tab_content">
+        <label>Color density:</label>
+        <form class = "range_form" oninput="setColorDensity(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1"/>
+          <input type="text" name="amountInput" value="1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+
+        <label>Color offset:</label>
+        <form class = "range_form" oninput="setColorOffset(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;" step="0.01" min="-1" max="1" value = "0"/>
+          <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
 
         <br>
-        <div id = "fractal_menu" class = "tab_content">
+        <hr>
 
-          <h4>Fractal Type: </h4>
-          <label class = "radio_input">
-            <input type="radio" onchange="setFractalType(0)" id="mandel" name="fractal" checked>
-            <i></i>   Mandelbrot
-          </label>
-          <br>
+        <label>Red:</label>
+        <canvas id = "red" height="100" width="310" ></canvas>
+        <br>
 
-          <label class = "radio_input">
-            <input type="radio" onchange="setFractalType(1)" id="julia" name="fractal">
-            <i></i>   Julia
-          </label>
-          <br><br>
+        <label>Green:</label>
+        <canvas id = "green" height="100" width= "310" ></canvas>
+        <br>
 
-          <label for = "text">Julia Real Part: </label><input type="text" id="julia_real_input" oninput="setJuliaReal(parseFloat(this.value))" value = "0.285"><br >
-          <label for = "text">Jula Imag Part: </label><input type="text" id="julia_imag_input" oninput="setJuliaImag(parseFloat(this.value))" value = "0.01"><br >
+        <label>Blue:</label>
+        <canvas id = "blue" height="100" width="310" ></canvas>
+        <br>
 
-          <label for = "julia_defaults">Julia Presets: </label>
-          <select id="julia_defaults" oninput="setJuliaPreset(this.value)">
-          </select>
-
-          <hr>
-
-          <label for = "text">Escape Radius: </label><input type="text" id = "radius_input" oninput="setEscapeRadius(parseFloat(this.value))" value = "1e+7"><br >
-          <label for = "text">Center Real Part: </label><input type="text" id = "center_re_input" oninput="setCenterReal(parseFloat(this.value))" value = "0.0"><br >
-          <label for = "text">Center Imag Part: </label><input type="text" id = "center_img_input" oninput="setCenterImag(parseFloat(this.value))" value = "0.0"><br >
-          <label for = "text">Zoom</label><input type="text" id = "zoom_input" oninput="setZoom(parseFloat(this.value))" value = "1.0"><br >
-
-        </div>
-
-        <div id = "color_menu" class = "tab_content">
-
-          <h4>Coloring method: </h4>
-
-          <label class = "radio_input">
-            <input type="radio" onchange="setColoring(2)" id="smooth" name="coloring" checked>
-            <i></i>   Smooth Iteration Count
-          </label>
-          <br>
-
-          <label class = "radio_input">
-            <input type="radio" id="triangle" onchange="setColoring(4);" name="coloring">
-            <i></i>   Triangle Inequality
-          </label><br>
-
-          <label class = "radio_input">
-            <input type="radio" id="stripe" onchange="setColoring(5)" name="coloring">
-          <i></i>   Stripe Average
-          </label><br>
-
-          <label class = "radio_input">
-            <input type="radio" id="curvature" onchange="setColoring(6)" name="coloring">
-          <i></i>   Curvature Average
-          </label><br>
-
-          <label class = "radio_input">
-            <input type="radio" id="trap_point" onchange="setColoring(7)" name="coloring">
-          <i></i>   Orbit Trap (Point)
-          </label><br>
-
-          <label class = "radio_input">
-            <input type="radio" id="trap_line" onchange="setColoring(8)" name="coloring">
-          <i></i>   Orbit Trap (Line)
-          </label><br>
-          <hr >
-
-          <label>Real Part (Orbit Trap Point)</label>
-          <form class = "range_form" oninput="setOrbitTrapX(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-            <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
-          </form>
-
-          <label>Imag Part (Orbit Trap Point)</label>
-          <form class = "range_form" oninput="setOrbitTrapY(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-            <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
-          </form>
+        <input type = "button" onclick="resetPalettes();" value = "Reset Gradient"/>
 
 
-          <hr>
-          <label>A (Orbit Trap Line)</label>
-          <form class = "range_form" oninput="setOrbitTrapA(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "-1"/>
-            <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
-          </form>
-
-          <label>B (Orbit Trap Line)</label>
-          <form class = "range_form" oninput="setOrbitTrapB(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-            <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
-          </form>
-
-          <label>C (Orbit Trap Line)</label>
-          <form class = "range_form" oninput="setOrbitTrapC(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0.12"/>
-            <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
-          </form>
-
-
-        </div>
-
-        <div id = "gradient_menu" class = "tab_content">
-          <label>Color density:</label>
-          <form class = "range_form" oninput="setColorDensity(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1"/>
-            <input type="text" name="amountInput" value="1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
-          </form>
-
-
-          <label>Color offset:</label>
-          <form class = "range_form" oninput="setColorOffset(this.amountInput.value);" action="javascript:void(0);">
-            <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;" step="0.01" min="-1" max="1" value = "0"/>
-            <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
-          </form>
-
-          <br>
-          <hr>
-
-          <label>Red:</label>
-          <canvas id = "red" height="100" width="310" ></canvas>
-          <br>
-
-          <label>Green:</label>
-          <canvas id = "green" height="100" width= "310" ></canvas>
-          <br>
-
-          <label>Blue:</label>
-          <canvas id = "blue" height="100" width="310" ></canvas>
-          <br>
-
-          <input type = "button" onclick="resetPalettes();" value = "Reset Gradient"/>
-        </div>
-
-        <div id = "misc_menu" class = "tab_content">
-          <h4>Control method: </h4>
-
-          <form>
-          <label class = "radio_input">
-            <input type="radio" onchange="setRectangleSelect(true);" name="control">
-          <i></i>   Rectangle Select
-          </label><br>
-
-          <label class = "radio_input">
-            <input type="radio"  onchange="setRectangleSelect(false);" name="control" checked>
-          <i></i>   Click And Drag
-          </label><br>
-
-          <br>
-          <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
-        </div>
       </div>
-      <a id = "help_button" href = "javascript:void(0);" onclick="toogle_help();">Help</a>
-    </div>
 
-    <div id = "help_container">
-      <a id = "close_button" href = "javascript:void(0);" onclick="toogle_help();">Close</a>
-      <h1>Fractal Generator</h1>
-      <hr />
-      <h2>Controls</h2>
-      <p>
-        For medium and high performance computers, you can use the "Click and Drag" option. For
-          computers which cannot render the fractal in real time, use the "Rectangle Select" option.
-      </p>
-      <p>
-        Set the prefered option from the "Misc" tab in the menu:
-      </p>
-      <img src = "res/control.jpg" />
+      <div id = "misc_menu" class = "tab_content">
 
-      <h3>Click and Drag</h3>
-      <ul>
-        <li>
-          Mouse Wheel - Zoom in and out
-        </li>
-        <li>
-          Left Mouse Button - Drag the fractal
-        </li>
-        <li>
-          ESC - Zoom out and center the fractal
-        </li>
-      </ul>
+        <h4>Control method: </h4>
 
-      <h3>Rectangle Select</h3>
-      <ul>
-        <li>
-          Left Mouse Button - Select area to zoom in
-        </li>
-        <li>
-          ESC - Zoom out and center the fractal
-        </li>
+        <label class = "radio_input">
+          <input type="radio" onchange="setRectangleSelect(true);" name="control">
+          <i></i>   Rectangle Select
+        </label><br>
 
-      </ul>
+        <label class = "radio_input">
+          <input type="radio"  onchange="setRectangleSelect(false);" name="control" checked>
+        <i></i>   Click And Drag
+        </label><br>
 
-      <h2>Gallery</h2>
-      <p>Check out the gallery of wallpapers generated using this tool <a href = "../fractal_gallery/" target="_blank">here</a>.</p>
+        <hr>
+
+        <label class = "checkbox_input">
+          <input type="checkbox"  onchange="setPixelate(this.checked); console.log(this.checked)" name="control" checked>
+          <i></i>   Reduce resolution on drag & zoom
+        </label><br>
+
+        <label>Quality on change:</label>
+        <form class = "range_form" oninput="setQuality(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="1" value = "0.18"/>
+          <input type="text" name="amountInput" value="0.18" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+        </form>
+
+        <hr>
+
+        <input type = "button" onclick="downloadFractalImage();" value = "Download Image"/>
+      </div>
 
     </div>
 
+    <a id = "help_button" href = "javascript:void(0);" onclick="toogle_help();">Help</a>
+  </div>
+
+  <div id = "help_container">
+    <a id = "close_button" href = "javascript:void(0);" onclick="toogle_help();">Close</a>
+    <h1>Fractal Generator</h1>
+    <hr />
+    <h2>Controls</h2>
+    <p>
+      For medium and high performance computers, you can use the "Click and Drag" option. For
+        computers which cannot render the fractal in real time, use the "Rectangle Select" option.
+    </p>
+    <p>
+      Set the prefered option from the "Misc" tab in the menu:
+    </p>
+    <img src = "res/control.jpg" />
+
+    <h3>Click and Drag</h3>
+    <ul>
+      <li>
+        Mouse Wheel - Zoom in and out
+      </li>
+      <li>
+        Left Mouse Button - Drag the fractal
+      </li>
+      <li>
+        ESC - Zoom out and center the fractal
+      </li>
+    </ul>
+
+    <h3>Rectangle Select</h3>
+    <ul>
+      <li>
+        Left Mouse Button - Select area to zoom in
+      </li>
+      <li>
+        ESC - Zoom out and center the fractal
+      </li>
+
+    </ul>
+
+    <h2>Gallery</h2>
+    <p>Check out the gallery of wallpapers generated using this tool <a href = "../fractal_gallery/" target="_blank">here</a>.</p>
 
   </body>
 </html>

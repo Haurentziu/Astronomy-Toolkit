@@ -47,10 +47,10 @@ function wheelListener(e){
     var threeY = (1.0 - 2.0 * dpr *  y / canvasHeight);
 
     if(e.deltaY < 0){
-      fractalMesh.material.uniforms.zoom.value *= 1.05;
+      fractalMesh.material.uniforms.zoom.value *= 1.08;
     }
     else{
-      fractalMesh.material.uniforms.zoom.value /= 1.05;
+      fractalMesh.material.uniforms.zoom.value /= 1.08;
     }
 
     var newZoom = fractalMesh.material.uniforms.zoom.value;

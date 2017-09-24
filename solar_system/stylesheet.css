@@ -10,6 +10,9 @@ body{
 
 }
 
+#error{
+  z-index: 5;
+}
 
 #help_button{
   z-index: 3;
@@ -110,12 +113,13 @@ body{
 
 #menu{
   position: fixed;
-  z-index: 4;
+  z-index: 3;
   top: 0px;
   left: -350px;
   /*left: 0px;*/
   width: 350px;
   height: 100%;
+  z-index: 2;
   /*-webkit-transition: all 2.5s ease-in-out;
   -moz-transition: all 2.5s ease-in-out;
   -ms-transition: all 2.5s ease-in-out;
@@ -143,7 +147,7 @@ body{
 
 #toogle_menu_button{
   position: fixed;
-  z-index: 4;
+  z-index: 3;
   left: -1px;
   /*left: 350px;*/
   z-index: 2;
@@ -393,7 +397,7 @@ input[type = "button"]:hover{
 
 
 /*Radio Button Input */
- .radio_input, .checkbox_input{
+ .radio_input{
    margin-left: -18px;
  }
 /* CUSTOM RADIO & CHECKBOXES
@@ -430,7 +434,7 @@ input[type = "button"]:hover{
 
 /* CHECKBOX OVERWRITE STYLES */
 .checkbox_input > i {
-  width: 30px;
+  width: 25px;
   border-radius: 3px;
 }
 
@@ -448,7 +452,6 @@ input[type = "button"]:hover{
   box-shadow: inset 0 0 0 3px #252525;
   background-color: goldenrod;
 }
-
 /* CHECKBOX */
 .checkbox_input > input + i:after{
   content: "";
@@ -462,11 +465,33 @@ input[type = "button"]:hover{
 
 }
 .checkbox_input > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
-  margin-left: 14px;
+  margin-left: 11px;
   background:  goldenrod;
 }
 
 
+#error{
+  display: none;
+  z-index: 0;
+  background-color: black;
+  position: absolute;
+  text-align: center;
+  top : 50%;
+  left: 50%;
+  width: 100%;
+  -ms-transform: translate(-50%, -50%);
+  transform    : translate(-50%, -50%);
+}
+
+#error a{
+  color: #fff;
+}
+
+#error img{
+  display: inline-block;
+  width: 64px;
+  margin-right: 50px;
+}
 
 canvas{
   z-index: 1;
@@ -493,6 +518,58 @@ canvas{
   padding: 0px;
 }
 
+
+#info{
+  z-index: 2;
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 0px;
+  left: 10px;
+}
+
+#info p{
+  font-family: "Courier New", Courier, monospace;
+  font-size: 15px;
+  color: #fff;
+  margin-top: -10px;
+}
+
+#guiContainer{
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  z-index: 2;
+  user-select: none;
+}
+#about a{
+  color: #fff;
+  outline: 0;
+}
+
+#about h1{
+  margin-left: 10px;
+}
+
+#about h2{
+  margin-left: 20px;
+}
+
+#about h3{
+  margin-left: 40px;
+}
+
+#about ul{
+  margin-left: 40px;
+}
+
+#aboutClose{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #fff;
+}
+
+
 ::-webkit-scrollbar {
   width:  5px;;
   height: 5px;
@@ -510,31 +587,4 @@ canvas{
 body {
   scrollbar-face-color: #aaaaaa;
   scrollbar-track-color: #212121;
-}
-
-#error{
-  display: none;
-  z-index: 0;
-  background-color: black;
-  position: absolute;
-  text-align: center;
-  top : 50%;
-  left: 50%;
-  width: 100%;
-
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform:    translate(-50%, -50%);
-  -ms-transform:     translate(-50%, -50%);
-  -o-transform:      translate(-50%, -50%);
-  transform:         translate(-50%, -50%);
-}
-
-#error a{
-  color: #fff;
-}
-
-#error img{
-  display: inline-block;
-  width: 64px;
-  margin-right: 50px;
 }
