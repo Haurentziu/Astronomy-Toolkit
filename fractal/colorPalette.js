@@ -16,12 +16,10 @@ function ColorPalette(canvasInterpolator, redInterpolator, greenInterpolator, bl
   this.ctx = this.canvas.getContext("2d");
   this.id = id;
 
-  this.isMouseDown = false;
   this.selectedPoint = 0;
 }
 
 ColorPalette.prototype.mouseDownListener = function(e){
-  this.isMouseDown = true;
   var dataX = this.canvasInterpolator.getDataX();
   var dataY = this.canvasInterpolator.getDataY();
   var point = getCursorPosition(this.canvas, e);
@@ -31,22 +29,23 @@ ColorPalette.prototype.mouseDownListener = function(e){
     var deltaY = (1.0 - dataY[i]) * this.canvas.height - point.y;
     if(deltaX * deltaX + deltaY * deltaY < 100){
       this.selectedPoint = i;
+      this.isPointSelected = true;
       break;
     }
   }
 }
 
 ColorPalette.prototype.mouseUpListener = function(e){
-  this.isMouseDown = false;
+  this.isPointSelected = false;
 }
 
 ColorPalette.prototype.mouseOutListener = function(e){
-  this.isMouseDown = false;
+  this.isPointSelected = false;
 }
 
 ColorPalette.prototype.mouseMoveListener = function(e){
   //console.log(this.isMouseDown);
-  if(this.isMouseDown){
+  if(this.isPointSelected){
     var dataX = this.canvasInterpolator.getDataX();
     var dataY = this.canvasInterpolator.getDataY();
     var point = getCursorPosition(this.canvas, e);
@@ -63,8 +62,8 @@ ColorPalette.prototype.mouseMoveListener = function(e){
     }
 
     if(this.selectedPoint == 0 || this.selectedPoint == lastPointIndex){
-      this.canvasInterpolator.updatePoint(lastPointIndex, dataX[lastPointIndex], 1.0 - point.y / this.canvas.height);
-      this.canvasInterpolator.updatePoint(0, dataX[0], 1.0 - point.y/ this.canvas.height);
+      this.canvasInterpolator.updatePoint(lastPointIndex, 1.0, 1.0 - point.y / this.canvas.height);
+      this.canvasInterpolator.updatePoint(0, 0.0, 1.0 - point.y/ this.canvas.height);
     }
     else{
       this.canvasInterpolator.updatePoint(this.selectedPoint, point.x / this.canvas.width, 1.0 - point.y / this.canvas.height);
