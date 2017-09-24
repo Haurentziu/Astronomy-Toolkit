@@ -27,6 +27,7 @@ body{
 	position: absolute !important;
 	height: 150px !important;
 	background-color: rgba(0, 0, 0, 0) !important;
+
 }
 
 #menu h1{
@@ -80,6 +81,7 @@ body{
 #banner{
 	background-color: #000;
 	background-image: url("../res/moving_banner.jpg");
+	/*background-image: url("../res/starry_night.jpg");*/
 
 /*  background-size: contain;*/
 	background-position: 0px 0px;
@@ -188,6 +190,7 @@ body{
   top: 30px;
   width: 70%;
 	padding-bottom: 50px;
+	margin-bottom: 80px;
 }
 
 

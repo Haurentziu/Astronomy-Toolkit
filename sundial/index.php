@@ -15,7 +15,7 @@
       <?php include("../basic_html/topbar.html") ?>
 
       <div id = "title">
-        <div id = "banner" style = "background-image: url('res/sundial.png');">
+        <div id = "banner" style = "background-image: url('res/sundial.jpg');">
 
         </div>
         <div id = "gradient">

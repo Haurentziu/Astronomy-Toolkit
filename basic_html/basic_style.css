@@ -18,8 +18,8 @@ body{
 }
 
 #main_container{
- 	min-height: 100%;
   position: relative;
+ 	min-height: 100%;
 }
 
 
@@ -66,7 +66,7 @@ body{
 
 #title h1{
 	position: relative;
-	top: -140vh;
+  top: -140vh;
 	z-index: 3;
 	text-align: center;
 	vertical-align: middle;
@@ -241,21 +241,27 @@ label{
 @media only screen and (max-device-width: 480px) {
   body{
     width: 100%;
+    height: auto !important;
   }
-	#banner{
+
+	#title{
 		height: 60vh;
 	}
-	#content{
-		top: -30vh;
+
+  #title h1{
+    top: -93.33vh;
+  }
+  #title h2{
+    top: -93.33vh;
+  }
+
+  #content{
 		left: 5%;
 		width: 90%;
 	}
-	#title h1{
-		top: -130vh;
-	}
-	#title h2{
-		top: -130vh;
-	}
 
+  #bottom_bar{
+    top: 0vh;
+  }
 
 }

@@ -60,7 +60,7 @@
         </a>
 
         <a href = "../nbody" target="_blank">
-          <div class = "page" style = "background: url(../res/nbody.png)">
+          <div class = "page" style = "background: url(../res/nbody.jpg)">
             <h3>N-Body Simulator</h3>
           </div>
         </a>
