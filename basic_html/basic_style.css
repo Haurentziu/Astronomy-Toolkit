@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+*:focus {
+    outline: none;
+}
+
+*{
+		margin: 0px;
+		padding: 0px;
+		font-family: 'Source Sans Pro', sans-serif;
+
+}
+
+body{
+	background-color: #FFF;
+	min-height: 100%;
+	min-width: 1140px;
+}
+
+#main_container{
+  position: relative;
+ 	min-height: 100%;
+}
+
+
+#menu{
+  min-width: 1140px !important;
+}
+
+#title{
+	position: relative;
+	top: 0px;
+	color: #FFF;
+	width: 100%;
+	height: 90vh;
+	text-shadow:
+	-0.5px -0.5px 0 #000,
+	 0.5px -0.5px 0 #000,
+	 -0.5px 0.5px 0 #000,
+		0.5px 0.5px 0 #000;
+
+}
+
+#banner{
+	position: relative;
+	background-position: center;
+  background-size: cover;
+	width: 100%;
+	height: 100%;
+	background-attachment: fixed;
+}
+
+#gradient{
+	z-index: 2;
+	position: relative;
+	top: -100%;
+	width: 100%;
+	height: 100%;
+	background: -webkit-linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
+/*	background: -o-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+	background: -moz-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+	background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));*/
+
+}
+
+
+#title h1{
+	position: relative;
+  top: -140vh;
+	z-index: 3;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 50px;
+	font-weight: 500;
+
+}
+
+#title h2{
+	z-index: 3;
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.2);
+	width: 100%;
+	top: -140vh;
+	font-weight: 500;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	padding: 10px 0 10px 0;
+}
+
+#content{
+	position: relative;
+	top: 0px;
+	left: 14%;
+	width: 72%;
+  padding-top: 30px;
+  min-height: 100%;
+	/*border-style: solid;
+	border-color: #9d9d9d;
+	border-width: 0 1px 0 1px;*/
+	background-color: #fff;
+	padding-bottom: 30px;
+/*  padding-top: 35px;*/
+/*  padding-bottom: 35px;*/
+}
+
+#content h5{
+  color: rgb(171, 50, 50);
+  font-weight: 600;
+  font-size: 23px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+/*  margin-left: 80px;*/
+}
+
+#content h4{
+  color: rgb(171, 50, 50);
+  font-weight: 600;
+  font-size: 26px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  /*margin-left: 65px;*/
+}
+
+#content h3{
+	color: rgb(171, 50, 50);
+	font-weight: 600;
+	font-size: 29px;
+	margin-bottom: 10px;
+  margin-left: 0px;
+	/*margin-left: 50px;*/
+}
+
+#content h2{
+  color: rgb(171, 50, 50);
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 0px;
+  /*margin-left: 35px;*/
+
+}
+
+#content h1{
+  color: rgb(171, 50, 50);
+	font-weight: bold;
+	font-size: 35px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+}
+
+.MathJax {
+	font-size: 20px;
+}
+
+
+
+#content p, li, label, a{
+  /*text-indent: 50px;*/
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: normal;
+  color: black;
+}
+
+
+#content ol{
+  padding-left: 0 !important;
+  list-style: inside decimal;
+}
+
+#content ul{
+  padding-left: 0 !important;
+  list-style: inside disc;
+}
+
+#content img{
+  width: 100%;
+}
+
+input{
+	margin-bottom: 10px;
+	padding: 5px;
+	font-size: 16px;
+}
+
+
+input[type="text"], input[type="number"]{
+	border-radius: 1px;
+	border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border: solid 1px #707070;
+  box-shadow: 0px 0px 1px 1px #969696;
+}
+
+input[type="button"]{
+	border-style: none;
+	border-width: 1px;
+	border-color: #212121;
+	padding: 10px;
+	background-color: #e74c3c;
+	color: #FFF;
+	font-size: 18px;
+	-webkit-transition: background-color 100ms ease-out 5ms;
+}
+
+input[type="button"]:hover, input[type="button"]:active{
+	background-color: #CF3A24 !important;
+}
+
+label{
+  margin-right: 10px;
+}
+
+.form{
+	margin-left: 0px;
+	font-size: 18px;
+	font-weight: 300;
+
+}
+
+#bottom_bar{
+	display: table;
+	position: relative;
+	background-color: #212121;
+	color: #FFF;
+	width: 100%;
+	text-align: center;
+	height: 1.5em;
+}
+
+#bottom_bar p {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+@media only screen and (max-device-width: 480px) {
+  body{
+    width: 100%;
+    height: auto !important;
+  }
+
+	#title{
+		height: 60vh;
+	}
+
+  #title h1{
+    top: -93.33vh;
+  }
+  #title h2{
+    top: -93.33vh;
+  }
+
+  #content{
+		left: 5%;
+		width: 90%;
+	}
+
+  #bottom_bar{
+    top: 0vh;
+  }
+
+}

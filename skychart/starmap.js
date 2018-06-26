@@ -207,7 +207,7 @@ function drawStars(){
 		if (stars[HR].mag < 5.5)  {
 			coord=projectStereo(stars[HR].dec, stars[HR].ra, false);
 			if (coord) {
-				size = 5*Math.pow(1.45, -stars[HR].mag);
+				size = width * 5 * Math.pow(1.45, -stars[HR].mag) / 900.0;
 				ctx.moveTo(coord.x, coord.y);
 				ctx.arc(coord.x, coord.y, size, 0, 2*Math.PI);
 				//   ctx.fillRect(coord.x, coord.y, size*2, size*2);
@@ -229,13 +229,13 @@ function drawDSO(){
 	ctx.fillStyle='#FCC868';
 	for (messier of messierObjects){
 		var coord = projectStereo(messier.dec, messier.ra, false);
-
+		var scale = 0.9 * width / 900.0
 		if (coord) {
-			if (messier.type == 'Globular Cluster') gcSymbol(coord['x'], coord['y'], 4);
-			if (messier.type == 'Spiral Galaxy' || messier.type == 'Galaxy') gxSymbol(coord['x'], coord['y'], 4, 2);
-			if (messier.type == 'Nebula') dnSymbol(coord['x'], coord['y'], 6, 6);
+			if (messier.type == 'Globular Cluster') gcSymbol(coord['x'], coord['y'], 4 * scale);
+			if (messier.type == 'Spiral Galaxy' || messier.type == 'Galaxy') gxSymbol(coord['x'], coord['y'], 4 * scale, 2 * scale);
+			if (messier.type == 'Nebula') dnSymbol(coord['x'], coord['y'], 6 * scale, 6 * scale);
 		//	if (messier.type == 'PN') pnSymbol(coord['x'], coord['y'], 3);
-			if (messier.type == 'Open Cluster') ocSymbol(coord['x'], coord['y'], 4);
+			if (messier.type == 'Open Cluster') ocSymbol(coord['x'], coord['y'], 4 * scale);
 			if (messier.mag < 7) {
 				if(isPrintFr) ctx.fillStyle="black" ;
 				else ctx.fillStyle='#FCC868';

@@ -1,0 +1,123 @@
+<style>
+  *{
+      margin: 0px;
+      padding: 0px;
+  }
+
+  #menu{
+    min-width: 100%;
+  	z-index: 4;
+  	position: fixed;
+  	display: table;
+  	width: 100% !important;
+  	/*height: 50px;*/
+  	background-color: rgba(0, 0, 0, 0.7);
+  	top: 0px;
+  }
+
+  #menu h1{
+  	position: relative;
+  	color: white;
+  	display: table-cell;
+  	vertical-align: middle;
+  	left: 20px;
+  	font-size: 35px;
+  	font-weight: normal;
+
+  }
+
+
+  #links{
+  	position: relative;
+  	display: table-cell;
+  	vertical-align: middle;
+  }
+
+  #menu h5, .dropdown_link{
+    display: inline-block;
+    padding: 10px;
+    position: relative;
+    margin-right: 22px;
+    float: right;
+    font-weight: normal;
+    color: #fff;
+    font-size: 20px;
+    vertical-align: middle;
+    -webkit-transition: background-color 200ms ease-out 1ms;
+    -moz-transition: background-color 200ms ease-out 1ms;
+    -o-transition: background-color 200ms ease-out 1ms;
+    transition: background-color 200ms ease-out 1ms;
+  }
+
+  #menu h5:hover{
+    background-color: rgba(205, 205, 205, 0.2);
+  }
+
+  .dropdown{
+    float: right;
+  }
+
+  .dropdown_content{
+    position: absolute;
+    top: 45px;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    float: left;
+    width: 240px;
+    overflow: hidden;
+  }
+
+  .dropdown:hover .drop_link h5{
+    background-color: rgba(205, 205, 205, 0.15);
+  }
+
+  .dropdown_content a, .dropdown_content h5{
+    width: 100%;
+    display: block;
+    float: left !important;
+    margin-bottom: 0px;
+  }
+  .dropdown:hover .dropdown_content {
+      display: block;
+  }
+
+
+</style>
+
+<div id = "menu">
+  <h1>Valuare &amp; Talent</h1>
+  <div id = "links">
+    <a href = "../contact"><h5>Contact</h5></a>
+
+    <div class = "dropdown">
+      <a class = "drop_link" href = "#"><h5>Downloads</h5></a>
+      <div class = "dropdown_content">
+        <a href = "../downloads/JavaFractal1.1.jar" target="_blank"><h5>Java Fractal</h5></a>
+        <a href = "../downloads/FunctionPlotter.jar" target="_blank"><h5>Function Plotter</h5></a>
+      </div>
+    </div>
+
+    <div class = "dropdown">
+      <a class = "drop_link" href = "#"><h5>Articles</h5></a>
+      <div class = "dropdown_content">
+        <a href = "../fractal_gallery" ><h5>Fractal Gallery</h5></a>
+				<a href = "../skychart_info" ><h5>Coding the Sky Map</h5></a>
+        <!--<h5>Coding the Solar System</h5>
+        <h5>Coding the Sundial</h5> -->
+      </div>
+    </div>
+
+    <div class = "dropdown">
+      <a class = "drop_link" href = "#"><h5>Interactive</h5></a>
+      <div class = "dropdown_content">
+        <a href = "../fractal" target="_blank"><h5>Fractal Generator</h5></a>
+        <a href = "../skychart" target="_blank"><h5>Sky Chart</h5></a>
+        <a href = "../nbody" target="_blank"><h5>N-Body Simulator</h5></a>
+        <a href = "../solar_system" target="_blank"><h5>Solar System</h5></a>
+        <a href = "../sundial"><h5>Sundial</h5></a>
+      </div>
+    </div>
+
+    <a href = "../"><h5>Home</h5></a>
+  </div>
+</div>

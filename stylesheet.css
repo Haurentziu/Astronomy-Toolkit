@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
 * {
 	margin: 0px;
 	padding: 0px;
@@ -5,26 +7,67 @@
 
 body{
   background-color: #ecf0f1;
-  /*background-image: url("./res/starry_night.jpg");
-  background-size:cover;
-  background-attachment: fixed;
-  background-position: center;*/
-
   color: #FFF;
   margin: 0px;
-  font-family: Arial, Helvetica, sans-serif	;
+  font-family: 'Source Sans Pro', sans-serif;
   min-height: 100%;
 }
 
 @keyframes animatedBackground {
 	from { background-position: 0 0; }
-	to { background-position: 6121px 0; }
+	to { background-position: 3295px 0;}
 }
 
+#container{
+ 	min-height: 100%;
+  position: relative;
+}
+
+#menu{
+	position: absolute !important;
+	height: 150px !important;
+	background-color: rgba(0, 0, 0, 0) !important;
+
+}
+
+#menu h1{
+	text-align: center !important;
+	left: 0px !important;
+	top: -15px;
+	font-size: 70px !important;
+	text-shadow:
+	-1px -1px 0 #000,
+	 1px -1px 0 #000,
+	 -1px 1px 0 #000,
+		1px 1px 0 #000 !important;
+		font-weight: 600 !important;
+}
+
+.dropdown_content{
+	position: absolute !important;
+	/*top: 152px !important;*/
+}
+
+#links{
+	position: absolute !important;
+	display: table !important;
+	left: 0px !important;
+	top: 106px !important;
+	width: 100% !important;
+	margin-left: 0px !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+	background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/*#bottom_bar{
+	top: 300px !important;
+}*/
 
 
 #title{
   position: relative;
+	display: block;
   top: 0px;
   width: 100%;
   margin: 0px;
@@ -37,12 +80,13 @@ body{
 
 #banner{
 	background-color: #000;
-	background-image: url("./res/starry_night.jpg");
+	background-image: url("../res/moving_banner.jpg");
+	/*background-image: url("../res/starry_night.jpg");*/
 
 /*  background-size: contain;*/
 	background-position: 0px 0px;
 	background-attachment: fixed;
-	animation: animatedBackground 90s linear infinite;
+	animation: animatedBackground 40s linear infinite;
 
 	/*background-position: left;*/
 	background-repeat: repeat-x;
@@ -119,7 +163,7 @@ body{
  	width: 100%;
  	height: 50px;
 	margin-top: -50px;
- 	top: -200%;
+ 	top: -100%;
  }
 
  #buttonBar a{
@@ -140,16 +184,18 @@ body{
 }
 
 #pages_container{
+	display: table;
   position: relative;
   left: 15% ;
-  top: -190px;
+  top: 30px;
   width: 70%;
-  height: 100%;
+	padding-bottom: 50px;
+	margin-bottom: 80px;
 }
 
 
-
 .page{
+	display: table-row;
   float: left;
   position: relative;
   top: 0px;
@@ -175,7 +221,6 @@ body{
   -moz-transition: 200ms;
   -o-transition: 200ms;
   transition: 200ms;
-
   background-size: cover !important;
 }
 
@@ -202,28 +247,9 @@ body{
   transition: 200ms;
 
   font-weight: 500;
-  font-size: 130%;
+  font-size: 23px;
 }
 
-#bottom_bar{
-  display: table;
-  clear: left;
-  position: relative;
-  text-align: center;
-  background-color: #212121;
-  width: 100%;
-  height: 2em;
-  font-size: 15px;
-  font-weight: normal;
-  left: 0px;
-  top: 10px;
-}
-
-#bottom_bar p{
-  display: table-cell;
-  vertical-align: middle;
-  font-size: 16px;
-}
 
 /*Animations*/
 .page:hover h3{

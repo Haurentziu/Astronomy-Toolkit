@@ -1,34 +1,64 @@
 var latitudeInput;
 var longitudeInput;
+var zoneInput;
+var solarInput;
+var civilInput;
+
 var map;
 var marker;
 
 var defaultLat = 51.48257;
 var defaultLong = 0;
+var defaultZone = 0;
 
 window.onload = function(){
 	latitudeInput = document.getElementById("lat");
-	longitudeInput = document.getElementById("long")
+	longitudeInput = document.getElementById("long");
+	zoneInput = document.getElementById("time_zone_input")
+	civilInput = document.getElementById("civil");
+	solarInput = document.getElementById("solar")
 	document.getElementById("search_field").addEventListener("keypress", enterSearch);
 
-	addImage(defaultLat, defaultLong, "Greenwich");
+	addImage("?lat=" + defaultLat + "&long=" + defaultLong + "&zone=" + defaultZone + "&time=civil");
 	updateFields(defaultLat, defaultLong)
+}
+
+function getLinkEnding(){
+	var latitude = parseFloat(latitudeInput.value);
+	var longitude = parseFloat(longitudeInput.value);
+	var zone = parseFloat(zoneInput.value);
+	var time = "";
+	if(civilInput.checked){
+		time = "civil";
+	}
+	else if(solarInput.checked){
+		time = "solar";
+	}
+	return "?lat=" + latitude + "&long=" + longitude + "&zone=" + zone + "&time=" + time;
 }
 
 function getImage(){
 	removeImage();
-	var latitude = parseFloat(latitudeInput.value);
-	var longitude = parseFloat(longitudeInput.value);
-	var motto = document.getElementById('motto').value
-	addImage(latitude, longitude, motto);
+	var linkEnd = getLinkEnding();
+	addImage(linkEnd);
 }
 
-function addImage(latitude, longitude, motto){
-	var imgElement = document.createElement("embed");
-	imgElement.setAttribute("src", "../cgi-bin/sundial.py?lat=" + latitude + "&long=" + longitude + '&name=' + motto );
-	imgElement.setAttribute("type", "image/svg+xml");
-	imgElement.setAttribute("width", "800px");
-	imgElement.setAttribute("height", "800px");
+function getPDF(){
+	removeImage();
+	var linkEnd = getLinkEnding();
+	var imgElement = document.createElement("iframe");
+	imgElement.setAttribute("src", "../cgi-bin/sundialPDF.py"+linkEnd);
+	imgElement.setAttribute("width", "820px");
+	imgElement.setAttribute("height", "820px");
+	imgElement.setAttribute("id", "sundial");
+	document.getElementById("image_div").appendChild(imgElement);
+}
+
+function addImage(ending){
+	var imgElement = document.createElement("img");
+	imgElement.setAttribute("src", "../cgi-bin/sundial.py" + ending);
+	imgElement.setAttribute("width", "820px");
+	imgElement.setAttribute("height", "820px");
 	imgElement.setAttribute("id", "sundial");
 	document.getElementById("image_div").appendChild(imgElement)
 
@@ -48,6 +78,7 @@ function geocode(){
 		if(status == google.maps.GeocoderStatus.OK){
 			updateFields(results[0].geometry.location.lat(), results[0].geometry.location.lng());
 			updateMarker(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+			updateTimeZone(results[0].geometry.location.lat(), results[0].geometry.location.lng());
 		}
 	});
 }
@@ -62,11 +93,17 @@ function geolocate(){
 function updatePosition(position){
 	updateFields(position.coords.latitude, position.coords.longitude);
 	updateMarker(position.coords.latitude, position.coords.longitude);
+	updateTimeZone(position.coords.latitude, position.coords.longitude);
 }
 
 function updateFields(lat, lng){
 	latitudeInput.value = lat;
 	longitudeInput.value = lng;
+}
+
+function positionInputListener(){
+	updateMarker(latitudeInput.value, longitudeInput.value);
+	updateTimeZone(latitudeInput.value, longitudeInput.value);
 }
 
 function updateMarker(lat, lng){
@@ -92,6 +129,7 @@ function initMap(){
     var longitude = event.latLng.lng();
     marker.setPosition(event.latLng);
 		updateFields(latitude, longitude);
+		updateTimeZone(latitude, longitude);
 	});
 }
 
@@ -100,4 +138,17 @@ function enterSearch(event){
 	if(event.keyCode == 13){
 		document.getElementById("search_button").click();
 	}
+}
+
+//key
+function updateTimeZone(latitude, longitude){
+	url = "https://maps.googleapis.com/maps/api/timezone/json?location="+latitude + "," + longitude + "&timestamp="+Math.round((new Date().getTime())/1000)+"&sensor=false",
+	$.ajax({
+   url: url,
+	}).done(function(response){
+  	if(response.timeZoneId != null){
+			zoneInput.value = parseInt((response.rawOffset) / 3600);
+			console.log(response);
+   	}
+	});
 }
