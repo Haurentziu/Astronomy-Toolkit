@@ -205,7 +205,6 @@ body{
 	border-style: solid;
 	border-width: 0px 10px 0px 10px;*/
 	margin-bottom: 80px;
-
 }
 
 .page{
@@ -288,7 +287,7 @@ body{
 	/*top: -15%;*/
   text-align: center;
   font-weight: 500;
-  font-size: 1.25vw;
+  font-size: 1.3vw;
 }
 
 .info h2{
@@ -396,7 +395,7 @@ body{
 
 		.info h2{
 			display: inline;
-			font-size: 20px;
+			font-size: 25px;
 		}
 
 		.ribbon h2{
