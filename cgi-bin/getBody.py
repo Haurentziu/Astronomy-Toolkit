@@ -10,13 +10,13 @@ def main():
     cgitb.enable()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM SmallBodies WHERE designation LIKE %s", "%" + get_search_querry() + "%")
-    print "Content-type: text/html\n"
+    #print "Content-type: text/html\n"
     results = cursor.fetchall()
     array = []
     for result in results:
         body = orbital_elements2dictionary(result[1], result[2], result[3], result[4], result[5], result[6], result[7])
         array.append(body)
-
+    #print get_search_querry()
     print json.dumps(array)
 
 

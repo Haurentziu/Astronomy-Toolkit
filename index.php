@@ -20,7 +20,32 @@
         <div id = "gradient"></div>
       </div>
 
+      <div class = "cat" onmouseenter="var audio = new Audio('../res/long_cat/meow.mp3'); audio.play();">
+        <img id="head"src="../res/long_cat/head.png" />
+        <div id = "body">
+
+        </div>
+        <img id="legs" src="../res/long_cat/legs.png" />
+      </div>
+
       <div id="pages_container">
+	
+	<a href = "../doomer" class="music">
+          <div class = "page">
+            <div class = "cropper" style="background: url(../res/doomer.jpg)">
+              <div class = "ribbon">
+                <h2>Music</h2>
+              </div>
+              <div class = "info">
+                <div class = "text">
+                  <h3>Doomer Playlist</h3>
+                  <h2>Sad Songs to Cry Your Eyes Out When You Are Having a Mental Breakdown in Public</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
 
         <a href = "../fractal_gallery" class="article">
           <div class = "page">
@@ -175,9 +200,9 @@
   	</div>
 
 
-    <?php include('basic_html/bottom_bar.html'); ?>
  </div>
 
+ <?php include('basic_html/bottom_bar.html'); ?>
 
   </body>
 </html>

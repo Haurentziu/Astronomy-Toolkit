@@ -1,0 +1,13 @@
+body{
+		background-color: black;
+}
+
+.video-js {
+	position: absolute;
+	margin: 0px !important;
+	left: 0px !important;
+	top: 0px !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+}

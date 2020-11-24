@@ -19,23 +19,46 @@ body{
 	to { background-position: 3295px 0;}
 }
 
-#boids-canvas{
+.cat{
 	position: absolute;
-	margin: 0;
-	top: 0px;
+	top: 160px;
 	left: 0px;
-	width: 100%;
+	/*width: 301px;*/
+	width: 15.20vw;
 	height: 100%;
 
-	z-index: -100;
-	overflow: hidden;
-	visibility: hidden;
+	cursor: grab;
+}
+
+.cat #head{
+	position: relative;
+	width: 100%;
+}
+
+.cat #body{
+	position: relative;
+	top: 0px;
+	width: 100%;
+	height: calc(100% - 22.32vw - 90px); /*100% - ratio * head.width - cat_head.top + bottombar.top */
+	background-image: url("../res/long_cat/body.png");
+	background-repeat: repeat-y;
+	background-size: 100% auto;
+	top: -4px;
+}
+
+.cat #legs{
+	position: fixed;
+	left: 3px;
+	background-color: #EEEEEE;
+/*	background-color: red;*/
+	width: 15.20vw;
+	padding-bottom: 25px;
+	bottom: 0px;
 }
 
 #container{
  	min-height: 100%;
   position: relative;
-	background-image: src("#boids-canvas")
 }
 
 #menu{
@@ -197,14 +220,16 @@ body{
 #pages_container{
 	display: table;
   position: relative;
-  left: 15% ;
+  /*left: 15% ;*/
+	left: 17.2vw;
   /*top: -1vw;*/
-  width: 70%;
+  width: 70vw;
 	padding-bottom: 50px;
 /*	border-color: #464646;
 	border-style: solid;
 	border-width: 0px 10px 0px 10px;*/
 	margin-bottom: 80px;
+
 }
 
 .page{
@@ -334,6 +359,10 @@ body{
 	background-color: #4CAF50;
 }
 
+.music .ribbon{
+	background-color: #AB47BC;
+}
+
 .page:hover .info{
 	top: 0;
 	margin-top: 0;
@@ -366,41 +395,56 @@ body{
 	border-color: #4CAF50;
 }
 
+.music:hover .page{
+	border-color: #AB47BC;
+}
+
 
 /*Media Queries*/
 
 @media screen and (max-width: 1000px) {
-		body{
-			width: 1000px;
-		}
 
-    .page{
-      width: calc(100% - 14px);
-			height: 51vw;
-			margin-left: 0;
-			margin-right: 0;
-    }
 
-		.info{
-			top: 0;
-			margin-top: 0;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.5);
-		}
+	body{
+		width: 1000px;
+	}
 
-		.info h3{
-			font-size: 40px ;
-			margin-bottom: 20px;
-		}
+	.cat{
+		visibility: hidden;
+	}
 
-		.info h2{
-			display: inline;
-			font-size: 25px;
-		}
+  .page{
+    width: calc(100% - 14px);
+		height: 51vw;
+		margin-left: 0;
+		margin-right: 0;
+  }
 
-		.ribbon h2{
-			font-size:25px;
-		}
+	#page_container{
+		width: 70%;
+		left: 15%;
+	}
+
+	.info{
+		top: 0;
+		margin-top: 0;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.info h3{
+		font-size: 40px ;
+		margin-bottom: 20px;
+	}
+
+	.info h2{
+		display: inline;
+		font-size: 25px;
+	}
+
+	.ribbon h2{
+		font-size:25px;
+	}
 
 
 }
