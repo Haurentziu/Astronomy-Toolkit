@@ -14,7 +14,21 @@ var juliaDefaults = [
   [-0.6180339, 0],
 ];
 
+function keydown_input(e, form){
+  var code = e.keyCode ? e.keyCode : e.which;
 
+  if(code == 40){
+    form.amountRange.value = parseFloat(form.amountRange.value) - parseFloat(form.amountRange.step);
+    form.amountInput.value = form.amountRange.value;
+    form.oninput(form.amountRange.value);
+  }
+  else if(code == 38){
+    form.amountRange.value = parseFloat(form.amountRange.value) + parseFloat(form.amountRange.step);
+    form.amountInput.value = form.amountRange.value;
+    form.oninput(form.amountRange.value);
+
+  }
+}
 
 function toogle_menu(){
   if(!show_help){
@@ -34,15 +48,15 @@ function toogle_menu(){
 
 function toogle_help(){
   var help = document.getElementById("help_container");
-  var bellow = document.getElementById("bellow_help");
+  //var bellow = document.getElementById("bellow_help");
   show_help = !show_help;
   if(show_help){
     help.classList.add("vertTranslateHelp");
-    bellow.classList.add("blur_bellow");
+    //bellow.classList.add("blur_bellow");
   }
   else{
     help.classList.remove("vertTranslateHelp");
-    bellow.classList.remove("blur_bellow");
+    //bellow.classList.remove("blur_bellow");
   }
 }
 

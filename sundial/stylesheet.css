@@ -63,10 +63,10 @@
 
 #sundial{
 	position: relative;
-	left: 50%;
-	margin-left: -410px;
+	left: 2.5%;
+	/*margin-left: -410px !important;*/
+	width: 95% !important;
 }
-
 
 @media only screen and (max-device-width: 480px) {
 	#banner{

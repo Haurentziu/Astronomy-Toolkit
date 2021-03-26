@@ -43,7 +43,7 @@ body{
 
 #banner{
 	position: relative;
-	background-position: center;
+	background-position: center center;
   background-size: cover;
 	width: 100%;
 	height: 100%;
@@ -167,15 +167,19 @@ body{
 #content ol{
   padding-left: 0 !important;
   list-style: inside decimal;
+/*  margin-left: 20px !important;*/
 }
 
 #content ul{
   padding-left: 0 !important;
   list-style: inside disc;
+  margin-left: 20px !important;
 }
 
 #content img{
   width: 100%;
+  margin: auto;
+  display: block;
 }
 
 input{
@@ -242,6 +246,10 @@ label{
   body{
     width: 100%;
     height: auto !important;
+  }
+
+  #banner{
+  /*  height: 1500px;*/
   }
 
 	#title{

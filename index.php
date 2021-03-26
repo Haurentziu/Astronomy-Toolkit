@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title>Valuare &amp; Talent</title>
+      <title>Raccoon Party</title>
       <link rel="stylesheet" type="text/css" href="stylesheet.css" />
-      <meta name='og:image' content="https://astronomytoolkit.ddns.net/res/solar_system.jpg">
-      <meta name='og:description' content="Astronomy Website by Haurentziu">
+      <meta name='og:image' content="https://sparklyraccoon.ddns.net/res/og_image.jpg">
+      <meta name='og:description' content="Amazing website with amazing raccoons">
 
 </head>
 
@@ -17,7 +17,13 @@
 
       <div id = "title">
         <div id = "banner"></div>
-        <div id = "gradient"></div>
+
+
+		<img src="../res/dumpster1.png" id = "dumpster1">
+		<img src="../res/dumpster2.png" id = "dumpster2">
+		<img src="../res/racoon2.png" id = "raccoon2">
+		<img src="../res/racoon3.png" id = "raccoon3">
+
       </div>
 
       <div class = "cat" onmouseenter="var audio = new Audio('../res/long_cat/meow.mp3'); audio.play();">
@@ -29,8 +35,24 @@
       </div>
 
       <div id="pages_container">
-	
-	<a href = "../doomer" class="music">
+	   <!-- <a href = "../raccoonflix" class="music">
+          <div class = "page">
+            <div class = "cropper" style="background: url(../res/raccoonflix.jpg)">
+              <div class = "ribbon">
+                <h2>Movies</h2>
+              </div>
+              <div class = "info">
+                <div class = "text">
+                  <h3>Raccoonflix</h3>
+                  <h2>Free Streaming Service</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+		-->
+	<!-- <a href = "../doomer" class="music">
           <div class = "page">
             <div class = "cropper" style="background: url(../res/doomer.jpg)">
               <div class = "ribbon">
@@ -45,6 +67,41 @@
             </div>
           </div>
         </a>
+-->
+
+        <a href = "../bread" class="article">
+          <div class = "page">
+            <div class = "cropper" style="background: url(../res/bread.jpg)">
+              <div class = "ribbon">
+                <h2>Article</h2>
+              </div>
+              <div class = "info">
+                <div class = "text">
+                  <h3>Baking Stuff</h3>
+                  <h2>Let's get this bread!</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+      <!--  <a href = "../dust" target="_blank" class="interactive">
+          <div class = "page">
+            <div class = "cropper" style="background: url(../res/dust.jpg)">
+              <div class = "ribbon">
+                <h2>Interactive</h2>
+              </div>
+
+              <div class = "info">
+                <div class = "text">
+                  <h3>Dust Sensor</h3>
+                  <h2>Readings from the dust sensor</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+-->
 
 
         <a href = "../fractal_gallery" class="article">

@@ -34,6 +34,7 @@
         <br>
         <h4>Gallery</h4>
 
+        <img  src = "photos/fractal (19).jpg"/>
         <img  src = "photos/fractal (1).jpg"/>
         <img  src = "photos/fractal (2).jpg"/>
         <img  src = "photos/fractal (3).jpg"/>
@@ -52,14 +53,13 @@
         <img  src = "photos/fractal (16).jpg"/>
         <img  src = "photos/fractal (17).jpg"/>
         <img  src = "photos/fractal (18).jpg"/>
-        <img  src = "photos/fractal (19).jpg"/>
         <img  src = "photos/fractal (20).jpg"/>
         <img  src = "photos/fractal (21).jpg"/>
         <img  src = "photos/fractal (22).jpg"/>
         <img  src = "photos/fractal (23).jpg"/>
         <p></p><p></p><p></p>
         <p>
-          Download the uncompressed images <a href = "photos/fractal.rar">here</a>.
+          Download the uncompressed images <a href = "photos/fractal.zip">here</a>.
 
         </p>
       </div>

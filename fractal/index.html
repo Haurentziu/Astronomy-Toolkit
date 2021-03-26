@@ -15,12 +15,17 @@
   <script id="fractal-vertex" type="x-shader/x-vertex">
          precision highp float;
          uniform float zoom;
+         uniform float rot_angle;
          uniform float aspect_ratio;
          uniform vec2 origin;
          varying vec2 pos;
+
          void main () {
-             pos = origin + vec2(position.x * aspect_ratio, position.y) / zoom;
-             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+           mat2 rotationM;
+           rotationM[0] = vec2(cos(rot_angle), -sin(rot_angle));
+           rotationM[1] = vec2(sin(rot_angle),  cos(rot_angle));
+           pos = origin + rotationM * vec2(position.x * aspect_ratio, position.y) / zoom;
+           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
          }
      </script>
 
@@ -139,6 +144,7 @@
 
       void main () {
         vec2 z = pos;
+
         vec2 c = vec2(julia_real, julia_imag);
         bool hasEscaped = false;
         bool isAverageColoring = (coloring == 4) || (coloring == 5) || (coloring == 6);
@@ -248,8 +254,7 @@
 
         //
         color += color_offset;
-        color *= color_density;
-        color = exp(color * log(1.8));
+        color = exp(color*color_density);
         color -=  floor(color);
 
 
@@ -283,6 +288,8 @@
     <script src = "mandelbrot.js"></script>
     <script src = "gui.js"></script>
     <script src = "controls.js"></script>
+    <script src = "cookie_stuff.js"></script>
+
     <script src = "../lib/Utils.js"></script>
 
     <div id = "error">
@@ -339,6 +346,12 @@
         <label for = "text">Center Imag Part: </label><input type="text" id = "center_img_input" oninput="setCenterImag(parseFloat(this.value))" value = "0.0"><br >
         <label for = "text">Zoom</label><input type="text" id = "zoom_input" oninput="setZoom(parseFloat(this.value))" value = "1.0"><br >
 
+        <label>Rotation</label>
+        <form class = "range_form" oninput="setRotation(this.amountInput.value);" action="javascript:void(0);">
+          <input type="range"  id = "rot_input_range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="1" min="-180" max="180" value = "0"/>
+          <input type="text" id = "rot_input_txt" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
+        </form>
+
       </div>
 
       <div id = "color_menu" class = "tab_content">
@@ -380,13 +393,13 @@
         <label>Real Part (Orbit Trap Point)</label>
         <form class = "range_form" oninput="setOrbitTrapX(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value"  onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
         <label>Imag Part (Orbit Trap Point)</label>
         <form class = "range_form" oninput="setOrbitTrapY(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          <input type="text" name="amountInput" value="0.00" oninput="this.form.amountRange.value=this.value" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
 
@@ -394,19 +407,19 @@
         <label>A (Orbit Trap Line)</label>
         <form class = "range_form" oninput="setOrbitTrapA(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "-1"/>
-          <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          <input type="text" name="amountInput" value="-1.00" oninput="this.form.amountRange.value=this.value" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
         <label>B (Orbit Trap Line)</label>
         <form class = "range_form" oninput="setOrbitTrapB(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0"/>
-          <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+          <input type="text" name="amountInput"  value="0.00" oninput="this.form.amountRange.value = parseFloat(this.value)" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
         <label>C (Orbit Trap Line)</label>
         <form class = "range_form" oninput="setOrbitTrapC(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="-2" max="2" value = "0.12"/>
-          <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" autocomplete="off"/>
+          <input type="text" name="amountInput" value="0.12" oninput="this.form.amountRange.value = parseFloat(this.value)" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
 
@@ -415,15 +428,15 @@
       <div id = "gradient_menu" class = "tab_content">
         <label>Color density:</label>
         <form class = "range_form" oninput="setColorDensity(this.amountInput.value);" action="javascript:void(0);">
-          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1"/>
-          <input type="text" name="amountInput" value="1.00" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;"  step="0.01" min="0" max="2" value = "1.2"/>
+          <input type="text" name="amountInput" value="1.20" oninput="this.form.amountRange.value=this.value" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
 
         <label>Color offset:</label>
         <form class = "range_form" oninput="setColorOffset(this.amountInput.value);" action="javascript:void(0);">
           <input type="range" name = "amountRange" oninput="this.form.amountInput.value=this.value;" step="0.01" min="-1" max="1" value = "0"/>
-          <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" autocomplete="off"/>
+          <input type="text" name="amountInput" value="0" oninput="this.form.amountRange.value=this.value" onkeydown="keydown_input(event, this.form)" autocomplete="off"/>
         </form>
 
         <br>
@@ -484,7 +497,7 @@
   </div>
 
   <div id = "help_container">
-    <a id = "close_button" href = "javascript:void(0);" onclick="toogle_help();">Close</a>
+    <a id = "close_button" onclick="toogle_help();">x</a>
     <h1>Fractal Generator</h1>
     <hr />
     <h2>Controls</h2>
@@ -505,6 +518,11 @@
       <li>
         Left Mouse Button - Drag the fractal
       </li>
+
+      <li>
+        CTRL + Mouse Down - Rotate the fractal
+      </li>
+
       <li>
         ESC - Zoom out and center the fractal
       </li>

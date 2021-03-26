@@ -1,4 +1,10 @@
 <style>
+@font-face {
+    font-family: HarlowsItalic;
+    src: url("../res/HARLOWSI.TTF");
+}
+
+
   *{
       margin: 0px;
       padding: 0px;
@@ -16,12 +22,13 @@
   }
 
   #menu h1{
+  	font-family: HarlowsItalic !important;
   	position: relative;
   	color: white;
   	display: table-cell;
   	vertical-align: middle;
   	left: 20px;
-  	font-size: 35px;
+  	font-size: 33px;
   	font-weight: normal;
 
   }
@@ -85,7 +92,8 @@
 </style>
 
 <div id = "menu">
-  <h1>Valuare &amp; Talent</h1>
+  <!-- <h1>Valuare &amp; Talent</h1> -->
+  <h1>Raccoon Party</h1>
   <div id = "links">
     <a href = "../contact"><h5>Contact</h5></a>
 
@@ -100,6 +108,7 @@
     <div class = "dropdown">
       <a class = "drop_link" href = "#"><h5>Articles</h5></a>
       <div class = "dropdown_content">
+        <a href = "../bread" ><h5>Baking Stuff</h5></a>
         <a href = "../fractal_gallery" ><h5>Fractal Gallery</h5></a>
 				<a href = "../skychart_info" ><h5>Coding the Sky Map</h5></a>
         <!--<h5>Coding the Solar System</h5>

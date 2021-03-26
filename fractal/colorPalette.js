@@ -70,6 +70,8 @@ ColorPalette.prototype.mouseMoveListener = function(e){
     }
 
     updatePaletts(); //from mandelbrot.js
+    decreasePixelRatio();
+
   }
 }
 

@@ -91,6 +91,13 @@ window.onload = function(){
   redPalette.draw();
   greenPalette.draw();
   bluePalette.draw();
+
+  if(getCookie("multipleVisits")===""){
+    toogle_help();
+    setCookie("multipleVisits", "true", 30);
+
+  }
+
 }
 
 function resetPalettes(){
@@ -170,14 +177,15 @@ function createFractal(){
           //origin: {type: '2f', value: new THREE.Vector2(0.001643721971153, -0.822467633298876)}
           origin: {type: '2f', value: new THREE.Vector2(0.0, 0.0)},
           color_offset: {type: 'f', value: 0.0},
-          color_density: {type: 'f', value: 1.0},
+          color_density: {type: 'f', value: 1.2},
           fractal_type: {type: 'i', value: 0},
 
           julia_real: {type: 'f', value: 0.285},
           julia_imag: {type: 'f', value: 0.01},
 
-          escape_radius_sq: {type: 'f', value: 1e14},
+          rot_angle: {type: 'f', value: 0.01},
 
+          escape_radius_sq: {type: 'f', value: 1e14},
           orbit_trap_point: {type: '2f', value: new THREE.Vector2(0, 0)},
 
           orbit_trap_line_a: {type: 'f', value: -1},
@@ -255,42 +263,64 @@ function setColorDensity(density){
   if(!isNaN(density))
     fractalMesh.material.uniforms.color_density.value = density;
   shouldUpdate = true;
+  decreasePixelRatio();
 }
 
 function setColorOffset(offset){
   if(!isNaN(offset))
     fractalMesh.material.uniforms.color_offset.value = offset;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
 
 function setOrbitTrapX(x){
   if(!isNaN(x))
     fractalMesh.material.uniforms.orbit_trap_point.value.x = x;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
+
+function setRotation(x){
+  if(!isNaN(x))
+    fractalMesh.material.uniforms.rot_angle.value = 3.1415 * x / 180.0;
+  shouldUpdate = true;
+  decreasePixelRatio();
+  console.log(x)
+}
+
 
 function setOrbitTrapY(y){
   if(!isNaN(y))
     fractalMesh.material.uniforms.orbit_trap_point.value.y = y;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
 
 function setOrbitTrapA(a){
   if(!isNaN(a))
     fractalMesh.material.uniforms.orbit_trap_line_a.value = a;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
 
 function setOrbitTrapB(b){
   if(!isNaN(b))
     fractalMesh.material.uniforms.orbit_trap_line_b.value = b;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
 
 function setOrbitTrapC(c){
   if(!isNaN(c))
     fractalMesh.material.uniforms.orbit_trap_line_c.value = c;
   shouldUpdate = true;
+  decreasePixelRatio();
+
 }
 
 

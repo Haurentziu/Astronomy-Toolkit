@@ -103,9 +103,27 @@ body{
 
 #close_button{
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 0px;
+  right: 0px;
   color: white;
+  font-size: 20px;
+  text-align: center !important;
+  text-decoration: none;
+  font-weight: bold;
+
+  background: #b00000;
+  /*border-color: #fff;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50% 50%;*/
+
+  width: 30px;
+  height: 30px;
+}
+
+#close_button:hover{
+  background: #870404;
+  cursor:pointer;
 }
 
 #menu{
@@ -337,6 +355,7 @@ input[type = "button"]:hover{
     border-radius: 3px;
 }
 
+
 .range_form input[type=range]::-webkit-slider-thumb{
     -webkit-appearance: none;
     border: none;
@@ -362,6 +381,8 @@ input[type = "button"]:hover{
 
     /*required for proper track sizing in FF*/
     width: 80%;
+    background: rgba(255, 0, 0, 0);
+    padding-top: 5px;
 }
 
 .range_form input[type=range]::-moz-range-track {
@@ -374,14 +395,14 @@ input[type = "button"]:hover{
 
 .range_form input[type=range]::-moz-range-thumb {
     border: none;
-    height: 16px;
-    width: 16px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     background: goldenrod;
 }
 
 /*hide the outline behind the border*/
-.range_form input[type=range]:-moz-focusring{
+range_form input[type=range]:-moz-focusring{
     outline: 0px solid white;
     outline-offset: -1px;
 }
